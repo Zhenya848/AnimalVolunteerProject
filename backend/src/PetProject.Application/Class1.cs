@@ -1,4 +1,4 @@
-﻿namespace PetProject.UseCases
+﻿namespace PetProject.Application
 {
     public class Class1
     {
