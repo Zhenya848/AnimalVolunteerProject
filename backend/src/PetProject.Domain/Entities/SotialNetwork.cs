@@ -1,4 +1,4 @@
-﻿namespace PetProject.Domain
+﻿namespace PetProject.Domain.Entities
 {
     public struct SotialNetwork
     {
