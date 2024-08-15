@@ -1,9 +1,7 @@
 ﻿namespace PetProject.Domain.Entities
 {
-    public class Pet
+    public class Pet : Shared.Entity<PetId>
     {
-        public Guid Id { get; private set; }
-
         public string Name { get; private set; } = default!;
         public string PetType { get; private set; } = default!;
         public string Description { get; private set; } = default!;
@@ -26,5 +24,10 @@
         public List<PetPhoto> PetPhotos { get; private set; } = default!;
 
         public HelpStatus HelpStatus { get; private set; }
+
+        private Pet(PetId id) : base(id)
+        {
+
+        }
     }
 }

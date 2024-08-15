@@ -1,8 +1,13 @@
 ﻿namespace PetProject.Domain.Entities
 {
-    public struct Requisite
+    public class Requisite : Shared.Entity<RequisiteId>
     {
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public string Name { get; private set; } = default!;
+        public string Description { get; private set; } = default!;
+
+        private Requisite(RequisiteId id) : base(id)
+        {
+
+        }
     }
 }
