@@ -1,6 +1,14 @@
-﻿using PetProject.Domain.Shared;
-
-namespace PetProject.Domain.Entities
+﻿namespace PetProject.Domain.Entities
 {
-    public class PetPhotoId : ObjectId<PetPhotoId> { }
+    public class PetPhotoId
+    {
+        public Guid Id { get; private set; }
+
+        private PetPhotoId(Guid id) => Id = id;
+
+        public static PetPhotoId AddNewId() => new(Guid.NewGuid());
+        public static PetPhotoId AddEmptyId() => new(Guid.Empty);
+
+        public static PetPhotoId Create(Guid id) => new(id);
+    }
 }

@@ -10,9 +10,6 @@ namespace PetProject.Domain.Aggregates
         public string TelephoneNumber { get; private set; } = default!;
 
         public int EXP { get; private set; }
-        public int CountOfShelterAnimals { get; private set; }
-        public int CountOfHomelessAnimals { get; private set; }
-        public int CountOfIllAnimals { get; private set; }
 
         public List<SotialNetwork> SotialNetworks { get; private set; } = default!;
         public List<Requisite> Requisites { get; private set; } = default!;
@@ -21,5 +18,9 @@ namespace PetProject.Domain.Aggregates
         private Volunteer(VolunteerId id) : base(id)
         {
         }
+
+        public int CountOfShelterAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.FindAHome);
+        public int CountOfHomelessAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.LookingForAHome);
+        public int CountOfIllAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
     }
 }

@@ -25,9 +25,6 @@ namespace PetProject.Infastructure.Configurations
             builder.Property(t => t.TelephoneNumber).HasMaxLength(13);
 
             builder.Property(e => e.EXP);
-            builder.Property(c => c.CountOfShelterAnimals);
-            builder.Property(c => c.CountOfHomelessAnimals);
-            builder.Property(c => c.CountOfIllAnimals);
 
             builder.OwnsMany(r => r.Requisites, rb => { rb.ToJson(); });
             builder.OwnsMany(sn => sn.SotialNetworks, snb => { snb.ToJson(); });

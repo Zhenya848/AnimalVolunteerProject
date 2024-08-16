@@ -13,7 +13,7 @@ using PetProject.Infastructure;
 namespace PetProject.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240816060256_Initial")]
+    [Migration("20240816100810_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,18 +31,6 @@ namespace PetProject.Infastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<int>("CountOfHomelessAnimals")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_of_homeless_animals");
-
-                    b.Property<int>("CountOfIllAnimals")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_of_ill_animals");
-
-                    b.Property<int>("CountOfShelterAnimals")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_of_shelter_animals");
 
                     b.Property<string>("Description")
                         .IsRequired()

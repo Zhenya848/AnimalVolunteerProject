@@ -29,18 +29,6 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<int>("CountOfHomelessAnimals")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_of_homeless_animals");
-
-                    b.Property<int>("CountOfIllAnimals")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_of_ill_animals");
-
-                    b.Property<int>("CountOfShelterAnimals")
-                        .HasColumnType("integer")
-                        .HasColumnName("count_of_shelter_animals");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
