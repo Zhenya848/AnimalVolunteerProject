@@ -9,7 +9,7 @@ namespace PetProject.Infastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<PetPhoto> builder)
         {
-            builder.ToTable("PetPhotos");
+            builder.ToTable("petPhotos");
 
             builder.HasKey(pp => pp.Id);
             builder.Property(pp => pp.Id).HasConversion(i => i.Id, value => PetPhotoId.Create(value));

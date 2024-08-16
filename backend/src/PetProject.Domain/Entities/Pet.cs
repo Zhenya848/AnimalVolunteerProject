@@ -1,4 +1,6 @@
-﻿namespace PetProject.Domain.Entities
+﻿using PetProject.Domain.ValueObjects;
+
+namespace PetProject.Domain.Entities
 {
     public class Pet : Shared.Entity<PetId>
     {

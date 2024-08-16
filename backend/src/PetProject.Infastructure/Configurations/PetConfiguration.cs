@@ -7,7 +7,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 {
     public void Configure(EntityTypeBuilder<Pet> builder)
     {
-        builder.ToTable("Pets");
+        builder.ToTable("pets");
 
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Id).HasConversion(i => i.Id, value => PetId.Create(value));
@@ -27,11 +27,12 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(iv => iv.IsVaccinated);
 
         builder.Property(bt => bt.BirthdayTime);
-        builder.Property(dof => dof.DateOfCreation);
+        builder.Property(doc => doc.DateOfCreation);
 
-        builder.HasMany(s => s.Requisites).WithOne().HasForeignKey("pet_id");
+        builder.OwnsMany(r => r.Requisites, rb => { rb.ToJson(); });
         builder.HasMany(r => r.PetPhotos).WithOne().HasForeignKey("pet_id");
 
-        builder.Property(hs => hs.HelpStatus).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+        builder.Property(hs => hs.HelpStatus).HasConversion<string>()
+            .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
     }
 }
