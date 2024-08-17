@@ -1,6 +1,6 @@
 ﻿namespace PetProject.Domain.Entities
 {
-    public class PetPhotoId
+    public record PetPhotoId
     {
         public Guid Id { get; private set; }
 

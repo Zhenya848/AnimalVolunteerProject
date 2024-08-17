@@ -1,6 +1,6 @@
 ﻿namespace PetProject.Domain.Aggregates
 {
-    public class VolunteerId
+    public record VolunteerId
     {
         public Guid Id { get; private set; }
 

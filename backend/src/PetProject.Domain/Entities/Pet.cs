@@ -1,17 +1,20 @@
-﻿using PetProject.Domain.ValueObjects;
+﻿using PetProject.Domain.Aggregates;
+using PetProject.Domain.ValueObjects;
 
 namespace PetProject.Domain.Entities
 {
     public class Pet : Shared.Entity<PetId>
     {
         public string Name { get; private set; } = default!;
-        public string PetType { get; private set; } = default!;
         public string Description { get; private set; } = default!;
         public string Breed { get; private set; } = default!;
         public string Color { get; private set; } = default!;
         public string HealthInfo { get; private set; } = default!;
-        public string Address { get; private set; } = default!;
-        public string TelephoneNumber { get; private set; } = default!;
+        public Addres Address { get; private set; } = default!;
+        public TelephoneNumber TelephoneNumber { get; private set; } = default!;
+
+        public BreedId BreedId { get; } = null!;
+        public SpeciesId SpeciesId { get; } = null!;
 
         public float Weight { get; private set; }
         public float Height { get; private set; }

@@ -8,6 +8,7 @@ namespace PetProject.Infastructure
     public class AppDbContext(IConfiguration configuration) : DbContext
     {
         public DbSet<Volunteer> Volunteers { get; set; }
+        public DbSet<Species> Species { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetProject.Domain.Aggregates;
 using PetProject.Domain.Shared;
+using PetProject.Domain.ValueObjects;
 
 namespace PetProject.Infastructure.Configurations
 {
@@ -21,9 +22,15 @@ namespace PetProject.Infastructure.Configurations
                 nb.Property(p => p.Patronymic).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("patronymic");
             });
 
-            builder.Property(d => d.Description).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
-            builder.Property(t => t.TelephoneNumber).HasMaxLength(13);
+            builder.ComplexProperty(tn => tn.TelephoneNumber, tnb =>
+            {
+                tnb.Property(pn => pn.PhoneNumber)
+                    .IsRequired()
+                    .HasMaxLength(TelephoneNumber.MAX_LENGTH)
+                    .HasColumnName("phone_number");
+            });
 
+            builder.Property(d => d.Description).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
             builder.Property(e => e.EXP);
 
             builder.OwnsMany(r => r.Requisites, rb => { rb.ToJson(); });

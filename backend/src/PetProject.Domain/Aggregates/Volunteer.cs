@@ -7,7 +7,7 @@ namespace PetProject.Domain.Aggregates
     {
         public FullName Name { get; private set; } = default!;
         public string Description { get; private set; } = default!;
-        public string TelephoneNumber { get; private set; } = default!;
+        public TelephoneNumber TelephoneNumber { get; private set; } = default!;
 
         public int EXP { get; private set; }
 
