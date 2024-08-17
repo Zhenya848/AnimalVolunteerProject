@@ -1,7 +1,7 @@
-﻿using PetProject.Domain.Entities;
-using PetProject.Domain.ValueObjects;
+﻿using PetProject.Domain.ValueObjects;
+using PetProject.Domain.ValueObjects.IdClasses;
 
-namespace PetProject.Domain.Aggregates
+namespace PetProject.Domain.Entities.Aggregates
 {
     public class Volunteer : Shared.Entity<VolunteerId>
     {

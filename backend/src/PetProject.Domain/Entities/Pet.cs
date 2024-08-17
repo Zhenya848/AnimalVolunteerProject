@@ -1,5 +1,5 @@
-﻿using PetProject.Domain.Aggregates;
-using PetProject.Domain.ValueObjects;
+﻿using PetProject.Domain.ValueObjects;
+using PetProject.Domain.ValueObjects.IdClasses;
 
 namespace PetProject.Domain.Entities
 {
@@ -13,8 +13,7 @@ namespace PetProject.Domain.Entities
         public Addres Address { get; private set; } = default!;
         public TelephoneNumber TelephoneNumber { get; private set; } = default!;
 
-        public BreedId BreedId { get; } = null!;
-        public SpeciesId SpeciesId { get; } = null!;
+        public PetTypeInfo PetTypeInfo { get; private set; } = default!;
 
         public float Weight { get; private set; }
         public float Height { get; private set; }

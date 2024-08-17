@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetProject.Domain.Aggregates;
-using PetProject.Domain.Entities;
-using PetProject.Domain.Shared;
+using PetProject.Domain.Entities.Aggregates;
+using PetProject.Domain.ValueObjects.IdClasses;
 
 namespace PetProject.Infastructure.Configurations
 {
@@ -17,10 +16,10 @@ namespace PetProject.Infastructure.Configurations
             builder.Property(s => s.Id)
                 .HasConversion(
                     speciesId => speciesId.Id,
-                    result => SpeciesId.Create(result)
+                    id => SpeciesId.Create(id)
                 );
 
-            builder.Property(x => x.PetType)
+            builder.Property(x => x.Name)
                 .IsRequired();
 
             builder.HasMany(b => b.Breeds).WithOne().HasForeignKey("species_id");

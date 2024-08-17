@@ -1,4 +1,4 @@
-﻿namespace PetProject.Domain.Entities
+﻿namespace PetProject.Domain.ValueObjects.IdClasses
 {
     public record PetId
     {

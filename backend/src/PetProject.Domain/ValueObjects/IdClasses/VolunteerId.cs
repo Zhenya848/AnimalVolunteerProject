@@ -1,4 +1,4 @@
-﻿namespace PetProject.Domain.Aggregates
+﻿namespace PetProject.Domain.ValueObjects.IdClasses
 {
     public record VolunteerId
     {

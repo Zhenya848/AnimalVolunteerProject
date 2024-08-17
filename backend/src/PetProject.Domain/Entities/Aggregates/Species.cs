@@ -1,10 +1,10 @@
-﻿using PetProject.Domain.Entities;
+﻿using PetProject.Domain.ValueObjects.IdClasses;
 
-namespace PetProject.Domain.Aggregates
+namespace PetProject.Domain.Entities.Aggregates
 {
     public class Species : Shared.Entity<SpeciesId>
     {
-        public string PetType { get; private set; } = default!;
+        public string Name { get; private set; } = default!;
         public List<Breed> Breeds { get; private set; } = default!;
 
         private Species(SpeciesId id) : base(id)

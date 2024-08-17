@@ -13,7 +13,7 @@ using PetProject.Infastructure;
 namespace PetProject.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240817193102_Initial")]
+    [Migration("20240817204646_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,16 +26,16 @@ namespace PetProject.Infastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PetProject.Domain.Aggregates.Species", b =>
+            modelBuilder.Entity("PetProject.Domain.Entities.Aggregates.Species", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("PetType")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("pet_type");
+                        .HasColumnName("name");
 
                     b.HasKey("Id")
                         .HasName("pk_species");
@@ -43,7 +43,7 @@ namespace PetProject.Infastructure.Migrations
                     b.ToTable("species", (string)null);
                 });
 
-            modelBuilder.Entity("PetProject.Domain.Aggregates.Volunteer", b =>
+            modelBuilder.Entity("PetProject.Domain.Entities.Aggregates.Volunteer", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -59,7 +59,7 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("exp");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetProject.Domain.Aggregates.Volunteer.Name#FullName", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetProject.Domain.Entities.Aggregates.Volunteer.Name#FullName", b1 =>
                         {
                             b1.IsRequired();
 
@@ -82,7 +82,7 @@ namespace PetProject.Infastructure.Migrations
                                 .HasColumnName("patronymic");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("TelephoneNumber", "PetProject.Domain.Aggregates.Volunteer.TelephoneNumber#TelephoneNumber", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("TelephoneNumber", "PetProject.Domain.Entities.Aggregates.Volunteer.TelephoneNumber#TelephoneNumber", b1 =>
                         {
                             b1.IsRequired();
 
@@ -222,22 +222,17 @@ namespace PetProject.Infastructure.Migrations
                                 .HasColumnName("zipcode");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("BreedId", "PetProject.Domain.Entities.Pet.BreedId#BreedId", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("PetTypeInfo", "PetProject.Domain.Entities.Pet.PetTypeInfo#PetTypeInfo", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<Guid>("Id")
+                            b1.Property<Guid>("BreedId")
                                 .HasColumnType("uuid")
-                                .HasColumnName("breed_id_id");
-                        });
+                                .HasColumnName("pet_type_info_breed_id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("SpeciesId", "PetProject.Domain.Entities.Pet.SpeciesId#SpeciesId", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<Guid>("Id")
+                            b1.Property<Guid>("SpeciesId")
                                 .HasColumnType("uuid")
-                                .HasColumnName("species_id_id");
+                                .HasColumnName("pet_type_info_species_id");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("TelephoneNumber", "PetProject.Domain.Entities.Pet.TelephoneNumber#TelephoneNumber", b1 =>
@@ -289,7 +284,7 @@ namespace PetProject.Infastructure.Migrations
                     b.ToTable("petPhotos", (string)null);
                 });
 
-            modelBuilder.Entity("PetProject.Domain.Aggregates.Volunteer", b =>
+            modelBuilder.Entity("PetProject.Domain.Entities.Aggregates.Volunteer", b =>
                 {
                     b.OwnsMany("PetProject.Domain.ValueObjects.Requisite", "Requisites", b1 =>
                         {
@@ -354,7 +349,7 @@ namespace PetProject.Infastructure.Migrations
 
             modelBuilder.Entity("PetProject.Domain.Entities.Breed", b =>
                 {
-                    b.HasOne("PetProject.Domain.Aggregates.Species", null)
+                    b.HasOne("PetProject.Domain.Entities.Aggregates.Species", null)
                         .WithMany("Breeds")
                         .HasForeignKey("species_id")
                         .HasConstraintName("fk_breed_species_species_id");
@@ -362,7 +357,7 @@ namespace PetProject.Infastructure.Migrations
 
             modelBuilder.Entity("PetProject.Domain.Entities.Pet", b =>
                 {
-                    b.HasOne("PetProject.Domain.Aggregates.Volunteer", null)
+                    b.HasOne("PetProject.Domain.Entities.Aggregates.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
@@ -407,12 +402,12 @@ namespace PetProject.Infastructure.Migrations
                         .HasConstraintName("fk_pet_photos_pets_pet_id");
                 });
 
-            modelBuilder.Entity("PetProject.Domain.Aggregates.Species", b =>
+            modelBuilder.Entity("PetProject.Domain.Entities.Aggregates.Species", b =>
                 {
                     b.Navigation("Breeds");
                 });
 
-            modelBuilder.Entity("PetProject.Domain.Aggregates.Volunteer", b =>
+            modelBuilder.Entity("PetProject.Domain.Entities.Aggregates.Volunteer", b =>
                 {
                     b.Navigation("Pets");
                 });

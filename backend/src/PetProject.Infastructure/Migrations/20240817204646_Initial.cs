@@ -16,7 +16,7 @@ namespace PetProject.Infastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    pet_type = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -82,8 +82,8 @@ namespace PetProject.Infastructure.Migrations
                     state = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     street = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     zipcode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    breed_id_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    species_id_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    pet_type_info_breed_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    pet_type_info_species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     requisites = table.Column<string>(type: "jsonb", nullable: true)
                 },

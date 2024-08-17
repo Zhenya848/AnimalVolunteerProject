@@ -1,4 +1,6 @@
-﻿namespace PetProject.Domain.Entities
+﻿using PetProject.Domain.ValueObjects.IdClasses;
+
+namespace PetProject.Domain.Entities
 {
     public class PetPhoto : Shared.Entity<PetPhotoId>
     {

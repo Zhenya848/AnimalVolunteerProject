@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PetProject.Domain.Entities;
 using PetProject.Domain.Shared;
-using PetProject.Domain.Aggregates;
 using PetProject.Domain.ValueObjects;
+using PetProject.Domain.ValueObjects.IdClasses;
 
 public class PetConfiguration : IEntityTypeConfiguration<Pet>
 {
@@ -19,16 +19,10 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(c => c.Color).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         builder.Property(h => h.HealthInfo).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
-        builder.ComplexProperty(p => p.SpeciesId, pb =>
+        builder.ComplexProperty(pti => pti.PetTypeInfo, ptib =>
         {
-            pb.Property(p => p.Id)
-                .IsRequired();
-        });
-
-        builder.ComplexProperty(p => p.BreedId, pb =>
-        {
-            pb.Property(p => p.Id)
-                .IsRequired();
+            ptib.Property(bi => bi.BreedId).HasConversion(i => i.Id, value => BreedId.Create(value));
+            ptib.Property(si => si.SpeciesId).HasConversion(i => i.Id, value => SpeciesId.Create(value));
         });
 
         builder.ComplexProperty(tn => tn.TelephoneNumber, tnb =>
