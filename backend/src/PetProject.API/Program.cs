@@ -1,4 +1,7 @@
+using PetProject.Application.Repositories;
+using PetProject.Application.Volunteers.Services;
 using PetProject.Infastructure;
+using PetProject.Infastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<AppDbContext>();
+
+builder.Services.AddScoped<IVolunteerService, VolunteerService>();
+builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
 
 var app = builder.Build();
 

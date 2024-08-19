@@ -2,9 +2,9 @@
 {
     public record PetId
     {
-        public Guid Id { get; private set; }
+        public Guid Value { get; private set; }
 
-        private PetId(Guid id) => Id = id;
+        private PetId(Guid id) => Value = id;
 
         public static PetId AddNewId() => new(Guid.NewGuid());
         public static PetId AddEmptyId() => new(Guid.Empty);

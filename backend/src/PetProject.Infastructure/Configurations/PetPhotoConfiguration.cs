@@ -13,7 +13,7 @@ namespace PetProject.Infastructure.Configurations
             builder.ToTable("petPhotos");
 
             builder.HasKey(pp => pp.Id);
-            builder.Property(pp => pp.Id).HasConversion(i => i.Id, value => PetPhotoId.Create(value));
+            builder.Property(pp => pp.Id).HasConversion(i => i.Value, value => PetPhotoId.Create(value));
 
             builder.Property(p => p.Path).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
             builder.Property(imp => imp.IsMainPhoto);

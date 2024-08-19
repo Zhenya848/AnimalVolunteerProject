@@ -2,9 +2,9 @@
 {
     public record VolunteerId
     {
-        public Guid Id { get; private set; }
+        public Guid Value { get; }
 
-        private VolunteerId(Guid id) => Id = id;
+        private VolunteerId(Guid id) => Value = id;
 
         public static VolunteerId AddNewId() => new(Guid.NewGuid());
         public static VolunteerId AddEmptyId() => new(Guid.Empty);

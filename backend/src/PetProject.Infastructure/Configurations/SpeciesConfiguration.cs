@@ -15,7 +15,7 @@ namespace PetProject.Infastructure.Configurations
 
             builder.Property(s => s.Id)
                 .HasConversion(
-                    speciesId => speciesId.Id,
+                    speciesId => speciesId.Value,
                     id => SpeciesId.Create(id)
                 );
 

@@ -34,8 +34,7 @@ namespace PetProject.Infastructure.Migrations
                     last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
-                    requisites = table.Column<string>(type: "jsonb", nullable: true),
-                    sotial_networks = table.Column<string>(type: "jsonb", nullable: true)
+                    details = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,7 +84,7 @@ namespace PetProject.Infastructure.Migrations
                     pet_type_info_breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_type_info_species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
-                    requisites = table.Column<string>(type: "jsonb", nullable: true)
+                    details = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {

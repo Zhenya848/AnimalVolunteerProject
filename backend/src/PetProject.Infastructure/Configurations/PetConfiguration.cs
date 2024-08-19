@@ -12,7 +12,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.ToTable("pets");
 
         builder.HasKey(p => p.Id);
-        builder.Property(p => p.Id).HasConversion(i => i.Id, value => PetId.Create(value));
+        builder.Property(p => p.Id).HasConversion(i => i.Value, value => PetId.Create(value));
 
         builder.Property(n => n.Name).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         builder.Property(d => d.Description).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
@@ -21,8 +21,8 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         builder.ComplexProperty(pti => pti.PetTypeInfo, ptib =>
         {
-            ptib.Property(bi => bi.BreedId).HasConversion(i => i.Id, value => BreedId.Create(value));
-            ptib.Property(si => si.SpeciesId).HasConversion(i => i.Id, value => SpeciesId.Create(value));
+            ptib.Property(bi => bi.BreedId).HasConversion(i => i.Value, value => BreedId.Create(value));
+            ptib.Property(si => si.SpeciesId).HasConversion(i => i.Value, value => SpeciesId.Create(value));
         });
 
         builder.ComplexProperty(tn => tn.TelephoneNumber, tnb =>
@@ -64,8 +64,17 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(bt => bt.BirthdayTime);
         builder.Property(doc => doc.DateOfCreation);
 
-        builder.OwnsMany(r => r.Requisites, rb => { rb.ToJson(); });
-        builder.HasMany(r => r.PetPhotos).WithOne().HasForeignKey("pet_id");
+        builder.OwnsOne(d => d.Details, db =>
+        {
+            db.ToJson();
+
+            db.OwnsMany(r => r.Requisites, rb =>
+            {
+                rb.Property(n => n.Name).IsRequired();
+                rb.Property(d => d.Description).IsRequired();
+            });
+        });
+
 
         builder.Property(hs => hs.HelpStatus).HasConversion<string>()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);

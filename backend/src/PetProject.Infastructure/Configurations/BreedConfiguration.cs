@@ -11,7 +11,7 @@ namespace PetProject.Infastructure.Configurations
         public void Configure(EntityTypeBuilder<Breed> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(p => p.Id).HasConversion(i => i.Id, value => BreedId.Create(value));
+            builder.Property(p => p.Id).HasConversion(i => i.Value, value => BreedId.Create(value));
 
             builder.Property(x => x.title).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         }

@@ -1,4 +1,5 @@
 ﻿using PetProject.Domain.ValueObjects;
+using PetProject.Domain.ValueObjects.Details;
 using PetProject.Domain.ValueObjects.IdClasses;
 
 namespace PetProject.Domain.Entities
@@ -24,8 +25,8 @@ namespace PetProject.Domain.Entities
         public DateOnly BirthdayTime { get; private set; }
         public DateOnly DateOfCreation { get; private set; }
 
-        public List<Requisite> Requisites { get; private set; } = default!;
-        public List<PetPhoto> PetPhotos { get; private set; } = default!;
+        public PetDetails Details { get; private set; } = default!;
+        public List<PetPhoto> Photos { get; private set; } = default!;
 
         public HelpStatus HelpStatus { get; private set; }
 

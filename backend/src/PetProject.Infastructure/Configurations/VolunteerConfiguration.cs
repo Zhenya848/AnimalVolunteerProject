@@ -14,7 +14,7 @@ namespace PetProject.Infastructure.Configurations
             builder.ToTable("volunteers");
 
             builder.HasKey(v => v.Id);
-            builder.Property(v => v.Id).HasConversion(i => i.Id, value => VolunteerId.Create(value));
+            builder.Property(v => v.Id).HasConversion(i => i.Value, value => VolunteerId.Create(value));
 
             builder.ComplexProperty(n => n.Name, nb =>
             {
@@ -34,8 +34,22 @@ namespace PetProject.Infastructure.Configurations
             builder.Property(d => d.Description).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
             builder.Property(e => e.EXP);
 
-            builder.OwnsMany(r => r.Requisites, rb => { rb.ToJson(); });
-            builder.OwnsMany(sn => sn.SotialNetworks, snb => { snb.ToJson(); });
+            builder.OwnsOne(d => d.Details, db => 
+            { 
+                db.ToJson();
+
+                db.OwnsMany(r => r.Requisites, rb =>
+                {
+                    rb.Property(n => n.Name).IsRequired();
+                    rb.Property(d => d.Description).IsRequired();
+                });
+
+                db.OwnsMany(sn => sn.SocialNetworks, snb =>
+                {
+                    snb.Property(n => n.Name).IsRequired();
+                    snb.Property(r => r.Reference).IsRequired();
+                });
+            });
 
             builder.HasMany(p => p.Pets).WithOne().HasForeignKey("volunteer_id");
         }
