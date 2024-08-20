@@ -12,9 +12,9 @@ namespace PetProject.API.Controllers
     {
         [HttpPost]
         public async Task<IActionResult> Create([FromServices] IVolunteerService volunteerService, 
-            [FromBody] CreateVolunteerRequest createVolunteerRequest)
+            [FromBody] CreateVolunteerRequest createVolunteerRequest, CancellationToken cancellationToken)
         {
-            var result = await volunteerService.Create(createVolunteerRequest);
+            var result = await volunteerService.Create(createVolunteerRequest, cancellationToken);
 
             if (result.IsFailure)
                 return BadRequest(result.Error);

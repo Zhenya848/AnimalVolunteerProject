@@ -13,11 +13,8 @@ namespace PetProject.Infastructure.Repositories
         public VolunteerRepository(AppDbContext appDbContext) 
             => _appDbContext = appDbContext;
 
-        public async Task<Result<VolunteerId, Error>> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
+        public async Task<VolunteerId> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
-            if (volunteer == null)
-                return Errors.General.ValueIsInvalid("Volunteer is null!");
-
             await _appDbContext.Volunteers.AddAsync(volunteer, cancellationToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 

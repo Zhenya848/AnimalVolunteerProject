@@ -15,19 +15,40 @@ namespace PetProject.Application.Volunteers.Services
         public VolunteerService(IVolunteerRepository volunteerRepository) =>
             _volunteerRepository = volunteerRepository;
 
-        public async Task<Result<VolunteerId, Error>> Create(CreateVolunteerRequest createVolunteerRequest,
+        public async Task<Result<VolunteerId, Error>> Create(CreateVolunteerRequest request,
             CancellationToken cancellationToken = default)
         {
-            List<SocialNetwork> socialNetworks = createVolunteerRequest.sotialNetworks
-            .Select(s => SocialNetwork.Create(s.name, s.reference).Value).ToList();
+            var fullName = FullName.Create(request.firstname, request.lastName, request.patronymic);
 
-            List<Requisite> requesites = createVolunteerRequest.requisites
-            .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
+            if (fullName.IsFailure)
+                return fullName.Error;
 
-            var volunteer = Volunteer.Create(VolunteerId.AddNewId(), createVolunteerRequest.firstname,
-                createVolunteerRequest.lastName, createVolunteerRequest.patronymic, createVolunteerRequest.description,
-                createVolunteerRequest.phoneNumber, createVolunteerRequest.exp, socialNetworks,
-                requesites, []);
+            var telephoneNumber = TelephoneNumber.Create(request.phoneNumber);
+
+            if (telephoneNumber.IsFailure)
+                return telephoneNumber.Error;
+
+            var socialNetworks = request.sotialNetworks
+            .Select(s => SocialNetwork.Create(s.name, s.reference)).ToList();
+
+            if (socialNetworks.Any(s => s.IsFailure))
+                return Errors.General.ValueIsInvalid("One or more links to a social network");
+
+            var requisites = request.requisites
+            .Select(r => Requisite.Create(r.title, r.description)).ToList();
+
+            if (requisites.Any(r => r.IsFailure))
+                return Errors.General.ValueIsInvalid("One or more requisites");
+
+            if (string.IsNullOrWhiteSpace(request.description))
+                return Errors.General.ValueIsInvalid("Description is null or white space!");
+
+            if (request.exp < 0)
+                return Errors.General.ValueIsInvalid("Exp can't be less than zero!");
+
+            var volunteer = Volunteer.Create(VolunteerId.AddNewId(), fullName.Value, request.description,
+                telephoneNumber.Value, request.exp, socialNetworks.Select(s => s.Value).ToList(),
+                requisites.Select(r => r.Value).ToList(), []);
 
             if (volunteer.IsFailure)
                 return Errors.General.ValueIsInvalid("Create volunteer fail!");

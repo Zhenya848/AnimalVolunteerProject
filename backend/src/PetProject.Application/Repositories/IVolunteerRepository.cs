@@ -7,6 +7,6 @@ namespace PetProject.Application.Repositories
 {
     public interface IVolunteerRepository
     {
-        Task<Result<VolunteerId, Error>> Add(Volunteer volunteer, CancellationToken cancellationToken = default);
+        Task<VolunteerId> Add(Volunteer volunteer, CancellationToken cancellationToken = default);
     }
 }

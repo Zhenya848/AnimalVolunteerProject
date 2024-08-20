@@ -33,20 +33,11 @@ namespace PetProject.Domain.Entities.Aggregates
             Pets = pets;
         }
 
-        public static Result<Volunteer, Error> Create(VolunteerId id, string firstname, string lastName, string patronymic, 
-            string description, string phoneNumber, int exp, List<SocialNetwork> sotialNetworks, 
+        public static Result<Volunteer, Error> Create(VolunteerId id, FullName fullName, 
+            string description, TelephoneNumber telephoneNumber, int exp, List<SocialNetwork> sotialNetworks, 
             List<Requisite> requisites, List<Pet> pets)
         {
-            var fullName = FullName.Create(firstname, lastName, patronymic);
-            var telephoneNumber = TelephoneNumber.Create(phoneNumber);
-
-            if (string.IsNullOrWhiteSpace(description))
-                return Errors.General.ValueIsInvalid("description is null or white space!");
-
-            if (exp < 0)
-                return Errors.General.ValueIsInvalid("Wtf??? exp can't be less than zero!");
-
-            return new Volunteer(id, fullName.Value, description, telephoneNumber.Value, exp, 
+            return new Volunteer(id, fullName, description, telephoneNumber, exp, 
                 sotialNetworks, requisites, pets);
         }
 
