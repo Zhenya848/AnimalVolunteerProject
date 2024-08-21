@@ -28,9 +28,6 @@ namespace PetProject.API
                 case ErrorType.Failure:
                     statusCode = StatusCodes.Status500InternalServerError;
                     break;
-                case ErrorType.ValueIsRequired:
-                    statusCode = StatusCodes.Status400BadRequest;
-                    break;
             }
 
             return new ObjectResult(Envelope.Error(result.Error)) { StatusCode = statusCode };

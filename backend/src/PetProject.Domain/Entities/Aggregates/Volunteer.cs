@@ -16,9 +16,7 @@ namespace PetProject.Domain.Entities.Aggregates
         public int EXP { get; private set; }
 
         public VolunteerDetails Details { get; private set; } = default!;
-
-        private List<Pet> _pets = [];
-        public IReadOnlyList<Pet> Pets => _pets;
+        public IReadOnlyList<Pet> Pets = default!;
 
         private Volunteer(VolunteerId id) : base(id)
         {
@@ -33,7 +31,7 @@ namespace PetProject.Domain.Entities.Aggregates
             EXP = exp;
 
             Details = new VolunteerDetails(sotialNetworks, requisites);
-            _pets = pets;
+            Pets = pets;
         }
 
         public int CountOfShelterAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.FindAHome);

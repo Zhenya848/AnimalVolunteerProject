@@ -10,9 +10,6 @@
             public static Error NotFound(Guid? id = null) =>
                 Error.NotFound("record.not.found", $"record not found{(id != null ? " for id: " + id : "")}");
 
-            public static Error ValueIsRequired(string? name = null) =>
-                Error.ValueIsRequired("length.is.invalid", $"invalid {name} length");
-
             public static Error Failure(string? name = null) =>
                 Error.Failure("failure", $"{(name != null ? name : "value")} is failure");
 

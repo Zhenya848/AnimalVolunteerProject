@@ -7,7 +7,7 @@ namespace PetProject.Application
     {
         public static IServiceCollection AddFromApplication(this IServiceCollection services)
         {
-            services.AddScoped<ICRUDVolunteerService, CRUDVolunteerService>();
+            services.AddScoped<IVolunteerService, VolunteerService>();
 
             return services;
         }

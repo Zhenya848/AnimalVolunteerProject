@@ -9,7 +9,7 @@ namespace PetProject.API.Controllers
     public class VolunteersController : ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create([FromServices] ICRUDVolunteerService volunteerService, 
+        public async Task<ActionResult<Guid>> Create([FromServices] IVolunteerService volunteerService, 
             [FromBody] CreateVolunteerRequest createVolunteerRequest, CancellationToken cancellationToken = default)
         {
             var result = await volunteerService.Create(createVolunteerRequest, cancellationToken);

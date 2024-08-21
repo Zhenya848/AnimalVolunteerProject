@@ -6,7 +6,7 @@ using PetProject.Domain.ValueObjects.IdClasses;
 
 namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService
 {
-    public interface ICRUDVolunteerService
+    public interface IVolunteerService
     {
         Task<Result<Guid, Error>> Create(CreateVolunteerRequest request, CancellationToken cancellationToken = default);
         Task Delete(Guid id);

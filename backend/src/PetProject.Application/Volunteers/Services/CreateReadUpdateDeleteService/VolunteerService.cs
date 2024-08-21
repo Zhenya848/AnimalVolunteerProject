@@ -8,11 +8,11 @@ using PetProject.Domain.ValueObjects.IdClasses;
 
 namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService
 {
-    public class CRUDVolunteerService : ICRUDVolunteerService
+    public class VolunteerService : IVolunteerService
     {
         private readonly IVolunteerRepository _volunteerRepository;
 
-        public CRUDVolunteerService(IVolunteerRepository volunteerRepository) =>
+        public VolunteerService(IVolunteerRepository volunteerRepository) =>
             _volunteerRepository = volunteerRepository;
 
         public async Task<Result<Guid, Error>> Create(CreateVolunteerRequest request,
