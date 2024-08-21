@@ -8,7 +8,7 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
 {
     public interface ICRUDVolunteerService
     {
-        Task<Result<VolunteerId, Error>> Create(CreateVolunteerRequest request, CancellationToken cancellationToken = default);
+        Task<Result<Guid, Error>> Create(CreateVolunteerRequest request, CancellationToken cancellationToken = default);
         Task Delete(Guid id);
         Task Update(Volunteer entity);
         Task<Volunteer> GetById(Guid id);

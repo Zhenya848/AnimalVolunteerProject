@@ -4,13 +4,13 @@ namespace PetProject.Domain.ValueObjects.Details
 {
     public class VolunteerDetails
     {
-        public IEnumerable<SocialNetwork> SocialNetworks = [];
-        public IEnumerable<Requisite> Requisites = [];
+        public IReadOnlyList<SocialNetwork> SocialNetworks = default!;
+        public IReadOnlyList<Requisite> Requisites = default!;
 
         public VolunteerDetails(IEnumerable<SocialNetwork> socialNetworks, IEnumerable<Requisite> requisites)
         {
-            SocialNetworks = socialNetworks;
-            Requisites = requisites;
+            SocialNetworks = socialNetworks.ToList();
+            Requisites = requisites.ToList();
         }
 
         private VolunteerDetails() { }

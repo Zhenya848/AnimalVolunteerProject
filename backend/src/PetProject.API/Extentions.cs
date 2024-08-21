@@ -1,21 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Mvc;
+using PetProject.API.Response;
 using PetProject.Domain.Shared;
 
 namespace PetProject.API
 {
     public static class Extentions
     {
-        public static ActionResult ToErrorResponse(this Error error)
+        public static ActionResult ToResponse<T>(this Result<T, Error> result)
         {
-            int statusCode = StatusCodes.Status400BadRequest;
+            if (result.IsSuccess)
+                return new OkObjectResult(Envelope.Ok(result.Value));
 
-            switch (error.ErrorType)
+            int statusCode = default;
+
+            switch (result.Error.ErrorType)
             {
                 case ErrorType.Validation:
                     statusCode = StatusCodes.Status400BadRequest;
                     break;
                 case ErrorType.NotFound:
-                    statusCode = StatusCodes.Status404NotFound; 
+                    statusCode = StatusCodes.Status404NotFound;
                     break;
                 case ErrorType.Conflict:
                     statusCode = StatusCodes.Status409Conflict;
@@ -28,7 +33,7 @@ namespace PetProject.API
                     break;
             }
 
-            return new ObjectResult(error) { StatusCode = statusCode };
+            return new ObjectResult(Envelope.Error(result.Error)) { StatusCode = statusCode };
         }
     }
 }

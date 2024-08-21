@@ -3,6 +3,7 @@ using PetProject.Domain.Shared;
 using PetProject.Domain.ValueObjects;
 using PetProject.Domain.ValueObjects.Details;
 using PetProject.Domain.ValueObjects.IdClasses;
+using System.Collections.Generic;
 
 namespace PetProject.Domain.Entities.Aggregates
 {
@@ -15,7 +16,9 @@ namespace PetProject.Domain.Entities.Aggregates
         public int EXP { get; private set; }
 
         public VolunteerDetails Details { get; private set; } = default!;
-        public List<Pet> Pets { get; private set; } = default!;
+
+        private List<Pet> _pets = [];
+        public IReadOnlyList<Pet> Pets => _pets;
 
         private Volunteer(VolunteerId id) : base(id)
         {
@@ -30,7 +33,7 @@ namespace PetProject.Domain.Entities.Aggregates
             EXP = exp;
 
             Details = new VolunteerDetails(sotialNetworks, requisites);
-            Pets = pets;
+            _pets = pets;
         }
 
         public int CountOfShelterAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.FindAHome);

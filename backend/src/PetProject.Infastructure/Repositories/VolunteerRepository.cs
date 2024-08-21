@@ -15,7 +15,7 @@ namespace PetProject.Infastructure.Repositories
         public VolunteerRepository(AppDbContext appDbContext) 
             => _appDbContext = appDbContext;
 
-        public async Task<VolunteerId> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
+        public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             await _appDbContext.Volunteers.AddAsync(volunteer, cancellationToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);

@@ -15,7 +15,7 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
         public CRUDVolunteerService(IVolunteerRepository volunteerRepository) =>
             _volunteerRepository = volunteerRepository;
 
-        public async Task<Result<VolunteerId, Error>> Create(CreateVolunteerRequest request,
+        public async Task<Result<Guid, Error>> Create(CreateVolunteerRequest request,
             CancellationToken cancellationToken = default)
         {
             var telephoneNumber = TelephoneNumber.Create(request.phoneNumber);

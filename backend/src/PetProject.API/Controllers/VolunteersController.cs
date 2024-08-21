@@ -15,9 +15,9 @@ namespace PetProject.API.Controllers
             var result = await volunteerService.Create(createVolunteerRequest, cancellationToken);
 
             if (result.IsFailure)
-                return BadRequest(result.Error.ToErrorResponse());
+                return result.ToResponse();
 
-            return Ok((Guid)result.Value);
+            return result.ToResponse();
         }
     }
 }
