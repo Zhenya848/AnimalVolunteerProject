@@ -21,7 +21,7 @@ namespace PetProject.Domain.Entities.Aggregates
         {
         }
 
-        private Volunteer(VolunteerId id, FullName name, string description, TelephoneNumber telephoneNumber, int exp, 
+        public Volunteer(VolunteerId id, FullName name, string description, TelephoneNumber telephoneNumber, int exp, 
             List<SocialNetwork> sotialNetworks, List<Requisite> requisites, List<Pet> pets) : base(id)
         {
             Name = name;
@@ -31,14 +31,6 @@ namespace PetProject.Domain.Entities.Aggregates
 
             Details = new VolunteerDetails(sotialNetworks, requisites);
             Pets = pets;
-        }
-
-        public static Result<Volunteer, Error> Create(VolunteerId id, FullName fullName, 
-            string description, TelephoneNumber telephoneNumber, int exp, List<SocialNetwork> sotialNetworks, 
-            List<Requisite> requisites, List<Pet> pets)
-        {
-            return new Volunteer(id, fullName, description, telephoneNumber, exp, 
-                sotialNetworks, requisites, pets);
         }
 
         public int CountOfShelterAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.FindAHome);

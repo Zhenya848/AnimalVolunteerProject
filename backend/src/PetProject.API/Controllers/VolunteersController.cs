@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.Application.Volunteers.Create;
-using PetProject.Application.Volunteers.Services;
-using PetProject.Domain.Entities.Aggregates;
-using PetProject.Domain.ValueObjects.IdClasses;
+using PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService;
 
 namespace PetProject.API.Controllers
 {
@@ -11,15 +9,15 @@ namespace PetProject.API.Controllers
     public class VolunteersController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> Create([FromServices] IVolunteerService volunteerService, 
-            [FromBody] CreateVolunteerRequest createVolunteerRequest, CancellationToken cancellationToken)
+        public async Task<ActionResult<Guid>> Create([FromServices] ICRUDVolunteerService volunteerService, 
+            [FromBody] CreateVolunteerRequest createVolunteerRequest, CancellationToken cancellationToken = default)
         {
             var result = await volunteerService.Create(createVolunteerRequest, cancellationToken);
 
             if (result.IsFailure)
-                return BadRequest(result.Error);
+                return BadRequest(result.Error.ToErrorResponse());
 
-            return Ok(result.Value);
+            return Ok((Guid)result.Value);
         }
     }
 }

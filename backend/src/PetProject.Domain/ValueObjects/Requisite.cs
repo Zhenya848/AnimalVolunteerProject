@@ -19,10 +19,10 @@ namespace PetProject.Domain.ValueObjects
         public static Result<Requisite, Error> Create(string name, string description)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return Errors.General.ValueIsInvalid("Name is null or white space!");
+                return Errors.General.ValueIsInvalid("Name is null or white space! name");
 
             if (string.IsNullOrWhiteSpace(description))
-                return Errors.General.ValueIsInvalid("Description is null or white space!");
+                return Errors.General.ValueIsInvalid("Description is null or white space! description");
 
             return new Requisite(name, description);
         }

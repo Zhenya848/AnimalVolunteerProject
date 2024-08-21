@@ -6,27 +6,32 @@ using PetProject.Domain.Shared;
 using PetProject.Domain.ValueObjects;
 using PetProject.Domain.ValueObjects.IdClasses;
 
-namespace PetProject.Application.Volunteers.Services
+namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService
 {
-    public class VolunteerService : IVolunteerService
+    public class CRUDVolunteerService : ICRUDVolunteerService
     {
         private readonly IVolunteerRepository _volunteerRepository;
 
-        public VolunteerService(IVolunteerRepository volunteerRepository) =>
+        public CRUDVolunteerService(IVolunteerRepository volunteerRepository) =>
             _volunteerRepository = volunteerRepository;
 
         public async Task<Result<VolunteerId, Error>> Create(CreateVolunteerRequest request,
             CancellationToken cancellationToken = default)
         {
-            var fullName = FullName.Create(request.firstname, request.lastName, request.patronymic);
-
-            if (fullName.IsFailure)
-                return fullName.Error;
-
             var telephoneNumber = TelephoneNumber.Create(request.phoneNumber);
 
             if (telephoneNumber.IsFailure)
                 return telephoneNumber.Error;
+
+            var existVolunteer = await _volunteerRepository.GetByPhoneNumber(telephoneNumber.Value);
+
+            if (existVolunteer.IsSuccess)
+                return Errors.Volunteer.AlreadyExist();
+
+            var fullName = FullName.Create(request.firstname, request.lastName, request.patronymic);
+
+            if (fullName.IsFailure)
+                return fullName.Error;
 
             var socialNetworks = request.sotialNetworks
             .Select(s => SocialNetwork.Create(s.name, s.reference)).ToList();
@@ -41,19 +46,16 @@ namespace PetProject.Application.Volunteers.Services
                 return Errors.General.ValueIsInvalid("One or more requisites");
 
             if (string.IsNullOrWhiteSpace(request.description))
-                return Errors.General.ValueIsInvalid("Description is null or white space!");
+                return Errors.General.ValueIsInvalid("Description is null or white space! description");
 
             if (request.exp < 0)
-                return Errors.General.ValueIsInvalid("Exp can't be less than zero!");
+                return Errors.General.ValueIsInvalid("Exp can't be less than zero! exp");
 
-            var volunteer = Volunteer.Create(VolunteerId.AddNewId(), fullName.Value, request.description,
+            Volunteer volunteer = new Volunteer(VolunteerId.AddNewId(), fullName.Value, request.description,
                 telephoneNumber.Value, request.exp, socialNetworks.Select(s => s.Value).ToList(),
                 requisites.Select(r => r.Value).ToList(), []);
 
-            if (volunteer.IsFailure)
-                return Errors.General.ValueIsInvalid("Create volunteer fail!");
-
-            return await _volunteerRepository.Add(volunteer.Value, cancellationToken);
+            return await _volunteerRepository.Add(volunteer, cancellationToken);
         }
 
         public Task Delete(Guid id)

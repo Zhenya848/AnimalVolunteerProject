@@ -3,6 +3,8 @@ using PetProject.Application.Repositories;
 using PetProject.Domain.ValueObjects.IdClasses;
 using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
+using Microsoft.EntityFrameworkCore;
+using PetProject.Domain.ValueObjects;
 
 namespace PetProject.Infastructure.Repositories
 {
@@ -19,6 +21,29 @@ namespace PetProject.Infastructure.Repositories
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
             return volunteer.Id;
+        }
+
+        public async Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId)
+        {
+            var volunteer = await _appDbContext.Volunteers.Include(d => d.Details)
+                .Include(t => t.TelephoneNumber).Include(n => n.Name).Include(p => p.Pets)
+                .FirstOrDefaultAsync(v => v.Id == volunteerId);
+
+            if (volunteer == null)
+                return Errors.General.NotFound((Guid)volunteerId);
+
+            return volunteer;
+        }
+
+        public async Task<Result<Volunteer, Error>> GetByPhoneNumber(TelephoneNumber phoneNumber)
+        {
+            var volunteer = await _appDbContext.Volunteers
+                .FirstOrDefaultAsync(v => v.TelephoneNumber == phoneNumber);
+
+            if (volunteer == null)
+                return Errors.General.NotFound();
+
+            return volunteer;
         }
     }
 }

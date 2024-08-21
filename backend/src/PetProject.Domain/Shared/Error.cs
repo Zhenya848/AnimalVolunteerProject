@@ -19,6 +19,9 @@
         public static Error NotFound(string code, string message) =>
             new Error(code, message, ErrorType.NotFound);
 
+        public static Error ValueIsRequired(string code, string message) =>
+            new Error(code, message, ErrorType.ValueIsRequired);
+
         public static Error Failure(string code, string message) =>
             new Error(code, message, ErrorType.Failure);
 
@@ -30,6 +33,7 @@
     {
         Validation,
         NotFound,
+        ValueIsRequired,
         Failure,
         Conflict
     }

@@ -1,5 +1,6 @@
+using PetProject.Application;
 using PetProject.Application.Repositories;
-using PetProject.Application.Volunteers.Services;
+using PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService;
 using PetProject.Infastructure;
 using PetProject.Infastructure.Repositories;
 
@@ -10,10 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<AppDbContext>();
-
-builder.Services.AddScoped<IVolunteerService, VolunteerService>();
-builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+builder.Services
+    .AddFromInfrastructure()
+    .AddFromApplication();
 
 var app = builder.Build();
 

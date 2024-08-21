@@ -19,7 +19,7 @@ namespace PetProject.Domain.ValueObjects
         public static Result<TelephoneNumber, Error> Create(string phoneNumber)
         {
             if (Regex.IsMatch(phoneNumber, PHONE_REGEX) == false)
-                return Errors.General.ValueIsInvalid("Telephone number!");
+                return Errors.General.ValueIsInvalid("Telephone number");
 
             return new TelephoneNumber(phoneNumber);
         }

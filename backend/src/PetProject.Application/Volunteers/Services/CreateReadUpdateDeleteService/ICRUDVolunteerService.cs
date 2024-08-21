@@ -4,9 +4,9 @@ using PetProject.Domain.Entities.Aggregates;
 using PetProject.Domain.Shared;
 using PetProject.Domain.ValueObjects.IdClasses;
 
-namespace PetProject.Application.Volunteers.Services
+namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService
 {
-    public interface IVolunteerService
+    public interface ICRUDVolunteerService
     {
         Task<Result<VolunteerId, Error>> Create(CreateVolunteerRequest request, CancellationToken cancellationToken = default);
         Task Delete(Guid id);
