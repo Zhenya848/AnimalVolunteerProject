@@ -24,9 +24,6 @@ namespace PetProject.Domain.Volunteers.ValueObjects
             if (string.IsNullOrWhiteSpace(lastName))
                 return Errors.General.ValueIsInvalid("last name is null or white space! last name");
 
-            if (string.IsNullOrWhiteSpace(patronymic))
-                return Errors.General.ValueIsInvalid("patronymic is null or white space! patronymic");
-
             return new FullName(firstName, lastName, patronymic);
         }
     }

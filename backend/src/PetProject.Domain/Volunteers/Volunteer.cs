@@ -24,8 +24,13 @@ namespace PetProject.Domain.Volunteers
         {
         }
 
-        public Volunteer(VolunteerId id, FullName name, string description, TelephoneNumber telephoneNumber, int exp,
-            List<SocialNetwork> sotialNetworks, List<Requisite> requisites) : base(id)
+        public Volunteer(VolunteerId id, 
+            FullName name, 
+            string description, 
+            TelephoneNumber telephoneNumber, 
+            int exp,
+            List<SocialNetwork> sotialNetworks, 
+            List<Requisite> requisites) : base(id)
         {
             Name = name;
             Description = description;

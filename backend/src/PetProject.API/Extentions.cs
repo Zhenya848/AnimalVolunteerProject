@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PetProject.API.Response;
 using PetProject.Domain.Shared;
@@ -31,6 +33,23 @@ namespace PetProject.API
             Envelope envelope = Envelope.Error([responseError]);
 
             return new ObjectResult(envelope) { StatusCode = statusCode };
+        }
+
+        public static ActionResult? ValidationErrorResponse(this ValidationResult validatorResult)
+        {
+            if (validatorResult.IsValid == false)
+            {
+                var validationErrors = validatorResult.Errors;
+
+                List<ResponseError> responseErrors =
+                    (from validationError in validationErrors
+                     let error = Error.Validation(validationError.ErrorCode, validationError.ErrorMessage)
+                     select new ResponseError(error.Code, error.Message, validationError.PropertyName)).ToList();
+
+                return new ObjectResult(Envelope.Error(responseErrors)) { StatusCode = StatusCodes.Status400BadRequest };
+            }
+
+            return null;
         }
     }
 }

@@ -20,19 +20,11 @@ namespace PetProject.API.Controllers
             [FromBody] CreateVolunteerRequest createVolunteerRequest, 
             CancellationToken cancellationToken = default)
         {
-            var validatorResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
+            var validatorResult = (await validator.ValidateAsync(createVolunteerRequest, cancellationToken))
+            .ValidationErrorResponse();
 
-            if (validatorResult.IsValid == false)
-            {
-                var validationErrors = validatorResult.Errors;
-
-                List<ResponseError> responseErrors = 
-                    (from validationError in validationErrors                                 
-                     let error = Error.Validation(validationError.ErrorCode, validationError.ErrorMessage)
-                     select new ResponseError(error.Code, error.Message, validationError.PropertyName)).ToList();
-
-                return BadRequest(Envelope.Error(responseErrors));
-            }
+            if (validatorResult != null)
+                return validatorResult;
 
             var result = await volunteerService.Create(createVolunteerRequest, cancellationToken);
 
