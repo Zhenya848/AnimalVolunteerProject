@@ -7,14 +7,11 @@ namespace PetProject.API
 {
     public static class Extentions
     {
-        public static ActionResult ToResponse<T>(this Result<T, Error> result)
+        public static ActionResult ToResponse(this Error error)
         {
-            if (result.IsSuccess)
-                return new OkObjectResult(Envelope.Ok(result.Value));
-
             int statusCode = default;
 
-            switch (result.Error.ErrorType)
+            switch (error.ErrorType)
             {
                 case ErrorType.Validation:
                     statusCode = StatusCodes.Status400BadRequest;
@@ -30,7 +27,10 @@ namespace PetProject.API
                     break;
             }
 
-            return new ObjectResult(Envelope.Error(result.Error)) { StatusCode = statusCode };
+            ResponseError responseError = new ResponseError(error.Code, error.Message, null);
+            Envelope envelope = Envelope.Error([responseError]);
+
+            return new ObjectResult(envelope) { StatusCode = statusCode };
         }
     }
 }

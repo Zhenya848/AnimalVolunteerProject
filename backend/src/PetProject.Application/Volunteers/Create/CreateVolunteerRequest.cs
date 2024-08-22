@@ -1,10 +1,11 @@
-﻿using PetProject.Domain.Dtos;
+﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
 
 namespace PetProject.Application.Volunteers.Create
 {
-    public record CreateVolunteerRequest(string firstname, 
+    public record CreateVolunteerRequest(
+        string firstname, 
         string lastName, 
-        string patronymic, 
+        string? patronymic, 
         string description, 
         string phoneNumber, 
         int exp, 

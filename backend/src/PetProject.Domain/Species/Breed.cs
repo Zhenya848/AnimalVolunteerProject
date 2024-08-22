@@ -1,6 +1,6 @@
-﻿using PetProject.Domain.ValueObjects.IdClasses;
+﻿using PetProject.Domain.Shared.ValueObjects.IdClasses;
 
-namespace PetProject.Domain.Entities
+namespace PetProject.Domain.Species
 {
     public class Breed : Shared.Entity<BreedId>
     {

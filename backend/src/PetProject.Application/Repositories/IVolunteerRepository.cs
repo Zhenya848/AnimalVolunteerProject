@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using PetProject.Domain.Entities.Aggregates;
 using PetProject.Domain.Shared;
-using PetProject.Domain.ValueObjects;
-using PetProject.Domain.ValueObjects.IdClasses;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
+using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.Application.Repositories
 {

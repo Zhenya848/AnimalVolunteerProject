@@ -2,7 +2,7 @@
 using PetProject.Domain.Shared;
 using System.Text.RegularExpressions;
 
-namespace PetProject.Domain.ValueObjects
+namespace PetProject.Domain.Volunteers.ValueObjects
 {
     public record TelephoneNumber
     {
@@ -11,13 +11,15 @@ namespace PetProject.Domain.ValueObjects
 
         public const int MAX_LENGTH = 13;
 
-        private TelephoneNumber(string phoneNumber) 
+        private TelephoneNumber(string phoneNumber)
         {
             PhoneNumber = phoneNumber;
         }
 
         public static Result<TelephoneNumber, Error> Create(string phoneNumber)
         {
+            phoneNumber = phoneNumber.Trim();
+
             if (Regex.IsMatch(phoneNumber, PHONE_REGEX) == false)
                 return Errors.General.ValueIsInvalid("Telephone number");
 

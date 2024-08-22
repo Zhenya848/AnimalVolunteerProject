@@ -1,10 +1,10 @@
-﻿using PetProject.Domain.Entities.Aggregates;
-using PetProject.Application.Repositories;
-using PetProject.Domain.ValueObjects.IdClasses;
+﻿using PetProject.Application.Repositories;
 using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
-using PetProject.Domain.ValueObjects;
+using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.ValueObjects;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
 
 namespace PetProject.Infastructure.Repositories
 {
@@ -25,8 +25,7 @@ namespace PetProject.Infastructure.Repositories
 
         public async Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId)
         {
-            var volunteer = await _appDbContext.Volunteers.Include(d => d.Details)
-                .Include(t => t.TelephoneNumber).Include(n => n.Name).Include(p => p.Pets)
+            var volunteer = await _appDbContext.Volunteers
                 .FirstOrDefaultAsync(v => v.Id == volunteerId);
 
             if (volunteer == null)

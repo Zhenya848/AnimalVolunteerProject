@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 
-namespace PetProject.Domain.ValueObjects
+namespace PetProject.Domain.Volunteers.ValueObjects
 {
     public record Requisite
     {

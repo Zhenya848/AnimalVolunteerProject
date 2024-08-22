@@ -1,8 +1,9 @@
-﻿using PetProject.Domain.ValueObjects;
-using PetProject.Domain.ValueObjects.Details;
-using PetProject.Domain.ValueObjects.IdClasses;
+﻿using PetProject.Domain.Shared.ValueObjects.IdClasses;
+using PetProject.Domain.Species;
+using PetProject.Domain.Volunteers.ValueObjects;
+using PetProject.Domain.Volunteers.ValueObjects.Collections;
 
-namespace PetProject.Domain.Entities
+namespace PetProject.Domain.Volunteers
 {
     public class Pet : Shared.Entity<PetId>
     {
@@ -25,7 +26,7 @@ namespace PetProject.Domain.Entities
         public DateOnly BirthdayTime { get; private set; }
         public DateOnly DateOfCreation { get; private set; }
 
-        public PetDetails Details { get; private set; } = default!;
+        public RequisitesList RequisitesList { get; private set; } = default!;
         public List<PetPhoto> Photos { get; private set; } = default!;
 
         public HelpStatus HelpStatus { get; private set; }

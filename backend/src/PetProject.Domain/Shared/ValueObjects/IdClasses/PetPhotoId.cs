@@ -1,4 +1,4 @@
-﻿namespace PetProject.Domain.ValueObjects.IdClasses
+﻿namespace PetProject.Domain.Shared.ValueObjects.IdClasses
 {
     public record PetPhotoId
     {

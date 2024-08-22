@@ -1,8 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Application.Volunteers.Create;
-using PetProject.Domain.Entities.Aggregates;
 using PetProject.Domain.Shared;
-using PetProject.Domain.ValueObjects.IdClasses;
+using PetProject.Domain.Volunteers;
 
 namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService
 {

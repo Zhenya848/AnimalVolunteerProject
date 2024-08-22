@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetProject.Domain.Entities.Aggregates;
 using PetProject.Domain.Shared;
-using PetProject.Domain.ValueObjects;
-using PetProject.Domain.ValueObjects.IdClasses;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
+using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.Infastructure.Configurations
 {
@@ -34,17 +34,22 @@ namespace PetProject.Infastructure.Configurations
             builder.Property(d => d.Description).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
             builder.Property(e => e.EXP);
 
-            builder.OwnsOne(d => d.Details, db => 
-            { 
-                db.ToJson();
+            builder.OwnsOne(rl => rl.RequisitesList, rlb =>
+            {
+                rlb.ToJson();
 
-                db.OwnsMany(r => r.Requisites, rb =>
+                rlb.OwnsMany(r => r.Requisites, rb =>
                 {
                     rb.Property(n => n.Name).IsRequired();
                     rb.Property(d => d.Description).IsRequired();
                 });
+            });
 
-                db.OwnsMany(sn => sn.SocialNetworks, snb =>
+            builder.OwnsOne(snl => snl.SocialNetworksList, snlb =>
+            {
+                snlb.ToJson();
+
+                snlb.OwnsMany(sn => sn.SocialNetworks, snb =>
                 {
                     snb.Property(n => n.Name).IsRequired();
                     snb.Property(r => r.Reference).IsRequired();

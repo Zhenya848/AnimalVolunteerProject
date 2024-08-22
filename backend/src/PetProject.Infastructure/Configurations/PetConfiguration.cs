@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using PetProject.Domain.Entities;
 using PetProject.Domain.Shared;
-using PetProject.Domain.ValueObjects;
-using PetProject.Domain.ValueObjects.IdClasses;
+using PetProject.Domain.Volunteers.ValueObjects;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
+using PetProject.Domain.Volunteers;
 
 public class PetConfiguration : IEntityTypeConfiguration<Pet>
 {
@@ -64,17 +64,16 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.Property(bt => bt.BirthdayTime);
         builder.Property(doc => doc.DateOfCreation);
 
-        builder.OwnsOne(d => d.Details, db =>
+        builder.OwnsOne(rl => rl.RequisitesList, rlb =>
         {
-            db.ToJson();
+            rlb.ToJson();
 
-            db.OwnsMany(r => r.Requisites, rb =>
+            rlb.OwnsMany(r => r.Requisites, rb =>
             {
                 rb.Property(n => n.Name).IsRequired();
                 rb.Property(d => d.Description).IsRequired();
             });
         });
-
 
         builder.Property(hs => hs.HelpStatus).HasConversion<string>()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);

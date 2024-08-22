@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetProject.Domain.Entities;
 using PetProject.Domain.Shared;
-using PetProject.Domain.ValueObjects.IdClasses;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
+using PetProject.Domain.Species;
 
 namespace PetProject.Infastructure.Configurations
 {

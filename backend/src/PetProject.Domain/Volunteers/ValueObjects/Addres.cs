@@ -1,4 +1,4 @@
-﻿namespace PetProject.Domain.ValueObjects
+﻿namespace PetProject.Domain.Volunteers.ValueObjects
 {
     public record Addres
     {

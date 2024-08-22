@@ -1,3 +1,4 @@
+using PetProject.API;
 using PetProject.Application;
 using PetProject.Application.Repositories;
 using PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService;
@@ -13,7 +14,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddFromInfrastructure()
-    .AddFromApplication();
+    .AddFromApplication()
+    .AddFromAPI();
 
 var app = builder.Build();
 

@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 
-namespace PetProject.Domain.ValueObjects
+namespace PetProject.Domain.Volunteers.ValueObjects
 {
     public record FullName
     {
-        public string FirstName { get; private set; } = default!;
-        public string LastName { get; private set; } = default!;
-        public string Patronymic { get; private set; } = default!;
+        public string FirstName { get; } = default!;
+        public string LastName { get; } = default!;
+        public string Patronymic { get; } = default!;
 
         private FullName(string firstName, string lastName, string patronymic)
         {
@@ -16,7 +16,7 @@ namespace PetProject.Domain.ValueObjects
             Patronymic = patronymic;
         }
 
-        public static Result<FullName, Error> Create(string firstName, string lastName, string patronymic) 
+        public static Result<FullName, Error> Create(string firstName, string lastName, string patronymic)
         {
             if (string.IsNullOrWhiteSpace(firstName))
                 return Errors.General.ValueIsInvalid("first name is null or white space! first name");

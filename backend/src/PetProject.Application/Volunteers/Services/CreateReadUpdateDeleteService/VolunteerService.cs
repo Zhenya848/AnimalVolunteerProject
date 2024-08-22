@@ -1,10 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Application.Repositories;
 using PetProject.Application.Volunteers.Create;
-using PetProject.Domain.Entities.Aggregates;
 using PetProject.Domain.Shared;
-using PetProject.Domain.ValueObjects;
-using PetProject.Domain.ValueObjects.IdClasses;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
+using PetProject.Domain.Volunteers;
+using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService
 {
@@ -12,48 +12,30 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
     {
         private readonly IVolunteerRepository _volunteerRepository;
 
-        public VolunteerService(IVolunteerRepository volunteerRepository) =>
+        public VolunteerService(IVolunteerRepository volunteerRepository)
+        {
             _volunteerRepository = volunteerRepository;
+        }
 
         public async Task<Result<Guid, Error>> Create(CreateVolunteerRequest request,
             CancellationToken cancellationToken = default)
         {
-            var telephoneNumber = TelephoneNumber.Create(request.phoneNumber);
-
-            if (telephoneNumber.IsFailure)
-                return telephoneNumber.Error;
-
-            var existVolunteer = await _volunteerRepository.GetByPhoneNumber(telephoneNumber.Value);
+            var telephoneNumber = TelephoneNumber.Create(request.phoneNumber).Value;
+            var existVolunteer = await _volunteerRepository.GetByPhoneNumber(telephoneNumber);
 
             if (existVolunteer.IsSuccess)
                 return Errors.Volunteer.AlreadyExist();
 
-            var fullName = FullName.Create(request.firstname, request.lastName, request.patronymic);
-
-            if (fullName.IsFailure)
-                return fullName.Error;
+            var fullName = FullName.Create(request.firstname, request.lastName, request.patronymic ?? "").Value;
 
             var socialNetworks = request.sotialNetworks
-            .Select(s => SocialNetwork.Create(s.name, s.reference)).ToList();
-
-            if (socialNetworks.Any(s => s.IsFailure))
-                return Errors.General.ValueIsInvalid("One or more links to a social network");
+            .Select(s => SocialNetwork.Create(s.name, s.reference).Value).ToList();
 
             var requisites = request.requisites
-            .Select(r => Requisite.Create(r.title, r.description)).ToList();
+            .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
 
-            if (requisites.Any(r => r.IsFailure))
-                return Errors.General.ValueIsInvalid("One or more requisites");
-
-            if (string.IsNullOrWhiteSpace(request.description))
-                return Errors.General.ValueIsInvalid("Description is null or white space! description");
-
-            if (request.exp < 0)
-                return Errors.General.ValueIsInvalid("Exp can't be less than zero! exp");
-
-            Volunteer volunteer = new Volunteer(VolunteerId.AddNewId(), fullName.Value, request.description,
-                telephoneNumber.Value, request.exp, socialNetworks.Select(s => s.Value).ToList(),
-                requisites.Select(r => r.Value).ToList(), []);
+            Volunteer volunteer = new Volunteer(VolunteerId.AddNewId(), fullName, request.description,
+                telephoneNumber, request.exp, socialNetworks, requisites);
 
             return await _volunteerRepository.Add(volunteer, cancellationToken);
         }

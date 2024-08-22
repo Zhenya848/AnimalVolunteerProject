@@ -1,14 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 
-namespace PetProject.Domain.ValueObjects
+namespace PetProject.Domain.Volunteers.ValueObjects
 {
     public record SocialNetwork
     {
         public string Name { get; } = default!;
         public string Reference { get; } = default!;
 
-        private SocialNetwork(string name, string reference) 
+        private SocialNetwork(string name, string reference)
         {
             Name = name;
             Reference = reference;
