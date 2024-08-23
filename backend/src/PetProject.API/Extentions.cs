@@ -35,21 +35,25 @@ namespace PetProject.API
             return new ObjectResult(envelope) { StatusCode = statusCode };
         }
 
-        public static ActionResult? ValidationErrorResponse(this ValidationResult validatorResult)
+        public static ActionResult ValidationErrorResponse(this ValidationResult validatorResult)
         {
             if (validatorResult.IsValid == false)
             {
                 var validationErrors = validatorResult.Errors;
+                List<ResponseError> responseErrors = new List<ResponseError>();
 
-                List<ResponseError> responseErrors =
-                    (from validationError in validationErrors
-                     let error = Error.Validation(validationError.ErrorCode, validationError.ErrorMessage)
-                     select new ResponseError(error.Code, error.Message, validationError.PropertyName)).ToList();
+                foreach (var validationError in validationErrors)
+                {
+                    Error error = Error.Deserialize(validationError.ErrorMessage);
+                    ResponseError responseError = new ResponseError(error.Code, error.Message, validationError.PropertyName);
+
+                    responseErrors.Add(responseError);
+                }
 
                 return new ObjectResult(Envelope.Error(responseErrors)) { StatusCode = StatusCodes.Status400BadRequest };
             }
 
-            return null;
+            throw new InvalidOperationException("Result can not be succees!");
         }
     }
 }

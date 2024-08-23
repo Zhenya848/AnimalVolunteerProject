@@ -12,9 +12,9 @@ namespace PetProject.API.Volunteers
             RuleFor(n => new { n.firstname, n.lastName, n.patronymic }).MustBeValueObject(n =>
             FullName.Create(n.firstname, n.lastName, n.patronymic ?? ""));
 
-            RuleFor(d => d.description).NotEmpty().MaximumLength(Constants.MAX_LOW_TEXT_LENGTH);
+            RuleFor(d => d.description).MustBeValueObject(Description.Create);
             RuleFor(pn => pn.phoneNumber).MustBeValueObject(TelephoneNumber.Create);
-            RuleFor(e => e.exp).Must(e => e >= 0);
+            RuleFor(e => e.exp).MustBeValueObject(Experience.Create);
 
             RuleForEach(r => r.requisites).MustBeValueObject(r => Requisite.Create(r.title, r.description));
             RuleForEach(sn => sn.sotialNetworks).MustBeValueObject(sn => SocialNetwork.Create(sn.name, sn.reference));

@@ -31,8 +31,10 @@ namespace PetProject.Infastructure.Configurations
                     .HasColumnName("phone_number");
             });
 
-            builder.Property(d => d.Description).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
-            builder.Property(e => e.EXP);
+            builder.ComplexProperty(d => d.Description, db => 
+            { db.Property(v => v.Value).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH); });
+
+            builder.ComplexProperty(e => e.EXP, eb => { eb.Property(v => v.Value); });
 
             builder.OwnsOne(rl => rl.RequisitesList, rlb =>
             {

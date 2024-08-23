@@ -28,8 +28,8 @@ namespace PetProject.Infastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    exp = table.Column<int>(type: "integer", nullable: false),
+                    description_value = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    exp_value = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
@@ -66,7 +66,6 @@ namespace PetProject.Infastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     breed = table.Column<string>(type: "text", nullable: false),
                     color = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     health_info = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
@@ -82,6 +81,7 @@ namespace PetProject.Infastructure.Migrations
                     state = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     street = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     zipcode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    description_value = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     pet_type_info_breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_type_info_species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),

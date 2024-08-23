@@ -10,10 +10,10 @@ namespace PetProject.Domain.Volunteers
     public class Volunteer : Shared.Entity<VolunteerId>
     {
         public FullName Name { get; private set; } = default!;
-        public string Description { get; private set; } = default!;
+        public Description Description { get; private set; } = default!;
         public TelephoneNumber TelephoneNumber { get; private set; } = default!;
 
-        public int EXP { get; private set; }
+        public Experience EXP { get; private set; } = default!;
 
         public RequisitesList RequisitesList { get; private set; } = default!;
         public SocialNetworksList SocialNetworksList { get; private set; } = default!;
@@ -26,9 +26,9 @@ namespace PetProject.Domain.Volunteers
 
         public Volunteer(VolunteerId id, 
             FullName name, 
-            string description, 
+            Description description, 
             TelephoneNumber telephoneNumber, 
-            int exp,
+            Experience exp,
             List<SocialNetwork> sotialNetworks, 
             List<Requisite> requisites) : base(id)
         {

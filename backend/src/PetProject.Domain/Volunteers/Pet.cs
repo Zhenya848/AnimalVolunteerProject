@@ -8,7 +8,7 @@ namespace PetProject.Domain.Volunteers
     public class Pet : Shared.Entity<PetId>
     {
         public string Name { get; private set; } = default!;
-        public string Description { get; private set; } = default!;
+        public Description Description { get; private set; } = default!;
         public string Breed { get; private set; } = default!;
         public string Color { get; private set; } = default!;
         public string HealthInfo { get; private set; } = default!;

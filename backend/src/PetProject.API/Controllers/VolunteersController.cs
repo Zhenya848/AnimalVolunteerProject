@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using PetProject.API.Response;
 using PetProject.Application.Volunteers.Create;
 using PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService;
 using PetProject.Domain.Shared;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace PetProject.API.Controllers
@@ -20,11 +20,10 @@ namespace PetProject.API.Controllers
             [FromBody] CreateVolunteerRequest createVolunteerRequest, 
             CancellationToken cancellationToken = default)
         {
-            var validatorResult = (await validator.ValidateAsync(createVolunteerRequest, cancellationToken))
-            .ValidationErrorResponse();
+            ValidationResult validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
 
-            if (validatorResult != null)
-                return validatorResult;
+            if (validationResult.IsValid == false)
+                return validationResult.ValidationErrorResponse();
 
             var result = await volunteerService.Create(createVolunteerRequest, cancellationToken);
 
@@ -32,6 +31,6 @@ namespace PetProject.API.Controllers
                 return result.Error.ToResponse();
 
             return Created("", Envelope.Ok(result.Value).ToString());
-        }
+        }   
     }
 }
