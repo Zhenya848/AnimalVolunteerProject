@@ -5,21 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using PetProject.Domain.Volunteers;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
+using Microsoft.Extensions.Logging;
 
 namespace PetProject.Infastructure.Repositories
 {
     public class VolunteerRepository : IVolunteerRepository
     {
         private readonly AppDbContext _appDbContext;
+        private readonly ILogger<VolunteerRepository> _logger;
 
-        public VolunteerRepository(AppDbContext appDbContext) 
-            => _appDbContext = appDbContext;
+        public VolunteerRepository(AppDbContext appDbContext, ILogger<VolunteerRepository> logger)
+        {
+            _appDbContext = appDbContext;
+            _logger = logger;
+        }
 
         public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             await _appDbContext.Volunteers.AddAsync(volunteer, cancellationToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
+            _logger.LogInformation("Created volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
             return volunteer.Id;
         }
 

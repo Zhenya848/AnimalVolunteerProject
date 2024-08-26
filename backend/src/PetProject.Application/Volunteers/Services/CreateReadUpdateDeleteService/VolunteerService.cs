@@ -26,9 +26,13 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
             if (existVolunteer.IsSuccess)
                 return Errors.Volunteer.AlreadyExist();
 
-            var fullName = FullName.Create(request.firstname, request.lastName, request.patronymic ?? "").Value;
+            var fullName = FullName.Create(
+                request.name.firstName, 
+                request.name.lastName, 
+                request.name.patronymic ?? "").Value;
+
             var description = Description.Create(request.description).Value;
-            var exp = Experience.Create(request.exp).Value;
+            var experience = Experience.Create(request.experience).Value;
 
             var socialNetworks = request.sotialNetworks
             .Select(s => SocialNetwork.Create(s.name, s.reference).Value).ToList();
@@ -37,7 +41,7 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
             .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
 
             Volunteer volunteer = new Volunteer(VolunteerId.AddNewId(), fullName, description,
-                telephoneNumber, exp, socialNetworks, requisites);
+                telephoneNumber, experience, socialNetworks, requisites);
 
             return await _volunteerRepository.Add(volunteer, cancellationToken);
         }

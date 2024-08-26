@@ -13,7 +13,7 @@ namespace PetProject.Domain.Volunteers
         public Description Description { get; private set; } = default!;
         public TelephoneNumber TelephoneNumber { get; private set; } = default!;
 
-        public Experience EXP { get; private set; } = default!;
+        public Experience Experience { get; private set; } = default!;
 
         public RequisitesList RequisitesList { get; private set; } = default!;
         public SocialNetworksList SocialNetworksList { get; private set; } = default!;
@@ -28,14 +28,14 @@ namespace PetProject.Domain.Volunteers
             FullName name, 
             Description description, 
             TelephoneNumber telephoneNumber, 
-            Experience exp,
+            Experience experience,
             List<SocialNetwork> sotialNetworks, 
             List<Requisite> requisites) : base(id)
         {
             Name = name;
             Description = description;
             TelephoneNumber = telephoneNumber;
-            EXP = exp;
+            Experience = experience;
 
             RequisitesList = new RequisitesList(requisites);
             SocialNetworksList = new SocialNetworksList(sotialNetworks);

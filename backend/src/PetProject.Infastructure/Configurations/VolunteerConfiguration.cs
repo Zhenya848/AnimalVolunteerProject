@@ -34,7 +34,7 @@ namespace PetProject.Infastructure.Configurations
             builder.ComplexProperty(d => d.Description, db => 
             { db.Property(v => v.Value).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH); });
 
-            builder.ComplexProperty(e => e.EXP, eb => { eb.Property(v => v.Value); });
+            builder.ComplexProperty(e => e.Experience, eb => { eb.Property(v => v.Value); });
 
             builder.OwnsOne(rl => rl.RequisitesList, rlb =>
             {

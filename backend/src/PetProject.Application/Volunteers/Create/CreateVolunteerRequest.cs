@@ -3,12 +3,10 @@
 namespace PetProject.Application.Volunteers.Create
 {
     public record CreateVolunteerRequest(
-        string firstname, 
-        string lastName, 
-        string? patronymic, 
+        FullNameDto name, 
         string description, 
         string phoneNumber, 
-        int exp, 
+        int experience, 
         IEnumerable<SocialNetworkDto> sotialNetworks, 
         IEnumerable<RequisiteDto> requisites) 
     {

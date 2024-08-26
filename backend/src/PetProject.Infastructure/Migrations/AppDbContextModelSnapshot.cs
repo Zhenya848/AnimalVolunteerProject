@@ -247,13 +247,13 @@ namespace PetProject.Infastructure.Migrations
                                 .HasColumnName("description_value");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("EXP", "PetProject.Domain.Volunteers.Volunteer.EXP#Experience", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Experience", "PetProject.Domain.Volunteers.Volunteer.Experience#Experience", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<int>("Value")
                                 .HasColumnType("integer")
-                                .HasColumnName("exp_value");
+                                .HasColumnName("experience_value");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PetProject.Domain.Volunteers.Volunteer.Name#FullName", b1 =>

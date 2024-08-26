@@ -2,8 +2,10 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PetProject.API.Response;
 using PetProject.Domain.Shared;
+using PetProject.Infastructure;
 
 namespace PetProject.API
 {
@@ -35,25 +37,12 @@ namespace PetProject.API
             return new ObjectResult(envelope) { StatusCode = statusCode };
         }
 
-        public static ActionResult ValidationErrorResponse(this ValidationResult validatorResult)
+        public async static Task ApplyMigrations(this WebApplication app)
         {
-            if (validatorResult.IsValid == false)
-            {
-                var validationErrors = validatorResult.Errors;
-                List<ResponseError> responseErrors = new List<ResponseError>();
+            await using var scope = app.Services.CreateAsyncScope();
+            AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                foreach (var validationError in validationErrors)
-                {
-                    Error error = Error.Deserialize(validationError.ErrorMessage);
-                    ResponseError responseError = new ResponseError(error.Code, error.Message, validationError.PropertyName);
-
-                    responseErrors.Add(responseError);
-                }
-
-                return new ObjectResult(Envelope.Error(responseErrors)) { StatusCode = StatusCodes.Status400BadRequest };
-            }
-
-            throw new InvalidOperationException("Result can not be succees!");
+            await dbContext.Database.MigrateAsync();
         }
     }
 }

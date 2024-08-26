@@ -16,15 +16,9 @@ namespace PetProject.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromServices] IVolunteerService volunteerService,
-            [FromServices] IValidator<CreateVolunteerRequest> validator,
             [FromBody] CreateVolunteerRequest createVolunteerRequest, 
             CancellationToken cancellationToken = default)
         {
-            ValidationResult validationResult = await validator.ValidateAsync(createVolunteerRequest, cancellationToken);
-
-            if (validationResult.IsValid == false)
-                return validationResult.ValidationErrorResponse();
-
             var result = await volunteerService.Create(createVolunteerRequest, cancellationToken);
 
             if (result.IsFailure)

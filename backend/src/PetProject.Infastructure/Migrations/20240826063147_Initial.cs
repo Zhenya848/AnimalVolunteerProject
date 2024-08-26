@@ -29,7 +29,7 @@ namespace PetProject.Infastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     description_value = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
-                    exp_value = table.Column<int>(type: "integer", nullable: false),
+                    experience_value = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
