@@ -59,6 +59,7 @@ namespace PetProject.Infastructure.Configurations
             });
 
             builder.HasMany(p => p.Pets).WithOne().HasForeignKey("volunteer_id");
+            builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field).HasColumnName("is_deleted");
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetProject.Domain.Species;
 using PetProject.Domain.Volunteers;
+using PetProject.Infastructure.Interceptors;
 
 namespace PetProject.Infastructure
 {
@@ -16,6 +17,8 @@ namespace PetProject.Infastructure
             optionsBuilder.UseNpgsql(configuration.GetConnectionString("Database"));
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

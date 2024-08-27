@@ -13,7 +13,7 @@ using PetProject.Infastructure;
 namespace PetProject.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240826063147_Initial")]
+    [Migration("20240827152542_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -127,6 +127,10 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("real")
                         .HasColumnName("weight");
 
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.Property<Guid?>("volunteer_id")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
@@ -239,6 +243,10 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetProject.Domain.Volunteers.Volunteer.Description#Description", b1 =>
                         {
                             b1.IsRequired();
@@ -312,6 +320,7 @@ namespace PetProject.Infastructure.Migrations
                     b.HasOne("PetProject.Domain.Volunteers.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
                     b.OwnsOne("PetProject.Domain.Volunteers.ValueObjects.Collections.RequisitesList", "RequisitesList", b1 =>

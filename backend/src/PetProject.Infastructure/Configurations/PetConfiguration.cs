@@ -75,7 +75,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 rb.Property(n => n.Name).IsRequired();
                 rb.Property(d => d.Description).IsRequired();
             });
-        });
+        }).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field).HasColumnName("is_deleted");
 
         builder.Property(hs => hs.HelpStatus).HasConversion<string>()
             .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);

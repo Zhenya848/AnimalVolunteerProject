@@ -37,6 +37,27 @@ namespace PetProject.API
             return new ObjectResult(envelope) { StatusCode = statusCode };
         }
 
+        public static ActionResult ValidationErrorResponse(this ValidationResult validatorResult)
+        {
+            if (validatorResult.IsValid == false)
+            {
+                var validationErrors = validatorResult.Errors;
+                List<ResponseError> responseErrors = new List<ResponseError>();
+
+                foreach (var validationError in validationErrors)
+                {
+                    Error error = Error.Deserialize(validationError.ErrorMessage);
+                    ResponseError responseError = new ResponseError(error.Code, error.Message, validationError.PropertyName);
+
+                    responseErrors.Add(responseError);
+                }
+
+                return new ObjectResult(Envelope.Error(responseErrors)) { StatusCode = StatusCodes.Status400BadRequest };
+            }
+
+            throw new InvalidOperationException("Result can not be succees!");
+        }
+
         public async static Task ApplyMigrations(this WebApplication app)
         {
             await using var scope = app.Services.CreateAsyncScope();

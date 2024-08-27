@@ -28,6 +28,7 @@ namespace PetProject.Infastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     description_value = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     experience_value = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
@@ -76,6 +77,7 @@ namespace PetProject.Infastructure.Migrations
                     birthday_time = table.Column<DateOnly>(type: "date", nullable: false),
                     date_of_creation = table.Column<DateOnly>(type: "date", nullable: false),
                     help_status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     state = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
@@ -94,7 +96,8 @@ namespace PetProject.Infastructure.Migrations
                         name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
                         principalTable: "volunteers",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

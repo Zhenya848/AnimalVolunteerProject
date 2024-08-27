@@ -1,12 +1,15 @@
-﻿using PetProject.Domain.Shared.ValueObjects.IdClasses;
+﻿using PetProject.Domain.Shared;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Species;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Volunteers.ValueObjects.Collections;
 
 namespace PetProject.Domain.Volunteers
 {
-    public class Pet : Shared.Entity<PetId>
+    public class Pet : Shared.Entity<PetId>, ISoftDeletable
     {
+        private bool _isDeleted = false;
+
         public string Name { get; private set; } = default!;
         public Description Description { get; private set; } = default!;
         public string Breed { get; private set; } = default!;
@@ -35,5 +38,9 @@ namespace PetProject.Domain.Volunteers
         {
 
         }
+
+        public void Delete() => _isDeleted = true;
+
+        public void Restore() => _isDeleted = false;
     }
 }

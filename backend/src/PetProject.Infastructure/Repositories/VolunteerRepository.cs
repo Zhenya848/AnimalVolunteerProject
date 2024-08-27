@@ -14,13 +14,17 @@ namespace PetProject.Infastructure.Repositories
         private readonly AppDbContext _appDbContext;
         private readonly ILogger<VolunteerRepository> _logger;
 
-        public VolunteerRepository(AppDbContext appDbContext, ILogger<VolunteerRepository> logger)
+        public VolunteerRepository(
+            AppDbContext appDbContext, 
+            ILogger<VolunteerRepository> logger)
         {
             _appDbContext = appDbContext;
             _logger = logger;
         }
 
-        public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
+        public async Task<Guid> Add(
+            Volunteer volunteer, 
+            CancellationToken cancellationToken = default)
         {
             await _appDbContext.Volunteers.AddAsync(volunteer, cancellationToken);
             await _appDbContext.SaveChangesAsync(cancellationToken);
@@ -29,7 +33,27 @@ namespace PetProject.Infastructure.Repositories
             return volunteer.Id;
         }
 
-        public async Task<Result<Volunteer, Error>> GetById(VolunteerId volunteerId)
+        public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+        {
+            _appDbContext.Volunteers.Attach(volunteer);
+            await _appDbContext.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation("Updated volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
+            return volunteer.Id;
+        }
+
+        public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
+        {
+            _appDbContext.Volunteers.Remove(volunteer);
+            await _appDbContext.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation("Removed volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
+            return volunteer.Id;
+        }
+
+        public async Task<Result<Volunteer, Error>> GetById(
+            VolunteerId volunteerId, 
+            CancellationToken cancellationToken = default)
         {
             var volunteer = await _appDbContext.Volunteers
                 .FirstOrDefaultAsync(v => v.Id == volunteerId);
@@ -40,7 +64,9 @@ namespace PetProject.Infastructure.Repositories
             return volunteer;
         }
 
-        public async Task<Result<Volunteer, Error>> GetByPhoneNumber(TelephoneNumber phoneNumber)
+        public async Task<Result<Volunteer, Error>> GetByPhoneNumber(
+            TelephoneNumber phoneNumber, 
+            CancellationToken cancellationToken = default)
         {
             var volunteer = await _appDbContext.Volunteers
                 .FirstOrDefaultAsync(v => v.TelephoneNumber == phoneNumber);

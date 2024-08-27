@@ -29,7 +29,7 @@ namespace PetProject.API.Middlewares
                 content.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await content.Response.WriteAsJsonAsync(envelope);
 
-                _logger.LogError(ex, ex.Message); 
+                _logger.LogError(ex, ex.Message);
             }
         }
     }
