@@ -30,7 +30,7 @@ namespace PetProject.API.Controllers
         }
 
         [HttpPut("{id:guid}/volunteer-info")]
-        public async Task<ActionResult<Guid>> Put(
+        public async Task<ActionResult<Guid>> UpdateVolunteerInfo(
             [FromServices] IVolunteerService volunteerService,
             [FromServices] IValidator<UpdateVolunteerRequest> validator,
             [FromBody] UpdateVolunteerDto dto,

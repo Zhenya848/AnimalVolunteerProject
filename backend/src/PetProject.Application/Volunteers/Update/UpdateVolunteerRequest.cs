@@ -1,7 +1,7 @@
 ﻿namespace PetProject.Application.Volunteers.Update
 {
     public record UpdateVolunteerRequest(
-        Guid volunteerId, UpdateVolunteerDto dto)
+        Guid VolunteerId, UpdateVolunteerDto Dto)
     {
 
     };

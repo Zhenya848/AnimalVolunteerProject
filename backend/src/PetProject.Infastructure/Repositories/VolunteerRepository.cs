@@ -38,7 +38,7 @@ namespace PetProject.Infastructure.Repositories
             _appDbContext.Volunteers.Attach(volunteer);
             await _appDbContext.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Updated volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
+            _logger.LogInformation("Saved volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
             return volunteer.Id;
         }
 

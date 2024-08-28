@@ -8,7 +8,7 @@ namespace PetProject.API.Volunteers
     {
         public DeleteVolunteerRequestValidator() 
         {
-            RuleFor(i => i.volunteerId).NotEmpty().WithError(Errors.General.Failure("id"));
+            RuleFor(i => i.VolunteerId).NotEmpty().WithError(Errors.General.Failure("id"));
         }
     }
 }

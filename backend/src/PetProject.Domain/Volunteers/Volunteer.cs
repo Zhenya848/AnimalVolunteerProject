@@ -44,7 +44,7 @@ namespace PetProject.Domain.Volunteers
             SocialNetworksList = new SocialNetworksList(sotialNetworks);
         }
 
-        public void UpdateVolunteerInfo(
+        public void UpdateInfo(
             FullName name,
             Description description,
             TelephoneNumber telephoneNumber,

@@ -21,24 +21,24 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
         public async Task<Result<Guid, Error>> Create(CreateVolunteerRequest request,
             CancellationToken cancellationToken = default)
         {
-            var telephoneNumber = TelephoneNumber.Create(request.phoneNumber).Value;
+            var telephoneNumber = TelephoneNumber.Create(request.PhoneNumber).Value;
             var existVolunteer = await _volunteerRepository.GetByPhoneNumber(telephoneNumber);
 
             if (existVolunteer.IsSuccess)
                 return Errors.Volunteer.AlreadyExist();
 
             var fullName = FullName.Create(
-                request.name.firstName, 
-                request.name.lastName, 
-                request.name.patronymic ?? "").Value;
+                request.Name.firstName, 
+                request.Name.lastName, 
+                request.Name.patronymic ?? "").Value;
 
-            var description = Description.Create(request.description).Value;
-            var experience = Experience.Create(request.experience).Value;
+            var description = Description.Create(request.Description).Value;
+            var experience = Experience.Create(request.Experience).Value;
 
-            var socialNetworks = request.sotialNetworks
+            var socialNetworks = request.SotialNetworks
             .Select(s => SocialNetwork.Create(s.name, s.reference).Value).ToList();
 
-            var requisites = request.requisites
+            var requisites = request.Requisites
             .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
 
             Volunteer volunteer = new Volunteer(VolunteerId.AddNewId(), fullName, description,
@@ -50,27 +50,27 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
         public async Task<Result<Guid, Error>> Update(UpdateVolunteerRequest request, 
             CancellationToken cancellationToken = default)
         {
-            var volunteer = await _volunteerRepository.GetById(VolunteerId.Create(request.volunteerId), cancellationToken);
+            var volunteer = await _volunteerRepository.GetById(VolunteerId.Create(request.VolunteerId), cancellationToken);
 
             if (volunteer.IsFailure)
                 return volunteer.Error;
 
-            var telephoneNumber = TelephoneNumber.Create(request.dto.phoneNumber).Value;
+            var telephoneNumber = TelephoneNumber.Create(request.Dto.PhoneNumber).Value;
             var fullName = FullName.Create(
-                request.dto.name.firstName,
-                request.dto.name.lastName,
-                request.dto.name.patronymic ?? "").Value;
+                request.Dto.Name.firstName,
+                request.Dto.Name.lastName,
+                request.Dto.Name.patronymic ?? "").Value;
 
-            var description = Description.Create(request.dto.description).Value;
-            var experience = Experience.Create(request.dto.experience).Value;
+            var description = Description.Create(request.Dto.Description).Value;
+            var experience = Experience.Create(request.Dto.Experience).Value;
 
-            var socialNetworks = request.dto.sotialNetworks
+            var socialNetworks = request.Dto.SotialNetworks
             .Select(s => SocialNetwork.Create(s.name, s.reference).Value).ToList();
 
-            var requisites = request.dto.requisites
+            var requisites = request.Dto.Requisites
             .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
 
-            volunteer.Value.UpdateVolunteerInfo(fullName, description, telephoneNumber, experience, socialNetworks, requisites);
+            volunteer.Value.UpdateInfo(fullName, description, telephoneNumber, experience, socialNetworks, requisites);
             
             return await _volunteerRepository.Save(volunteer.Value, cancellationToken);
         }
@@ -78,7 +78,7 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
         public async Task<Result<Guid, Error>> Delete(DeleteVolunteerRequest request, 
             CancellationToken cancellationToken = default)
         {
-            var volunteer = await _volunteerRepository.GetById(VolunteerId.Create(request.volunteerId), cancellationToken);
+            var volunteer = await _volunteerRepository.GetById(VolunteerId.Create(request.VolunteerId), cancellationToken);
 
             if (volunteer.IsFailure)
                 return volunteer.Error;
