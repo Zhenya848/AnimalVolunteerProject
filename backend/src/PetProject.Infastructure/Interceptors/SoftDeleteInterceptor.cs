@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using PetProject.Domain.Shared;
+using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Volunteers;
 using System;
 using System.Collections.Generic;

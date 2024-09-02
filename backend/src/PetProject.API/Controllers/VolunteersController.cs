@@ -3,6 +3,10 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetProject.API.Response;
+using PetProject.Application.Files.Create;
+using PetProject.Application.Files.Delete;
+using PetProject.Application.Files.Get;
+using PetProject.Application.Files.Services;
 using PetProject.Application.Volunteers.Create;
 using PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService;
 using PetProject.Application.Volunteers.Update;
@@ -11,9 +15,7 @@ using System.Linq;
 
 namespace PetProject.API.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class VolunteersController : ControllerBase
+    public class VolunteersController : ApplicationController
     {
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
@@ -67,6 +69,53 @@ namespace PetProject.API.Controllers
             var result = await volunteerService.Delete(request, cancellationToken);
 
             if (result.IsFailure)
+                return result.Error.ToResponse();
+
+            return Ok(result.Value);
+        }
+
+        [HttpPost("petPhoto")]
+        public async Task<IActionResult> CreatePhoto(
+            IFormFile file,
+            [FromServices] IFileService service,
+            CancellationToken cancellationToken)
+        {
+            await using var stream = file.OpenReadStream();
+            var request = new CreateFileRequest("photos", Guid.NewGuid().ToString(), stream);
+
+            var result = await service.Create(request, cancellationToken);
+
+            if (result.IsFailure)
+                return result.Error.ToResponse();
+
+            return Ok(result.Value);
+        }
+
+        [HttpDelete("petPhoto/{objectName:guid}")]
+        public async Task<IActionResult> DeletePhoto(
+            [FromRoute] Guid objectName,
+            [FromServices] IFileService service,
+            CancellationToken cancellationToken)
+        {
+            DeleteFileRequest request = new DeleteFileRequest("photos", objectName.ToString());
+            var result = await service.Delete(request, cancellationToken);
+
+            if (result.IsFailure)
+                return result.Error.ToResponse();
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet("petPhoto/{objectName:guid}")]
+        public async Task<IActionResult> GetPhoto(
+            [FromRoute] Guid objectName,
+            [FromServices] IFileService service,
+            CancellationToken cancellationToken)
+        {
+            GetFileRequest request = new GetFileRequest("photos", objectName.ToString());
+            var result = await service.Get(request, cancellationToken);
+
+            if (result.IsFailure) 
                 return result.Error.ToResponse();
 
             return Ok(result.Value);

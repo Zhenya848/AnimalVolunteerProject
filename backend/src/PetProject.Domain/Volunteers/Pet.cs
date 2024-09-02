@@ -3,6 +3,7 @@ using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Species;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Volunteers.ValueObjects.Collections;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetProject.Domain.Volunteers
 {

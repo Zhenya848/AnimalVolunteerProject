@@ -13,7 +13,7 @@ using PetProject.Infastructure;
 namespace PetProject.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240827152542_Initial")]
+    [Migration("20240830170434_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -320,7 +320,6 @@ namespace PetProject.Infastructure.Migrations
                     b.HasOne("PetProject.Domain.Volunteers.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
                     b.OwnsOne("PetProject.Domain.Volunteers.ValueObjects.Collections.RequisitesList", "RequisitesList", b1 =>

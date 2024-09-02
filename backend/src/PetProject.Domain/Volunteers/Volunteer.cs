@@ -4,6 +4,7 @@ using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Volunteers.ValueObjects.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetProject.Domain.Volunteers
 {
@@ -60,8 +61,28 @@ namespace PetProject.Domain.Volunteers
             SocialNetworksList.SocialNetworks = sotialNetworks;
         }
 
-        public void Delete() => _isDeleted = true;
-        public void Restore() => _isDeleted = false;
+        public void Delete()
+        {
+            _isDeleted = true;
+            DeleteSoftDeletableEntities(Pets);
+        }
+        public void Restore()
+        {
+            _isDeleted = false;
+            RestoreSoftDeletableEntities(Pets);
+        }
+
+        private void DeleteSoftDeletableEntities(IReadOnlyList<ISoftDeletable> entities)
+        {
+            foreach (ISoftDeletable entity in entities)
+                entity.Delete();
+        }
+
+        private void RestoreSoftDeletableEntities(IReadOnlyList<ISoftDeletable> entities)
+        {
+            foreach (ISoftDeletable entity in entities)
+                entity.Restore();
+        }
 
         public int CountOfShelterAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.FindAHome);
         public int CountOfHomelessAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.LookingForAHome);

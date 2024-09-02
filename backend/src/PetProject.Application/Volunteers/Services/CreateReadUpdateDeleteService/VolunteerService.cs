@@ -83,7 +83,8 @@ namespace PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteServi
             if (volunteer.IsFailure)
                 return volunteer.Error;
 
-            return await _volunteerRepository.Delete(volunteer.Value);
+            volunteer.Value.Delete();
+            return await _volunteerRepository.Save(volunteer.Value);
         }
 
         public Task<List<Volunteer>> Get()

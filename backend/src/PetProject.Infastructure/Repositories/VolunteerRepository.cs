@@ -56,6 +56,7 @@ namespace PetProject.Infastructure.Repositories
             CancellationToken cancellationToken = default)
         {
             var volunteer = await _appDbContext.Volunteers
+                .Include(p => p.Pets)
                 .FirstOrDefaultAsync(v => v.Id == volunteerId);
 
             if (volunteer == null)
