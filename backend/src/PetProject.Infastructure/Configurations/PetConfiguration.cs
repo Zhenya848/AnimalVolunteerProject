@@ -77,6 +77,17 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             });
         });
 
+        builder.OwnsOne(pl => pl.PhotosList, plb =>
+        {
+            plb.ToJson();
+
+            plb.OwnsMany(p => p.Photos, pb =>
+            {
+                pb.Property(p => p.Path).IsRequired();
+                pb.Property(imp => imp.IsMainPhoto).IsRequired();
+            });
+        });
+
         builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field).HasColumnName("is_deleted");
 
         builder.Property(hs => hs.HelpStatus).HasConversion<string>()

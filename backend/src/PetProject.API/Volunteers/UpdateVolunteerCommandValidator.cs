@@ -1,13 +1,16 @@
 ﻿using FluentValidation;
 using PetProject.Application.Volunteers.Update;
+using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.API.Volunteers
 {
-    public class UpdateVolunteerDtoValidator : AbstractValidator<UpdateVolunteerDto>
+    public class UpdateVolunteerCommandValidator : AbstractValidator<UpdateVolunteerCommand>
     {
-        public UpdateVolunteerDtoValidator() 
+        public UpdateVolunteerCommandValidator()
         {
+            RuleFor(i => i.VolunteerId).NotEmpty().WithError(Errors.General.Failure("id"));
+
             RuleFor(n => n.Name).MustBeValueObject(n =>
             FullName.Create(n.firstName, n.lastName, n.patronymic ?? ""));
 
@@ -16,7 +19,7 @@ namespace PetProject.API.Volunteers
             RuleFor(e => e.Experience).MustBeValueObject(Experience.Create);
 
             RuleForEach(r => r.Requisites).MustBeValueObject(r => Requisite.Create(r.title, r.description));
-            RuleForEach(sn => sn.SotialNetworks).MustBeValueObject(sn => SocialNetwork.Create(sn.name, sn.reference));
-        }    
+            RuleForEach(sn => sn.SocialNetworks).MustBeValueObject(sn => SocialNetwork.Create(sn.name, sn.reference));
+        }
     }
 }

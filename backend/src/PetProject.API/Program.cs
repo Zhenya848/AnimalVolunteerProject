@@ -1,12 +1,10 @@
 using PetProject.API;
 using PetProject.Application;
 using PetProject.Application.Repositories;
-using PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService;
 using PetProject.Infastructure;
 using PetProject.Infastructure.Repositories;
 using FluentValidation.AspNetCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using PetProject.API.Validation;
 using Microsoft.EntityFrameworkCore;
 using PetProject.API.Middlewares;
 using Serilog;
@@ -26,13 +24,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddFromInfrastructure(builder.Configuration)
-    .AddFromApplication()
-    .AddFromAPI();
-
-builder.Services.AddFluentValidationAutoValidation(conf =>
-{
-    conf.OverrideDefaultResultFactoryWith<CustomResultFactory>();
-});
+    .AddFromAPI()
+    .AddFromApplication();
 
 var app = builder.Build();
 

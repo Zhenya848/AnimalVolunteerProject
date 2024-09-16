@@ -23,8 +23,8 @@ namespace PetProject.API.Middlewares
             }
             catch (Exception ex)
             {
-                ResponseError responseError = new ResponseError("server.internal", ex.Message, null);
-                Envelope envelope = Envelope.Error([responseError]);
+                Error error = Error.Failure("server.internal", ex.Message);
+                Envelope envelope = Envelope.Error(error);
 
                 content.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await content.Response.WriteAsJsonAsync(envelope);

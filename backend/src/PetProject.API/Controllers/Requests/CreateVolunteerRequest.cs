@@ -1,16 +1,12 @@
 ﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
-using PetProject.Domain.Volunteers.ValueObjects;
 
-namespace PetProject.Application.Volunteers.Update
+namespace PetProject.API.Controllers.Requests
 {
-    public record UpdateVolunteerDto(
+    public record CreateVolunteerRequest(
         FullNameDto Name,
         string Description,
         string PhoneNumber,
         int Experience,
         IEnumerable<SocialNetworkDto> SotialNetworks,
-        IEnumerable<RequisiteDto> Requisites)
-    {
-
-    };
+        IEnumerable<RequisiteDto> Requisites);
 }

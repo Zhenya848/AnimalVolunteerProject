@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace PetProject.Application.Files.Create
 {
-    public record CreateFileRequest(string BucketName, string ObjectName, Stream Stream);
+    public record CreateFilesCommand(IEnumerable<FileData> Files, string BucketName);
 }

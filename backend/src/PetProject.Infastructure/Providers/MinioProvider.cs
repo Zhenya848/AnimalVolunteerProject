@@ -27,41 +27,44 @@ namespace PetProject.Infastructure.Providers
             _logger = logger;
         }
 
-        public async Task<Result<string, Error>> UploadFile(
-            CreateFileRequest fileData, 
+        public async Task<Result<IReadOnlyList<string>, Error>> UploadFiles(
+            CreateFilesCommand request, 
             CancellationToken cancellationToken)
         {
+            var semaphoreSlim = new SemaphoreSlim(5);
+
             try
             {
-                var bucketExistArgs = new BucketExistsArgs().WithBucket(fileData.BucketName);
+                var bucketExistArgs = new BucketExistsArgs().WithBucket(request.BucketName);
                 var bucketExist = await _minioClient.BucketExistsAsync(bucketExistArgs, cancellationToken);
 
                 if (bucketExist == false)
                 {
-                    var makeBucketArgs = new MakeBucketArgs().WithBucket(fileData.BucketName);
+                    var makeBucketArgs = new MakeBucketArgs().WithBucket(request.BucketName);
 
                     await _minioClient.MakeBucketAsync(makeBucketArgs, cancellationToken);
                 }
 
-                var putObjectArgs = new PutObjectArgs()
-                    .WithBucket(fileData.BucketName)
-                    .WithStreamData(fileData.Stream)
-                    .WithObjectSize(fileData.Stream.Length)
-                    .WithObject(Guid.NewGuid().ToString());
+                var fileTasks = request.Files.Select(
+                    async f => await PutObject(f, semaphoreSlim, cancellationToken, request.BucketName));
 
-                var res = await _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
+                var result = await Task.WhenAll(fileTasks);
 
-                return res.ObjectName;
+                if (result.Any(p => p.IsFailure))
+                    return result.First().Error;
+
+                return request.Files.Select(p => p.ObjectName).ToList();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 return Error.Failure("file.upload", "Fail to upload file in minio");
             }
+            finally { semaphoreSlim.Release(); }
         }
 
         public async Task<Result<string, Error>> DeleteFile(
-            DeleteFileRequest fileData, 
+            DeleteFileCommand fileData, 
             CancellationToken cancellationToken)
         {
             try
@@ -84,7 +87,7 @@ namespace PetProject.Infastructure.Providers
             }
         }
 
-        public async Task<Result<string, Error>> GetFile(GetFileRequest fileData, CancellationToken cancellationToken)
+        public async Task<Result<string, Error>> GetFile(GetFileCommand fileData, CancellationToken cancellationToken)
         {
             try
             {
@@ -113,6 +116,37 @@ namespace PetProject.Infastructure.Providers
             var fileExist = await _minioClient.StatObjectAsync(fileExistArgs);
 
             return fileExist.ContentType != null;
+        }
+
+        private async Task<Result<string, Error>> PutObject(
+            FileData fileDto,
+            SemaphoreSlim semaphoreSlim,
+            CancellationToken cancellationToken,
+            string bucketName)
+        {
+            await semaphoreSlim.WaitAsync(cancellationToken);
+
+            var putObjectArgs = new PutObjectArgs()
+                .WithBucket(bucketName)
+                .WithStreamData(fileDto.Stream)
+                .WithObjectSize(fileDto.Stream.Length)
+                .WithObject(fileDto.ObjectName);
+
+            try
+            {
+                await _minioClient.PutObjectAsync(putObjectArgs, cancellationToken);
+
+                return fileDto.ObjectName;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Fail to upload file in minio with path {path} in bucket {bucket}",
+                    fileDto.ObjectName,
+                    bucketName);
+
+                return Error.Failure("file.upload", "Fail to upload file in minio");
+            }
+            finally { semaphoreSlim.Release(); }
         }
     }
 }

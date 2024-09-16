@@ -8,16 +8,16 @@ namespace PetProject.Application.Files.Providers
 {
     public interface IFileProvider
     {
-        public Task<Result<string, Error>> UploadFile(
-            CreateFileRequest fileData,
+        public Task<Result<IReadOnlyList<string>, Error>> UploadFiles(
+            CreateFilesCommand fileData,
             CancellationToken cancellationToken);
 
         public Task<Result<string, Error>> DeleteFile(
-            DeleteFileRequest fileData,
+            DeleteFileCommand fileData,
             CancellationToken cancellationToken);
 
         public Task<Result<string, Error>> GetFile(
-            GetFileRequest fileData,
+            GetFileCommand fileData,
             CancellationToken cancellationToken);
     }
 }

@@ -21,7 +21,8 @@ namespace PetProject.Domain.Volunteers
         public RequisitesList RequisitesList { get; private set; } = default!;
         public SocialNetworksList SocialNetworksList { get; private set; } = default!;
 
-        public IReadOnlyList<Pet> Pets = default!;
+        private List<Pet> _pets = new List<Pet>();
+        public IReadOnlyList<Pet> Pets => _pets;
 
         private Volunteer(VolunteerId id) : base(id)
         {
@@ -61,6 +62,16 @@ namespace PetProject.Domain.Volunteers
             SocialNetworksList.SocialNetworks = sotialNetworks;
         }
 
+        public Result<Pet, Error> GetPetById(PetId id)
+        {
+            var pet = _pets.FirstOrDefault(p => p.Id == id);
+
+            if (pet == null)
+                return Errors.General.NotFound(id.Value);
+
+            return pet;
+        }
+
         public void Delete()
         {
             _isDeleted = true;
@@ -87,5 +98,8 @@ namespace PetProject.Domain.Volunteers
         public int CountOfShelterAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.FindAHome);
         public int CountOfHomelessAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.LookingForAHome);
         public int CountOfIllAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
+
+        public void AddPet(Pet pet) => _pets.Add(pet);
+            
     }
 }

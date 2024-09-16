@@ -8,16 +8,16 @@ namespace PetProject.Application.Files.Services
 {
     public interface IFileService
     {
-        public Task<Result<string, Error>> Create(
-            CreateFileRequest request,
+        public Task<UnitResult<Error>> Create(
+            CreateFilesCommand request,
             CancellationToken cancellationToken = default);
 
         public Task<Result<string, Error>> Delete(
-            DeleteFileRequest request,
+            DeleteFileCommand request,
             CancellationToken cancellationToken = default);
 
         public Task<Result<string, Error>> Get(
-            GetFileRequest request,
+            GetFileCommand request,
             CancellationToken cancellationToken = default);
     }
 }

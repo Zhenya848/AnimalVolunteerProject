@@ -5,9 +5,9 @@ using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.API.Volunteers
 {
-    public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteerRequest>
+    public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteerCommand>
     {
-        public CreateVolunteerRequestValidator()
+        public CreateVolunteerCommandValidator()
         {
             RuleFor(n => n.Name).MustBeValueObject(n =>
             FullName.Create(n.firstName, n.lastName, n.patronymic ?? ""));
@@ -17,7 +17,7 @@ namespace PetProject.API.Volunteers
             RuleFor(e => e.Experience).MustBeValueObject(Experience.Create);
 
             RuleForEach(r => r.Requisites).MustBeValueObject(r => Requisite.Create(r.title, r.description));
-            RuleForEach(sn => sn.SotialNetworks).MustBeValueObject(sn => SocialNetwork.Create(sn.name, sn.reference));
+            RuleForEach(sn => sn.SocialNetworks).MustBeValueObject(sn => SocialNetwork.Create(sn.name, sn.reference));
         }
     }
 }

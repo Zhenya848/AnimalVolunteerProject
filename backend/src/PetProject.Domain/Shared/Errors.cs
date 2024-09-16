@@ -15,6 +15,9 @@
 
             public static Error Conflict(string? name = null) =>
                 Error.Conflict("conflict", $"{(name != null ? name : "value")} is conflict");
+
+            public static Error ValueIsRequired(string? name = null) =>
+                Error.Conflict("value.is.required", $"{(name != null ? name : "value")} is required");
         }
 
         public static class Volunteer

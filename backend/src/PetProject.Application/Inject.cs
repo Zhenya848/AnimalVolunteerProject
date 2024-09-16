@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PetProject.Application.Files.Services;
-using PetProject.Application.Volunteers.Services.CreateReadUpdateDeleteService;
+using PetProject.Application.Pets.Services;
+using PetProject.Application.Volunteers.Services;
 
 namespace PetProject.Application
 {
@@ -9,6 +10,7 @@ namespace PetProject.Application
         public static IServiceCollection AddFromApplication(this IServiceCollection services)
         {
             services.AddScoped<IVolunteerService, VolunteerService>();
+            services.AddScoped<IPetService, PetService>();
             services.AddScoped<IFileService, FileService>();
 
             return services;

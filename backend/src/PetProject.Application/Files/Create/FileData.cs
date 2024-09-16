@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetProject.Application.Files.Delete
+namespace PetProject.Application.Files.Create
 {
-    public record DeleteFileRequest(string BucketName, string ObjectName);
+    public record FileData(Stream Stream, string ObjectName);
 }

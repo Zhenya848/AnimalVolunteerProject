@@ -21,22 +21,22 @@ namespace PetProject.Application.Files.Services
             _minioProvider = minioProvider;
         }
 
-        public async Task<Result<string, Error>> Create(
-            CreateFileRequest request,
+        public async Task<UnitResult<Error>> Create(
+            CreateFilesCommand request,
             CancellationToken cancellationToken = default)
         {
-            return await _minioProvider.UploadFile(request, cancellationToken);
+            return await _minioProvider.UploadFiles(request, cancellationToken);
         }
 
         public async Task<Result<string, Error>> Delete(
-            DeleteFileRequest request, 
+            DeleteFileCommand request, 
             CancellationToken cancellationToken = default)
         {
             return await _minioProvider.DeleteFile(request, cancellationToken);
         }
 
         public async Task<Result<string, Error>> Get(
-            GetFileRequest request, 
+            GetFileCommand request, 
             CancellationToken cancellationToken = default)
         {
             return await _minioProvider.GetFile(request, cancellationToken);

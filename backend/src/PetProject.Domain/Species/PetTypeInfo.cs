@@ -7,7 +7,7 @@ namespace PetProject.Domain.Species
         public BreedId BreedId { get; } = null!;
         public SpeciesId SpeciesId { get; } = null!;
 
-        private PetTypeInfo(BreedId breedId, SpeciesId speciesId)
+        public PetTypeInfo(BreedId breedId, SpeciesId speciesId)
         {
             BreedId = breedId;
             SpeciesId = speciesId;

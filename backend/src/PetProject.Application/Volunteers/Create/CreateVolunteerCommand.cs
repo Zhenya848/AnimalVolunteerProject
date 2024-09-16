@@ -2,14 +2,14 @@
 
 namespace PetProject.Application.Volunteers.Create
 {
-    public record CreateVolunteerRequest(
+    public record CreateVolunteerCommand(
         FullNameDto Name, 
         string Description, 
         string PhoneNumber, 
         int Experience, 
-        IEnumerable<SocialNetworkDto> SotialNetworks, 
+        IEnumerable<SocialNetworkDto> SocialNetworks, 
         IEnumerable<RequisiteDto> Requisites) 
     {
-
+        
     };
 }

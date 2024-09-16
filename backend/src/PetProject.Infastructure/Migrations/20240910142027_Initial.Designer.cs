@@ -13,7 +13,7 @@ using PetProject.Infastructure;
 namespace PetProject.Infastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240830170434_Initial")]
+    [Migration("20240910142027_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -74,14 +74,9 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateOnly>("BirthdayTime")
-                        .HasColumnType("date")
+                    b.Property<DateTime>("BirthdayTime")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("birthday_time");
-
-                    b.Property<string>("Breed")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("breed");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -89,8 +84,8 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("color");
 
-                    b.Property<DateOnly>("DateOfCreation")
-                        .HasColumnType("date")
+                    b.Property<DateTime>("DateOfCreation")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_of_creation");
 
                     b.Property<string>("HealthInfo")
@@ -206,35 +201,6 @@ namespace PetProject.Infastructure.Migrations
                         .HasDatabaseName("ix_pets_volunteer_id");
 
                     b.ToTable("pets", (string)null);
-                });
-
-            modelBuilder.Entity("PetProject.Domain.Volunteers.PetPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<bool>("IsMainPhoto")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_main_photo");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("path");
-
-                    b.Property<Guid?>("PetId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("pet_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_pet_photos");
-
-                    b.HasIndex("PetId")
-                        .HasDatabaseName("ix_pet_photos_pet_id");
-
-                    b.ToTable("petPhotos", (string)null);
                 });
 
             modelBuilder.Entity("PetProject.Domain.Volunteers.Volunteer", b =>
@@ -369,16 +335,56 @@ namespace PetProject.Infastructure.Migrations
                             b1.Navigation("Requisites");
                         });
 
+                    b.OwnsOne("PetProject.Domain.Volunteers.ValueObjects.Collections.PetPhotosList", "PhotosList", b1 =>
+                        {
+                            b1.Property<Guid>("PetId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("PetId");
+
+                            b1.ToTable("pets");
+
+                            b1.ToJson("photos_list");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PetId")
+                                .HasConstraintName("fk_pets_pets_id");
+
+                            b1.OwnsMany("PetProject.Domain.Volunteers.ValueObjects.PetPhoto", "Photos", b2 =>
+                                {
+                                    b2.Property<Guid>("PetPhotosListPetId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<bool>("IsMainPhoto")
+                                        .HasColumnType("boolean");
+
+                                    b2.Property<string>("Path")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("PetPhotosListPetId", "Id");
+
+                                    b2.ToTable("pets");
+
+                                    b2.ToJson("photos_list");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PetPhotosListPetId")
+                                        .HasConstraintName("fk_pets_pets_pet_photos_list_pet_id");
+                                });
+
+                            b1.Navigation("Photos");
+                        });
+
+                    b.Navigation("PhotosList")
+                        .IsRequired();
+
                     b.Navigation("RequisitesList")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PetProject.Domain.Volunteers.PetPhoto", b =>
-                {
-                    b.HasOne("PetProject.Domain.Volunteers.Pet", null)
-                        .WithMany("Photos")
-                        .HasForeignKey("PetId")
-                        .HasConstraintName("fk_pet_photos_pets_pet_id");
                 });
 
             modelBuilder.Entity("PetProject.Domain.Volunteers.Volunteer", b =>
@@ -485,11 +491,6 @@ namespace PetProject.Infastructure.Migrations
             modelBuilder.Entity("PetProject.Domain.Species.Species", b =>
                 {
                     b.Navigation("Breeds");
-                });
-
-            modelBuilder.Entity("PetProject.Domain.Volunteers.Pet", b =>
-                {
-                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("PetProject.Domain.Volunteers.Volunteer", b =>

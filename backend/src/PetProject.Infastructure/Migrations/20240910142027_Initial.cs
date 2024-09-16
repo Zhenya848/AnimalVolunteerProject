@@ -67,15 +67,14 @@ namespace PetProject.Infastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    breed = table.Column<string>(type: "text", nullable: false),
                     color = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     health_info = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     weight = table.Column<float>(type: "real", nullable: false),
                     height = table.Column<float>(type: "real", nullable: false),
                     is_castrated = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
-                    birthday_time = table.Column<DateOnly>(type: "date", nullable: false),
-                    date_of_creation = table.Column<DateOnly>(type: "date", nullable: false),
+                    birthday_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    date_of_creation = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     help_status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
@@ -87,6 +86,7 @@ namespace PetProject.Infastructure.Migrations
                     pet_type_info_breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_type_info_species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
+                    photos_list = table.Column<string>(type: "jsonb", nullable: false),
                     requisites_list = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
@@ -99,34 +99,10 @@ namespace PetProject.Infastructure.Migrations
                         principalColumn: "id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "petPhotos",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    path = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    is_main_photo = table.Column<bool>(type: "boolean", nullable: false),
-                    pet_id = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_pet_photos", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_pet_photos_pets_pet_id",
-                        column: x => x.pet_id,
-                        principalTable: "pets",
-                        principalColumn: "id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "ix_breed_species_id",
                 table: "breed",
                 column: "species_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_pet_photos_pet_id",
-                table: "petPhotos",
-                column: "pet_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_pets_volunteer_id",
@@ -141,13 +117,10 @@ namespace PetProject.Infastructure.Migrations
                 name: "breed");
 
             migrationBuilder.DropTable(
-                name: "petPhotos");
+                name: "pets");
 
             migrationBuilder.DropTable(
                 name: "species");
-
-            migrationBuilder.DropTable(
-                name: "pets");
 
             migrationBuilder.DropTable(
                 name: "volunteers");

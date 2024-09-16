@@ -22,30 +22,27 @@ namespace PetProject.Infastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<Guid> Add(
+        public Guid Add(
             Volunteer volunteer, 
             CancellationToken cancellationToken = default)
         {
-            await _appDbContext.Volunteers.AddAsync(volunteer, cancellationToken);
-            await _appDbContext.SaveChangesAsync(cancellationToken);
+            _appDbContext.Volunteers.AddAsync(volunteer, cancellationToken);
 
             _logger.LogInformation("Created volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
             return volunteer.Id;
         }
 
-        public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
+        public Guid Save(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             _appDbContext.Volunteers.Attach(volunteer);
-            await _appDbContext.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Saved volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
             return volunteer.Id;
         }
 
-        public async Task<Guid> Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
+        public Guid Delete(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             _appDbContext.Volunteers.Remove(volunteer);
-            await _appDbContext.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Removed volunteer {volunteer} with id {volunteer.Id.Value}", volunteer, volunteer.Id.Value);
             return volunteer.Id;

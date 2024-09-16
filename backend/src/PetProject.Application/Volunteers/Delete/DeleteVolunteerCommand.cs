@@ -1,6 +1,6 @@
 ﻿namespace PetProject.Application.Volunteers.Update
 {
-    public record DeleteVolunteerRequest(
+    public record DeleteVolunteerCommand(
         Guid VolunteerId)
     {
 

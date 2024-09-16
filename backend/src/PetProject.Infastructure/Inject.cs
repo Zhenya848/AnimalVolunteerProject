@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using PetProject.Application.Database;
 using PetProject.Application.Files.Providers;
 using PetProject.Application.Repositories;
 using PetProject.Infastructure.Options;
@@ -16,6 +17,7 @@ namespace PetProject.Infastructure
         {
             services.AddScoped<AppDbContext>();
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddMinio(configuration);
 
             return services;

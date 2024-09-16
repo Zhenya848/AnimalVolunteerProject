@@ -1,4 +1,5 @@
-﻿using PetProject.Domain.Shared;
+﻿using CSharpFunctionalExtensions;
+using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Species;
 using PetProject.Domain.Volunteers.ValueObjects;
@@ -13,7 +14,6 @@ namespace PetProject.Domain.Volunteers
 
         public string Name { get; private set; } = default!;
         public Description Description { get; private set; } = default!;
-        public string Breed { get; private set; } = default!;
         public string Color { get; private set; } = default!;
         public string HealthInfo { get; private set; } = default!;
         public Addres Address { get; private set; } = default!;
@@ -27,11 +27,11 @@ namespace PetProject.Domain.Volunteers
         public bool IsCastrated { get; private set; }
         public bool IsVaccinated { get; private set; }
 
-        public DateOnly BirthdayTime { get; private set; }
-        public DateOnly DateOfCreation { get; private set; }
+        public DateTime BirthdayTime { get; private set; }
+        public DateTime DateOfCreation { get; private set; }
 
         public RequisitesList RequisitesList { get; private set; } = default!;
-        public List<PetPhoto> Photos { get; private set; } = default!;
+        public PetPhotosList PhotosList { get; private set; } = default!;
 
         public HelpStatus HelpStatus { get; private set; }
 
@@ -39,6 +39,47 @@ namespace PetProject.Domain.Volunteers
         {
 
         }
+
+        public Pet(
+            PetId id,
+            string name, 
+            Description description, 
+            string color, 
+            string healthInfo, 
+            Addres address, 
+            TelephoneNumber telephoneNumber, 
+            float weight, 
+            float height, 
+            bool isCastrated, 
+            bool isVaccinated, 
+            DateTime birthdayTime, 
+            DateTime dateOfCreation,
+            List<Requisite> requisitesList, 
+            List<PetPhoto> photos,
+            SpeciesId speciesId,
+            BreedId breedId,
+            HelpStatus helpStatus) : base(id)
+        {
+            Name = name;
+            Description = description;
+            Color = color;
+            HealthInfo = healthInfo;
+            Address = address;
+            TelephoneNumber = telephoneNumber;
+            Weight = weight;
+            Height = height;
+            IsCastrated = isCastrated;
+            IsVaccinated = isVaccinated;
+            BirthdayTime = birthdayTime;
+            DateOfCreation = dateOfCreation;
+            RequisitesList = new RequisitesList(requisitesList);
+            PhotosList = new PetPhotosList(photos);
+            PetTypeInfo = new PetTypeInfo(breedId, speciesId);
+            HelpStatus = helpStatus;
+        }
+
+        public void UpdatePhotos(IEnumerable<PetPhoto> petPhotos) =>
+            PhotosList = new PetPhotosList(petPhotos);
 
         public void Delete() => _isDeleted = true;
 

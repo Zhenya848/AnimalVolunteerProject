@@ -2,26 +2,24 @@
 
 namespace PetProject.API.Response
 {
-    public record ResponseError(string? errorCode, string? errorMessage, string? propertyName);
-
     public class Envelope
     {
         public object? Result { get; }
-        public List<ResponseError> ResponseErrors { get; }
+        public ErrorList? ResponseErrors { get; }
 
         public DateTime? Time {  get; }
 
-        private Envelope(object? result, IEnumerable<ResponseError> errors)
+        private Envelope(object? result, ErrorList? errors)
         {
             Result = result;
-            ResponseErrors = errors.ToList();
+            ResponseErrors = errors;
             Time = DateTime.Now;
         }
 
         public static Envelope Ok(object? result) =>
-            new Envelope (result, []);
+            new Envelope (result, null);
 
-        public static Envelope Error(IEnumerable<ResponseError> errors) =>
+        public static Envelope Error(ErrorList errors) =>
             new Envelope (null, errors);
     }
 }

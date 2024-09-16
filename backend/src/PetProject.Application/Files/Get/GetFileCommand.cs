@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace PetProject.Application.Files.Get
 {
-    public record GetFileRequest(string BucketName, string ObjectName);
+    public record GetFileCommand(string BucketName, string ObjectName);
 }
