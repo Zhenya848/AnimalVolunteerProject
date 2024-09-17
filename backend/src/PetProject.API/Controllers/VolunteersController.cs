@@ -145,7 +145,6 @@ namespace PetProject.API.Controllers
                 request.Weight, request.Height, request.IsCastrated, request.IsVaccinated,
                 request.BirthdayTime, request.DateOfCreation, request.Requisites, request.HelpStatus);
 
-
         [HttpPost("{volunteerId:guid}/pet/{petId:guid}/photos")]
         public async Task<IActionResult> UploadPhotosToPet(
             [FromServices] IPetService service,
