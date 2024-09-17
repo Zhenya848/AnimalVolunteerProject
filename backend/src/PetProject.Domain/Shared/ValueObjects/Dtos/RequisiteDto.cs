@@ -1,4 +1,4 @@
 ﻿namespace PetProject.Domain.Shared.ValueObjects.Dtos
 {
-    public record RequisiteDto(string title, string description);
+    public record RequisiteDto(string Title, string Description);
 }

@@ -129,10 +129,7 @@ namespace PetProject.API.Controllers
             [FromRoute] Guid volunteerId,
             CancellationToken cancellationToken)
         {
-            var command = new CreatePetCommand(volunteerId, request.Name, request.Description, 
-                request.Color, request.HealthInfo, request.Addres, request.TelephoneNumber, 
-                request.Weight, request.Height, request.IsCastrated, request.IsVaccinated, 
-                request.BirthdayTime, request.DateOfCreation, request.Requisites, request.HelpStatus);
+            var command = InitializePetCommand(volunteerId, request);
 
             var result = await service.Create(command, cancellationToken);
 
@@ -141,6 +138,13 @@ namespace PetProject.API.Controllers
 
             return new ObjectResult(result.Value) { StatusCode = StatusCodes.Status201Created };
         }
+
+        private CreatePetCommand InitializePetCommand(Guid volunteerId, CreatePetRequest request) =>
+            new CreatePetCommand(volunteerId, request.Name, request.Description,
+                request.Color, request.HealthInfo, request.Addres, request.TelephoneNumber,
+                request.Weight, request.Height, request.IsCastrated, request.IsVaccinated,
+                request.BirthdayTime, request.DateOfCreation, request.Requisites, request.HelpStatus);
+
 
         [HttpPost("{volunteerId:guid}/pet/{petId:guid}/photos")]
         public async Task<IActionResult> UploadPhotosToPet(

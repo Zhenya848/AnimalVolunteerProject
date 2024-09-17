@@ -58,6 +58,9 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         builder.ComplexProperty(d => d.Description, db =>
         { db.Property(v => v.Value).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH); });
 
+        builder.ComplexProperty(s => s.SerialNumber, sb =>
+        { sb.Property(v => v.Value).IsRequired().HasColumnName("serial_number"); });
+
         builder.Property(w => w.Weight);
         builder.Property(h => h.Height);
         builder.Property(ic => ic.IsCastrated);

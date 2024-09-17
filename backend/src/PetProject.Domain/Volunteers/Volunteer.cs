@@ -99,7 +99,76 @@ namespace PetProject.Domain.Volunteers
         public int CountOfHomelessAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.LookingForAHome);
         public int CountOfIllAnimals() => Pets.Count(p => p.HelpStatus == HelpStatus.NeedHelp);
 
-        public void AddPet(Pet pet) => _pets.Add(pet);
-            
+        public UnitResult<Error> AddPet(Pet pet)
+        {
+            if (_pets.Count > 50)
+                return Error.Failure("too.many.items", "You can't add more than 50 pets!");
+
+            var serialNumber = SerialNumber.Create(_pets.Count + 1);
+
+            if (serialNumber.IsFailure)
+                return serialNumber.Error;
+
+            pet.SetSerialNumber(serialNumber.Value);
+
+            _pets.Add(pet);
+
+            return Result.Success<Error>();
+        }
+
+        public UnitResult<Error> MovePet(Pet pet, SerialNumber serialNumber)
+        {
+            if (pet.SerialNumber == null || _pets.Select(p => p.Id == pet.Id).Any() == false)
+                return Errors.General.NotFound(pet.Id);
+
+            if (serialNumber.Value > _pets.Count)
+                return Errors.General.ValueIsInvalid("Serial number");
+
+            int indexOfPassedPet = pet.SerialNumber.Value - 1;
+            int indexOfNewPet = serialNumber.Value - 1;
+
+            if (indexOfPassedPet == indexOfNewPet)
+                return Result.Success<Error>();
+
+            pet.SetSerialNumber(serialNumber);
+            Pet savedObj;
+
+            if (indexOfPassedPet > indexOfNewPet)
+            {
+                _pets[indexOfNewPet].SerialNumber!.MoveSerialNumberToForward();
+
+                savedObj = _pets[indexOfNewPet];
+                _pets[indexOfNewPet] = pet;
+
+                for (int i = indexOfNewPet + 1; i < indexOfPassedPet; i++)
+                {
+                    _pets[i].SerialNumber!.MoveSerialNumberToForward();
+                    Pet current = _pets[i];
+
+                    _pets[i] = savedObj;
+                    savedObj = current;
+                }
+            }
+            else
+            {
+                _pets[indexOfNewPet].SerialNumber!.MoveSerialNumberToBackward();
+
+                savedObj = _pets[indexOfNewPet];
+                _pets[indexOfNewPet] = pet;
+
+                for (int i = indexOfNewPet - 1; i > indexOfPassedPet; i--)
+                {
+                    _pets[i].SerialNumber!.MoveSerialNumberToBackward();
+                    Pet current = _pets[i];
+
+                    _pets[i] = savedObj;
+                    savedObj = current;
+                }
+            }
+
+            _pets[indexOfPassedPet] = savedObj;
+
+            return Result.Success<Error>();
+        }
     }
 }

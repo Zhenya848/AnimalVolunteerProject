@@ -68,7 +68,7 @@ namespace PetProject.Application.Volunteers.Services
             .Select(s => SocialNetwork.Create(s.name, s.reference).Value).ToList();
 
             var requisites = command.Requisites
-            .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
+            .Select(r => Requisite.Create(r.Title, r.Description).Value).ToList();
 
             Volunteer volunteer = new Volunteer(VolunteerId.AddNewId(), fullName, description,
                 telephoneNumber, experience, socialNetworks, requisites);
@@ -107,7 +107,7 @@ namespace PetProject.Application.Volunteers.Services
             .Select(s => SocialNetwork.Create(s.name, s.reference).Value).ToList();
 
             var requisites = command.Requisites
-            .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
+            .Select(r => Requisite.Create(r.Title, r.Description).Value).ToList();
 
             volunteer.Value.UpdateInfo(fullName, description, telephoneNumber, experience, socialNetworks, requisites);
 
