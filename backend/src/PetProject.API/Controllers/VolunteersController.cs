@@ -129,7 +129,7 @@ namespace PetProject.API.Controllers
             [FromRoute] Guid volunteerId,
             CancellationToken cancellationToken)
         {
-            var command = InitializePetCommand(volunteerId, request);
+            var command = InitializeCreatePetCommand(volunteerId, request);
 
             var result = await service.Create(command, cancellationToken);
 
@@ -139,7 +139,7 @@ namespace PetProject.API.Controllers
             return new ObjectResult(result.Value) { StatusCode = StatusCodes.Status201Created };
         }
 
-        private CreatePetCommand InitializePetCommand(Guid volunteerId, CreatePetRequest request) =>
+        private CreatePetCommand InitializeCreatePetCommand(Guid volunteerId, CreatePetRequest request) =>
             new CreatePetCommand(volunteerId, request.Name, request.Description,
                 request.Color, request.HealthInfo, request.Addres, request.TelephoneNumber,
                 request.Weight, request.Height, request.IsCastrated, request.IsVaccinated,
