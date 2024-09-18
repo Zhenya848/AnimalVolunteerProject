@@ -118,14 +118,14 @@ namespace PetProject.Domain.Volunteers
 
         public UnitResult<Error> MovePet(Pet pet, SerialNumber serialNumber)
         {
-            if (pet.SerialNumber == null || _pets.Select(p => p.Id == pet.Id).Any() == false)
+            if (_pets.Select(p => p.Id == pet.Id).Any() == false)
                 return Errors.General.NotFound(pet.Id);
 
-            if (serialNumber.Value > _pets.Count)
+            if (serialNumber > _pets.Count)
                 return Errors.General.ValueIsInvalid("Serial number");
 
-            int indexOfPassedPet = pet.SerialNumber.Value - 1;
-            int indexOfNewPet = serialNumber.Value - 1;
+            int indexOfPassedPet = pet.SerialNumber - 1;
+            int indexOfNewPet = serialNumber - 1;
 
             if (indexOfPassedPet == indexOfNewPet)
                 return Result.Success<Error>();
@@ -135,14 +135,14 @@ namespace PetProject.Domain.Volunteers
 
             if (indexOfPassedPet > indexOfNewPet)
             {
-                _pets[indexOfNewPet].SerialNumber!.MoveSerialNumberToForward();
+                _pets[indexOfNewPet].SerialNumber.MoveSerialNumberToForward();
 
                 savedObj = _pets[indexOfNewPet];
                 _pets[indexOfNewPet] = pet;
 
                 for (int i = indexOfNewPet + 1; i < indexOfPassedPet; i++)
                 {
-                    _pets[i].SerialNumber!.MoveSerialNumberToForward();
+                    _pets[i].SerialNumber.MoveSerialNumberToForward();
                     Pet current = _pets[i];
 
                     _pets[i] = savedObj;
@@ -151,14 +151,14 @@ namespace PetProject.Domain.Volunteers
             }
             else
             {
-                _pets[indexOfNewPet].SerialNumber!.MoveSerialNumberToBackward();
+                _pets[indexOfNewPet].SerialNumber.MoveSerialNumberToBackward();
 
                 savedObj = _pets[indexOfNewPet];
                 _pets[indexOfNewPet] = pet;
 
                 for (int i = indexOfNewPet - 1; i > indexOfPassedPet; i--)
                 {
-                    _pets[i].SerialNumber!.MoveSerialNumberToBackward();
+                    _pets[i].SerialNumber.MoveSerialNumberToBackward();
                     Pet current = _pets[i];
 
                     _pets[i] = savedObj;

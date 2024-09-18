@@ -49,14 +49,24 @@ namespace Tests
 
             Assert.Equal(addedPetResult.Value.Id, petToAdd.Id);
             Assert.Equal(addedPetResult.Value.SerialNumber, serialNumber.Value);
-            Assert.Equal(addedPetResult.Value.SerialNumber!.Value, volunteer.Pets.Count);
+            Assert.Equal(addedPetResult.Value.SerialNumber.Value, volunteer.Pets.Count);
         }
 
-        [Fact]
-        public void Move_Pets_With_Other_Pets_Return_Success_Result()
+        [Theory]
+        [InlineData(4, 2, "AEBCDFGHIJ")]
+        [InlineData(1, 3, "ACBDEFGHIJ")]
+        [InlineData(0, 10, "BCDEFGHIJA")]
+        [InlineData(9, 1, "JABCDEFGHI")]
+        [InlineData(5, 1, "FABCDEGHIJ")]
+        [InlineData(6, 10, "ABCDEFHIJG")]
+        [InlineData(7, 7, "ABCDEFHGIJ")]
+        [InlineData(8, 9, "ABCDEFGHIJ")]
+        public void Move_Pets_With_Other_Pets_Return_Success_Result(
+            int indexOfPet, 
+            int serialNumber, 
+            string expectedResult)
         {
             Volunteer volunteer = CreateTestVolunteer();
-            const string RIGHT_ORDER = "12345678910";
 
             volunteer.AddPet(CreateTestPetWithName("A"));
             volunteer.AddPet(CreateTestPetWithName("B"));
@@ -69,91 +79,21 @@ namespace Tests
             volunteer.AddPet(CreateTestPetWithName("I"));
             volunteer.AddPet(CreateTestPetWithName("J"));
 
-            var test1 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[4],
-                SerialNumber.Create(2).Value,
-                "AEBCDFGHIJ",
-                RIGHT_ORDER);
+            volunteer.MovePet(volunteer.Pets[indexOfPet], SerialNumber.Create(serialNumber).Value);
 
-            var test2 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[0],
-                SerialNumber.Create(10).Value,
-                "EBCDFGHIJA",
-                RIGHT_ORDER);
+            string expectedOrder = "12345678910";
 
-            var test3 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[9],
-                SerialNumber.Create(1).Value,
-                "AEBCDFGHIJ",
-                RIGHT_ORDER);
+            string actualResult = "";
+            string actualOrder = "";
 
-            var test4 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[5],
-                SerialNumber.Create(1).Value,
-                "FAEBCDGHIJ",
-                RIGHT_ORDER);
-
-            var test5 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[6],
-                SerialNumber.Create(9).Value,
-                "FAEBCDHIGJ",
-                RIGHT_ORDER);
-
-            var test6 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[1],
-                SerialNumber.Create(3).Value,
-                "FEABCDHIGJ",
-                RIGHT_ORDER);
-
-            var test7 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[6],
-                SerialNumber.Create(6).Value,
-                "FEABCHDIGJ",
-                RIGHT_ORDER);
-
-            var test8 = CheckPetMove(
-                volunteer,
-                volunteer.Pets[6],
-                SerialNumber.Create(7).Value,
-                "FEABCHDIGJ",
-                RIGHT_ORDER);
-
-            List<(string petNames, string rightAnswer, string order, string rightOrder)> tests =
-                [test1, test2, test3, test4, test5, test6, test7, test8];
-
-            foreach (var test in tests)
+            for (int i = 0; i < volunteer.Pets.Count; i++)
             {
-                Assert.Equal(test.rightAnswer, test.petNames);
-                Assert.Equal(test.rightOrder, test.order);
-            }
-        }
-
-        private (string petNames, string rightAnswer, string order, string rightOrder) CheckPetMove(
-            Volunteer volunteer,
-            Pet pet,
-            SerialNumber serialNumber,
-            string expectedResult,
-            string expectedOrder)
-        {
-            volunteer.MovePet(pet, serialNumber);
-
-            string petNames = "";
-            string order = "";
-
-            foreach (var current in volunteer.Pets)
-            {
-                petNames += current.Name;
-                order += current.SerialNumber!.Value.ToString();
+                actualResult += volunteer.Pets[i].Name;
+                actualOrder += (int)volunteer.Pets[i].SerialNumber;
             }
 
-            return (petNames, expectedResult, order, expectedOrder);
+            Assert.Equal(expectedResult, actualResult);
+            Assert.Equal(expectedOrder, actualOrder);
         }
 
         private Pet CreateTestPetWithName(string name)

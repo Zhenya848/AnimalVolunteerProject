@@ -28,5 +28,8 @@ namespace PetProject.Domain.Volunteers.ValueObjects
 
         public void MoveSerialNumberToForward() => Value++;
         public void MoveSerialNumberToBackward() => Value--;
+
+        public static implicit operator int(SerialNumber serialNumber) =>
+            serialNumber.Value;
     }
 }

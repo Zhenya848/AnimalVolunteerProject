@@ -21,7 +21,8 @@ namespace PetProject.Domain.Volunteers
 
         public PetTypeInfo PetTypeInfo { get; private set; } = default!;
 
-        public SerialNumber? SerialNumber { get; private set; } = null;
+        public SerialNumber SerialNumber { get; private set; } = default!;           
+
         public float Weight { get; private set; }
         public float Height { get; private set; }
 
