@@ -101,9 +101,6 @@ namespace PetProject.Domain.Volunteers
 
         public UnitResult<Error> AddPet(Pet pet)
         {
-            if (_pets.Count > 50)
-                return Error.Failure("too.many.items", "You can't add more than 50 pets!");
-
             var serialNumber = SerialNumber.Create(_pets.Count + 1);
 
             if (serialNumber.IsFailure)
@@ -135,14 +132,14 @@ namespace PetProject.Domain.Volunteers
 
             if (indexOfPassedPet > indexOfNewPet)
             {
-                _pets[indexOfNewPet].SerialNumber.MoveSerialNumberToForward();
+                _pets[indexOfNewPet].MoveSerialNumberToForward();
 
                 savedObj = _pets[indexOfNewPet];
                 _pets[indexOfNewPet] = pet;
 
                 for (int i = indexOfNewPet + 1; i < indexOfPassedPet; i++)
                 {
-                    _pets[i].SerialNumber.MoveSerialNumberToForward();
+                    _pets[i].MoveSerialNumberToForward();
                     Pet current = _pets[i];
 
                     _pets[i] = savedObj;
@@ -151,14 +148,14 @@ namespace PetProject.Domain.Volunteers
             }
             else
             {
-                _pets[indexOfNewPet].SerialNumber.MoveSerialNumberToBackward();
+                _pets[indexOfNewPet].MoveSerialNumberToBackward();
 
                 savedObj = _pets[indexOfNewPet];
                 _pets[indexOfNewPet] = pet;
 
                 for (int i = indexOfNewPet - 1; i > indexOfPassedPet; i--)
                 {
-                    _pets[i].SerialNumber.MoveSerialNumberToBackward();
+                    _pets[i].MoveSerialNumberToBackward();
                     Pet current = _pets[i];
 
                     _pets[i] = savedObj;

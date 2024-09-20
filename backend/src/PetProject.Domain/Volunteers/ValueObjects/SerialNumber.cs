@@ -11,7 +11,7 @@ namespace PetProject.Domain.Volunteers.ValueObjects
     public record SerialNumber
     {
         public static SerialNumber First = new SerialNumber(1);
-        public int Value { get; private set; }
+        public int Value { get; }
 
         private SerialNumber(int value)
         {
@@ -25,9 +25,6 @@ namespace PetProject.Domain.Volunteers.ValueObjects
 
             return new SerialNumber(number);
         }
-
-        public void MoveSerialNumberToForward() => Value++;
-        public void MoveSerialNumberToBackward() => Value--;
 
         public static implicit operator int(SerialNumber serialNumber) =>
             serialNumber.Value;

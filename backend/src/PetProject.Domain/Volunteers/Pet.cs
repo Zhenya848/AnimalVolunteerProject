@@ -89,5 +89,11 @@ namespace PetProject.Domain.Volunteers
         public void Delete() => _isDeleted = true;
 
         public void Restore() => _isDeleted = false;
+
+        public void MoveSerialNumberToForward() =>
+            SerialNumber = SerialNumber.Create(SerialNumber.Value + 1).Value;
+
+        public void MoveSerialNumberToBackward() =>
+            SerialNumber = SerialNumber.Create(SerialNumber.Value - 1).Value;
     }
 }
