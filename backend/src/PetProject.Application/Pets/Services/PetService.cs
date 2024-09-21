@@ -61,7 +61,10 @@ namespace PetProject.Application.Pets.Services
                 return (ErrorList)volunteer.Error;
 
             var pet = InitializePet(command);
-            volunteer.Value.AddPet(pet);
+            var addPetResult = volunteer.Value.AddPet(pet);
+
+            if (addPetResult.IsFailure)
+                return (ErrorList)addPetResult.Error;
 
             _volunteerRepository.Save(volunteer.Value, cancellationToken);
             await _unitOfWork.SaveChanges(cancellationToken);
@@ -82,7 +85,7 @@ namespace PetProject.Application.Pets.Services
             var telephoneNumber = TelephoneNumber.Create(command.TelephoneNumber).Value;
 
             var requisites = command.Requisites
-            .Select(r => Requisite.Create(r.title, r.description).Value).ToList();
+            .Select(r => Requisite.Create(r.Title, r.Description).Value).ToList();
 
             var speciesId = SpeciesId.AddEmptyId();
             var breedId = BreedId.AddEmptyId();

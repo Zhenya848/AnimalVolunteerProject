@@ -21,6 +21,8 @@ namespace PetProject.Domain.Volunteers
 
         public PetTypeInfo PetTypeInfo { get; private set; } = default!;
 
+        public SerialNumber SerialNumber { get; private set; } = default!;           
+
         public float Weight { get; private set; }
         public float Height { get; private set; }
 
@@ -81,8 +83,17 @@ namespace PetProject.Domain.Volunteers
         public void UpdatePhotos(IEnumerable<PetPhoto> petPhotos) =>
             PhotosList = new PetPhotosList(petPhotos);
 
+        public void SetSerialNumber(SerialNumber serialNumber) =>
+            SerialNumber = serialNumber;
+
         public void Delete() => _isDeleted = true;
 
         public void Restore() => _isDeleted = false;
+
+        public void MoveSerialNumberToForward() =>
+            SerialNumber = SerialNumber.Create(SerialNumber.Value + 1).Value;
+
+        public void MoveSerialNumberToBackward() =>
+            SerialNumber = SerialNumber.Create(SerialNumber.Value - 1).Value;
     }
 }

@@ -85,6 +85,7 @@ namespace PetProject.Infastructure.Migrations
                     description_value = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     pet_type_info_breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_type_info_species_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    serial_number = table.Column<int>(type: "integer", nullable: false),
                     phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     photos_list = table.Column<string>(type: "jsonb", nullable: false),
                     requisites_list = table.Column<string>(type: "jsonb", nullable: false)
