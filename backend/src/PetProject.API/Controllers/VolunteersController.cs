@@ -158,7 +158,7 @@ namespace PetProject.API.Controllers
 
             var command = new UploadFilesToPetCommand(volunteerId, petId, filesDto);
 
-            var result = await service.UploadFiles(command, cancellationToken);
+            var result = await service.UploadPhotos(command, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
