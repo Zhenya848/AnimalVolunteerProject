@@ -17,7 +17,7 @@ namespace PetProject.Application.Pets.Services
             CreatePetCommand request, 
             CancellationToken cancellationToken = default);
 
-        public Task<Result<Guid, ErrorList>> UploadFiles(
+        public Task<Result<Guid, ErrorList>> UploadPhotos(
             UploadFilesToPetCommand command,
             CancellationToken cancellationToken = default);
     }

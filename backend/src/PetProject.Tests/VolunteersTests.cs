@@ -6,7 +6,7 @@ using PetProject.Domain.Species;
 using PetProject.Domain.Volunteers;
 using PetProject.Domain.Volunteers.ValueObjects;
 
-namespace Tests
+namespace PetProject.Domain.Tests
 {
     public class VolunteersTests
     {

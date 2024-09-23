@@ -96,7 +96,7 @@ namespace PetProject.Application.Pets.Services
                 speciesId, breedId, command.HelpStatus);
         }
 
-        public async Task<Result<Guid, ErrorList>> UploadFiles(
+        public async Task<Result<Guid, ErrorList>> UploadPhotos(
             UploadFilesToPetCommand command,
             CancellationToken cancellationToken = default)
         {
@@ -125,12 +125,15 @@ namespace PetProject.Application.Pets.Services
 
                 foreach (var file in command.Files)
                 {
-                    var path = Guid.NewGuid() + "." + Path.GetExtension(file.FileName);
+                    var pathResult = FilePath.Create(file.FileName);
 
-                    var fileData = new FileData(file.Stream, path);
+                    if (pathResult.IsFailure)
+                        return (ErrorList)pathResult.Error;
+
+                    var fileData = new FileData(file.Stream, pathResult.Value.FullPath);
                     files.Add(fileData);
 
-                    var petPhoto = PetPhoto.Create(path, false).Value;
+                    var petPhoto = PetPhoto.Create(pathResult.Value.FullPath, false).Value;
                     petPhotos.Add(petPhoto);
                 }
 
