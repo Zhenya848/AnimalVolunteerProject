@@ -29,6 +29,8 @@ namespace PetProject.Application.Tests
         [Fact]
         public async void Service_Should_Upload_Files_To_Pet()
         {
+            // arrange
+
             var ct = new CancellationTokenSource().Token;
 
             var volunteer = CreateTestVolunteer();
@@ -102,7 +104,11 @@ namespace PetProject.Application.Tests
                 createPetValidatorMock.Object,
                 uploadFilesValidatorMock.Object);
 
+            // act
+
             var result = await petService.UploadPhotos(command, ct);
+
+            // assert
 
             Assert.True(result.IsSuccess);
         }

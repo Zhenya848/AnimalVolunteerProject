@@ -13,11 +13,17 @@ namespace PetProject.Domain.Tests
         [Fact]
         public void Add_First_Pet_Init_Return_Success_Result()
         {
+            // arrange
+
             Volunteer volunteer = CreateTestVolunteer();
             Pet pet = CreateTestPetWithName("TEST");
 
+            // act
+
             var addPetResult = volunteer.AddPet(pet);
             var addedPetResult = volunteer.GetPetById(pet.Id);
+
+            // assert
 
             Assert.True(addPetResult.IsSuccess);
             Assert.True(addedPetResult.IsSuccess);
@@ -29,6 +35,8 @@ namespace PetProject.Domain.Tests
         [Fact]
         public void Add_Pets_With_Other_Pets_Return_Success_Result()
         {
+            // arrange
+
             const int PETS_COUNT = 10;
 
             Volunteer volunteer = CreateTestVolunteer();
@@ -39,10 +47,14 @@ namespace PetProject.Domain.Tests
 
             var petToAdd = CreateTestPetWithName("TEST");
 
+            // act
+
             var addPetResult = volunteer.AddPet(petToAdd);
             var addedPetResult = volunteer.GetPetById(petToAdd.Id);
 
             var serialNumber = SerialNumber.Create(PETS_COUNT + 1);
+
+            // assert
 
             Assert.True(addPetResult.IsSuccess);
             Assert.True(addedPetResult.IsSuccess);
@@ -66,6 +78,8 @@ namespace PetProject.Domain.Tests
             int serialNumber, 
             string expectedResult)
         {
+            // arrange
+
             Volunteer volunteer = CreateTestVolunteer();
 
             volunteer.AddPet(CreateTestPetWithName("A"));
@@ -79,6 +93,8 @@ namespace PetProject.Domain.Tests
             volunteer.AddPet(CreateTestPetWithName("I"));
             volunteer.AddPet(CreateTestPetWithName("J"));
 
+            // act
+
             volunteer.MovePet(volunteer.Pets[indexOfPet], SerialNumber.Create(serialNumber).Value);
 
             string expectedOrder = "12345678910";
@@ -91,6 +107,8 @@ namespace PetProject.Domain.Tests
                 actualResult += volunteer.Pets[i].Name;
                 actualOrder += (int)volunteer.Pets[i].SerialNumber;
             }
+
+            // assert
 
             Assert.Equal(expectedResult, actualResult);
             Assert.Equal(expectedOrder, actualOrder);
