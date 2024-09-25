@@ -3,7 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetProject.Application.Database;
 using PetProject.Application.Files.Providers;
+using PetProject.Application.Messaging;
 using PetProject.Application.Repositories;
+using PetProject.Infastructure.BackgroundServices;
+using PetProject.Infastructure.MessageQueues;
 using PetProject.Infastructure.Options;
 using PetProject.Infastructure.Providers;
 using PetProject.Infastructure.Repositories;
@@ -18,7 +21,12 @@ namespace PetProject.Infastructure
             services.AddScoped<AppDbContext>();
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddMinio(configuration);
+            services.AddHostedService<FileCleanerBackgroundService>();
+
+            services.AddSingleton<IMessageQueue<IEnumerable<Application.Files.Providers.FileInfo>>, 
+                InMemoryMessageQueue<IEnumerable<Application.Files.Providers.FileInfo>>>();
 
             return services;
         }

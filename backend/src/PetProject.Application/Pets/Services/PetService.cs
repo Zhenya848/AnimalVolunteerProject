@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using PetProject.Application.Pets.UploadPhotos;
+using PetProject.Application.Messaging;
 
 namespace PetProject.Application.Pets.Services
 {
@@ -30,14 +31,17 @@ namespace PetProject.Application.Pets.Services
 
         private readonly IValidator<CreatePetCommand> _createPetValidator;
         private readonly IValidator<UploadFilesToPetCommand> _uploadFilesValidator;
-            
+
+        private readonly IMessageQueue<IEnumerable<Files.Providers.FileInfo>> _messageQueue;
+
         public PetService(
             IVolunteerRepository volunteerRepository, 
             IFileProvider fileProvider, 
             IUnitOfWork unitOfWork,
             ILogger<PetService> logger,
             IValidator<CreatePetCommand> createPetValidator,
-            IValidator<UploadFilesToPetCommand> uploadFilesValidator)
+            IValidator<UploadFilesToPetCommand> uploadFilesValidator,
+            IMessageQueue<IEnumerable<Files.Providers.FileInfo>> messageQueue)
         {
             _volunteerRepository = volunteerRepository;
             _fileProvider = fileProvider;
@@ -45,6 +49,7 @@ namespace PetProject.Application.Pets.Services
             _logger = logger;
             _createPetValidator = createPetValidator;
             _uploadFilesValidator = uploadFilesValidator;
+            _messageQueue = messageQueue;
         }
 
         public async Task<Result<Guid, ErrorList>> Create(CreatePetCommand command, CancellationToken cancellationToken = default)
@@ -144,7 +149,14 @@ namespace PetProject.Application.Pets.Services
                 var uploadResult = await _fileProvider.UploadFiles(createFilesCommand, cancellationToken);
 
                 if (uploadResult.IsFailure)
+                {
+                    List<Files.Providers.FileInfo> filesInfo = 
+                        files.Select(f => new Files.Providers.FileInfo("photos", f.ObjectName)).ToList();
+
+                    await _messageQueue.WriteAsync(filesInfo, cancellationToken);
+
                     return (ErrorList)uploadResult.Error;
+                }
 
                 transaction.Commit();
 

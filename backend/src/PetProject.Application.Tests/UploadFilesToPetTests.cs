@@ -26,6 +26,14 @@ namespace PetProject.Application.Tests
 {
     public class UploadFilesToPetTests
     {
+        private readonly Mock<IFileProvider> _fileProviderMock = new();
+        private readonly Mock<IUnitOfWork> _unitOfWork = new();
+        private readonly Mock<IDbTransaction> _transactionMock = new();
+        private readonly Mock<IVolunteerRepository> _volunteerRepository = new();
+        private readonly Mock<ILogger<PetService>> _loggerMock = new();
+        private readonly Mock<IValidator<UploadFilesToPetCommand>> _uploadFilesValidatorMock = new();
+        private readonly Mock<IValidator<CreatePetCommand>> _createPetValidatorMock = new();
+
         [Fact]
         public async void Service_Should_Upload_Files_To_Pet()
         {
@@ -64,45 +72,30 @@ namespace PetProject.Application.Tests
             List<string> photoPaths = 
                 createFilesCommand.Files.Select(p => p.ObjectName).ToList();
 
-            var fileProviderMock = new Mock<IFileProvider>();
-
-            fileProviderMock.Setup(u => u.UploadFiles(createFilesCommand, ct))
+            _fileProviderMock.Setup(u => u.UploadFiles(createFilesCommand, ct))
                 .ReturnsAsync(Result.Success<IReadOnlyList<string>, Error>(photoPaths));
 
-            var unitOfWork = new Mock<IUnitOfWork>();
-
-            unitOfWork.Setup(s => s.SaveChanges(ct))
+            _unitOfWork.Setup(s => s.SaveChanges(ct))
                 .Returns(Task.CompletedTask);
 
-            var transactionMock = new Mock<IDbTransaction>();
+            _unitOfWork.Setup(c => c.BeginTransaction(ct)).ReturnsAsync(_transactionMock.Object);
 
-            unitOfWork.Setup(c => c.BeginTransaction(ct)).ReturnsAsync(transactionMock.Object);
-
-            var volunteerRepository = new Mock<IVolunteerRepository>();
-
-            volunteerRepository.Setup(g => g.GetById(volunteer.Id, ct))
+            _volunteerRepository.Setup(g => g.GetById(volunteer.Id, ct))
                 .ReturnsAsync(volunteer);
 
-            var uploadFilesValidatorMock = new Mock<IValidator<UploadFilesToPetCommand>>();
-
-            uploadFilesValidatorMock.Setup(v => v.ValidateAsync(command, ct))
+            _uploadFilesValidatorMock.Setup(v => v.ValidateAsync(command, ct))
                 .ReturnsAsync(new ValidationResult());
 
-            var createPetValidatorMock = new Mock<IValidator<CreatePetCommand>>();
-
-            createPetValidatorMock.Setup(v => v.ValidateAsync(It.IsAny<CreatePetCommand>(), ct))
+            _createPetValidatorMock.Setup(v => v.ValidateAsync(It.IsAny<CreatePetCommand>(), ct))
                 .ReturnsAsync(new ValidationResult());
-
-            var logger = LoggerFactory.Create(builder => builder.AddConsole())
-                .CreateLogger<PetService>();
 
             var petService = new PetService(
-                volunteerRepository.Object,
-                fileProviderMock.Object,
-                unitOfWork.Object,
-                logger,
-                createPetValidatorMock.Object,
-                uploadFilesValidatorMock.Object);
+                _volunteerRepository.Object,
+                _fileProviderMock.Object,
+                _unitOfWork.Object,
+                _loggerMock.Object,
+                _createPetValidatorMock.Object,
+                _uploadFilesValidatorMock.Object);
 
             // act
 
