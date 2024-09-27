@@ -7,6 +7,7 @@ using PetProject.Application.Files.Delete;
 using PetProject.Application.Files.Get;
 using PetProject.Application.Files.Providers;
 using PetProject.Domain.Shared;
+using PetProject.Domain.Volunteers.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,6 +62,23 @@ namespace PetProject.Infastructure.Providers
                 return Error.Failure("file.upload", "Fail to upload file in minio");
             }
             finally { semaphoreSlim.Release(); }
+        }
+
+        public Result<IReadOnlyList<string>, Error> GetFiles()
+        {
+            var listObjectArgs = new ListObjectsArgs()
+                .WithBucket("photos")
+                .WithRecursive(false);
+
+            var files = _minioClient.ListObjectsAsync(listObjectArgs);
+
+            List<string> paths = new List<string>();
+
+            using var subscription = files.Subscribe(
+                item => paths.Add(item.Key),
+                ex => _logger.LogError(ex, "Failed to get file."));
+
+            return paths;
         }
 
         public async Task<Result<string, Error>> DeleteFile(
