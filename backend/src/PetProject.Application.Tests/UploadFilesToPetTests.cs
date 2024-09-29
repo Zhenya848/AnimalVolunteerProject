@@ -4,7 +4,6 @@ using Moq;
 using PetProject.Application.Database;
 using PetProject.Application.Files.Create;
 using PetProject.Application.Files.Providers;
-using PetProject.Application.Pets.UploadPhotos;
 using PetProject.Application.Repositories;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.ValueObjects.Dtos;
@@ -17,10 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PetProject.Application.Pets.Create;
 using Microsoft.Extensions.Logging;
-using PetProject.Application.Pets.Services;
 using System.Data;
+using PetProject.Application.Volunteers.UseCases.Pets.Create;
+using PetProject.Application.Volunteers.UseCases.Pets.Services;
+using PetProject.Application.Volunteers.UseCases.Pets.UploadPhotos;
 
 namespace PetProject.Application.Tests
 {

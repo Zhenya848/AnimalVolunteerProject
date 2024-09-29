@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PetProject.Application.Volunteers.Update;
+using PetProject.Application.Volunteers.UseCases.Update;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers.ValueObjects;
 

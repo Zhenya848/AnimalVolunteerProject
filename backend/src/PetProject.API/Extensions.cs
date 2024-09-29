@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PetProject.API.Response;
 using PetProject.Domain.Shared;
-using PetProject.Infastructure;
+using PetProject.Infastructure.DbContexts;
 
 namespace PetProject.API
 {
@@ -31,7 +31,7 @@ namespace PetProject.API
         public async static Task ApplyMigrations(this WebApplication app)
         {
             await using var scope = app.Services.CreateAsyncScope();
-            AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            WriteDbContext dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
 
             await dbContext.Database.MigrateAsync();
         }

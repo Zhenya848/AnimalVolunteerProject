@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PetProject.Application.Volunteers.Create;
+using PetProject.Application.Volunteers.UseCases.Create;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers.ValueObjects;
 

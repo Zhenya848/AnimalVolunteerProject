@@ -6,16 +6,17 @@ using PetProject.Domain.Volunteers;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using Microsoft.Extensions.Logging;
+using PetProject.Infastructure.DbContexts;
 
 namespace PetProject.Infastructure.Repositories
 {
     public class VolunteerRepository : IVolunteerRepository
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly WriteDbContext _appDbContext;
         private readonly ILogger<VolunteerRepository> _logger;
 
         public VolunteerRepository(
-            AppDbContext appDbContext, 
+            WriteDbContext appDbContext, 
             ILogger<VolunteerRepository> logger)
         {
             _appDbContext = appDbContext;

@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PetProject.Application.Files.Services;
-using PetProject.Application.Pets.Services;
-using PetProject.Application.Volunteers.Services;
+using PetProject.Application.Volunteers.Queries.Pets.Services;
+using PetProject.Application.Volunteers.UseCases.Pets.Services;
+using PetProject.Application.Volunteers.UseCases.Services;
 
 namespace PetProject.Application
 {
@@ -12,6 +13,7 @@ namespace PetProject.Application
             services.AddScoped<IVolunteerService, VolunteerService>();
             services.AddScoped<IPetService, PetService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IPetQueryService, PetQueryService>();
 
             return services;
         }

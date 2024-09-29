@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PetProject.Application.Volunteers.Update;
+using PetProject.Application.Volunteers.UseCases.Delete;
 using PetProject.Domain.Shared;
 
 namespace PetProject.API.Volunteers

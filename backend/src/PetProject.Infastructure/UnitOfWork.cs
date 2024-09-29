@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using PetProject.Application.Database;
+using PetProject.Infastructure.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +12,9 @@ namespace PetProject.Infastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly WriteDbContext _appDbContext;
 
-        public UnitOfWork(AppDbContext appDbContext)
+        public UnitOfWork(WriteDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
