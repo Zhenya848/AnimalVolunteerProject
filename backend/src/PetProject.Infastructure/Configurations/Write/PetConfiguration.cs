@@ -4,6 +4,10 @@ using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Volunteers;
+using System.Text.Json;
+using PetProject.Domain.Shared.ValueObjects.Dtos;
+using PetProject.Domain.Volunteers.ValueObjects.Collections;
+using PetProject.Infastructure.Extensions;
 
 namespace PetProject.Infastructure.Configurations.Write
 {
@@ -58,7 +62,7 @@ namespace PetProject.Infastructure.Configurations.Write
             });
 
             builder.ComplexProperty(d => d.Description, db =>
-            { db.Property(v => v.Value).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH); });
+            { db.Property(v => v.Value).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH).HasColumnName("description"); });
 
             builder.ComplexProperty(s => s.SerialNumber, sb =>
             { sb.Property(v => v!.Value).IsRequired().HasColumnName("serial_number"); });
@@ -71,27 +75,15 @@ namespace PetProject.Infastructure.Configurations.Write
             builder.Property(bt => bt.BirthdayTime);
             builder.Property(doc => doc.DateOfCreation);
 
-            builder.OwnsOne(rl => rl.RequisitesList, rlb =>
-            {
-                rlb.ToJson();
+            builder.Property(rl => rl.Requisites)
+                .ValueToDtoConversion(
+                requisite => new RequisiteDto(requisite.Name, requisite.Description),
+                dto => Requisite.Create(dto.Name, dto.Description).Value);
 
-                rlb.OwnsMany(r => r.Requisites, rb =>
-                {
-                    rb.Property(n => n.Name).IsRequired();
-                    rb.Property(d => d.Description).IsRequired();
-                });
-            });
-
-            builder.OwnsOne(pl => pl.PhotosList, plb =>
-            {
-                plb.ToJson();
-
-                plb.OwnsMany(p => p.Photos, pb =>
-                {
-                    pb.Property(p => p.Path).IsRequired();
-                    pb.Property(imp => imp.IsMainPhoto).IsRequired();
-                });
-            });
+            builder.Property(pl => pl.Photos)
+                .ValueToDtoConversion(
+                photos => new PetPhotoDto(photos.Path, photos.IsMainPhoto),
+                dto => PetPhoto.Create(dto.Path, dto.IsMainPhoto).Value);
 
             builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field).HasColumnName("is_deleted");
 

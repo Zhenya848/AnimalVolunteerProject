@@ -1,5 +1,4 @@
-﻿using PetProject.Application.Volunteers.UseCases.Pets.Create;
-using PetProject.Domain.Shared.ValueObjects.Dtos;
+﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
 
 namespace PetProject.API.Controllers.Volunteers.Requests
 {

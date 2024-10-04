@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetProject.Domain.Shared.ValueObjects.Dtos;
 using PetProject.Domain.Shared.ValueObjects.Dtos.ForQuery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PetProject.Infastructure.Configurations.Read
@@ -15,15 +17,25 @@ namespace PetProject.Infastructure.Configurations.Read
         {
             builder.ToTable("volunteers");
 
-            builder.HasKey(v => v.Id);
+            builder.HasKey(i => i.Id);
 
-            builder.OwnsMany(s => s.SocialNetworksDto, sb =>
-            {
-                sb.ToJson();
+            builder.Property(pl => pl.Requisites)
+                .HasConversion(
+                    requisites => JsonSerializer.Serialize(
+                        string.Empty,
+                        JsonSerializerOptions.Default),
 
-                sb.Property(n => n.name);
-                sb.Property(r => r.reference);
-            });
+                    json => JsonSerializer.Deserialize<RequisiteDto[]>(json, JsonSerializerOptions.Default)!)
+                .HasColumnType("jsonb");
+
+            builder.Property(pl => pl.SocialNetworks)
+                .HasConversion(
+                    requisites => JsonSerializer.Serialize(
+                        string.Empty,
+                        JsonSerializerOptions.Default),
+
+                    json => JsonSerializer.Deserialize<SocialNetworkDto[]>(json, JsonSerializerOptions.Default)!)
+                .HasColumnType("jsonb");
         }
     }
 }

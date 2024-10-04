@@ -1,4 +1,5 @@
-﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
+﻿using PetProject.Application.Shared.Interfaces.Commands;
+using PetProject.Domain.Shared.ValueObjects.Dtos;
 
 namespace PetProject.Application.Volunteers.UseCases.Create
 {
@@ -8,7 +9,7 @@ namespace PetProject.Application.Volunteers.UseCases.Create
         string PhoneNumber,
         int Experience,
         IEnumerable<SocialNetworkDto> SocialNetworks,
-        IEnumerable<RequisiteDto> Requisites)
+        IEnumerable<RequisiteDto> Requisites) : ICreateCommand
     {
 
     };

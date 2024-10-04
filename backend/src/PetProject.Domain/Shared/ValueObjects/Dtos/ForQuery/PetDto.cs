@@ -21,8 +21,8 @@ namespace PetProject.Domain.Shared.ValueObjects.Dtos.ForQuery
         public string Street { get; } = default!;
         public string City { get; } = default!;
         public string State { get; } = default!;
-        public string ZipCode { get; } = default!;
-        public string TelephoneNumber { get; } = default!;
+        public string Zipcode { get; } = default!;
+        public string PhoneNumber { get; } = default!;
 
         public Guid BreedId { get; }
         public Guid SpeciesId { get; }
@@ -38,8 +38,8 @@ namespace PetProject.Domain.Shared.ValueObjects.Dtos.ForQuery
         public DateTime BirthdayTime { get; }
         public DateTime DateOfCreation { get; }
 
-        public RequisiteDto[] RequisitesDto { get; } = default!;
-        public string[] PhotoPaths { get; } = default!;
+        public RequisiteDto[] Requisites { get; set; } = [];
+        public PetPhotoDto[] Photos { get; set; } = [];
 
         public HelpStatus HelpStatus { get; }
     }

@@ -2,9 +2,7 @@
 using FluentValidation;
 using Moq;
 using PetProject.Application.Database;
-using PetProject.Application.Files.Create;
 using PetProject.Application.Files.Providers;
-using PetProject.Application.Repositories;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.ValueObjects.Dtos;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
@@ -18,9 +16,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using PetProject.Application.Volunteers.UseCases.Pets.Create;
-using PetProject.Application.Volunteers.UseCases.Pets.Services;
-using PetProject.Application.Volunteers.UseCases.Pets.UploadPhotos;
+using PetProject.Application.Volunteers.Pets.Commands.UploadPhotos;
+using PetProject.Application.Volunteers.Pets.Commands.Create;
+using PetProject.Application.Volunteers.Pets.Commands;
+using PetProject.Application.Files.Commands.Create;
+using PetProject.Application.Repositories.Write;
 
 namespace PetProject.Application.Tests
 {
@@ -152,7 +152,7 @@ namespace PetProject.Application.Tests
             var requisiteDto = new RequisiteDto(TEST, TEST);
 
             var socialNetworks = new List<SocialNetwork>()
-            { SocialNetwork.Create(socilaNetworkDto.name, socilaNetworkDto.reference).Value };
+            { SocialNetwork.Create(socilaNetworkDto.Name, socilaNetworkDto.Reference).Value };
 
             var requisites = new List<Requisite>()
             { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };

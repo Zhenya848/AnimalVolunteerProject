@@ -115,6 +115,16 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
 
+                    b.Property<string>("Photos")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("photos");
+
+                    b.Property<string>("Requisites")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("requisites");
+
                     b.Property<float>("Weight")
                         .HasColumnType("real")
                         .HasColumnName("weight");
@@ -164,7 +174,7 @@ namespace PetProject.Infastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(1000)
                                 .HasColumnType("character varying(1000)")
-                                .HasColumnName("description_value");
+                                .HasColumnName("description");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("PetTypeInfo", "PetProject.Domain.Volunteers.Pet.PetTypeInfo#PetTypeInfo", b1 =>
@@ -214,6 +224,16 @@ namespace PetProject.Infastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<string>("Requisites")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("requisites");
+
+                    b.Property<string>("SocialNetworks")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("social_networks");
 
                     b.Property<bool>("_isDeleted")
                         .HasColumnType("boolean")
@@ -293,205 +313,6 @@ namespace PetProject.Infastructure.Migrations
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
-
-                    b.OwnsOne("PetProject.Domain.Volunteers.ValueObjects.Collections.RequisitesList", "RequisitesList", b1 =>
-                        {
-                            b1.Property<Guid>("PetId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("PetId")
-                                .HasName("pk_pets");
-
-                            b1.ToTable("pets");
-
-                            b1.ToJson("requisites_list");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PetId")
-                                .HasConstraintName("fk_pets_pets_pet_id");
-
-                            b1.OwnsMany("PetProject.Domain.Volunteers.ValueObjects.Requisite", "Requisites", b2 =>
-                                {
-                                    b2.Property<Guid>("RequisitesListPetId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Description")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("RequisitesListPetId", "Id");
-
-                                    b2.ToTable("pets");
-
-                                    b2.ToJson("requisites_list");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("RequisitesListPetId")
-                                        .HasConstraintName("fk_pets_pets_requisites_list_pet_id");
-                                });
-
-                            b1.Navigation("Requisites");
-                        });
-
-                    b.OwnsOne("PetProject.Domain.Volunteers.ValueObjects.Collections.PetPhotosList", "PhotosList", b1 =>
-                        {
-                            b1.Property<Guid>("PetId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("PetId");
-
-                            b1.ToTable("pets");
-
-                            b1.ToJson("photos_list");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PetId")
-                                .HasConstraintName("fk_pets_pets_id");
-
-                            b1.OwnsMany("PetProject.Domain.Volunteers.ValueObjects.PetPhoto", "Photos", b2 =>
-                                {
-                                    b2.Property<Guid>("PetPhotosListPetId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<bool>("IsMainPhoto")
-                                        .HasColumnType("boolean");
-
-                                    b2.Property<string>("Path")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("PetPhotosListPetId", "Id");
-
-                                    b2.ToTable("pets");
-
-                                    b2.ToJson("photos_list");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("PetPhotosListPetId")
-                                        .HasConstraintName("fk_pets_pets_pet_photos_list_pet_id");
-                                });
-
-                            b1.Navigation("Photos");
-                        });
-
-                    b.Navigation("PhotosList")
-                        .IsRequired();
-
-                    b.Navigation("RequisitesList")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PetProject.Domain.Volunteers.Volunteer", b =>
-                {
-                    b.OwnsOne("PetProject.Domain.Volunteers.ValueObjects.Collections.SocialNetworksList", "SocialNetworksList", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("volunteers");
-
-                            b1.ToJson("social_networks_list");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-
-                            b1.OwnsMany("PetProject.Domain.Volunteers.ValueObjects.SocialNetwork", "SocialNetworks", b2 =>
-                                {
-                                    b2.Property<Guid>("SocialNetworksListVolunteerId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Reference")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("SocialNetworksListVolunteerId", "Id");
-
-                                    b2.ToTable("volunteers");
-
-                                    b2.ToJson("social_networks_list");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("SocialNetworksListVolunteerId")
-                                        .HasConstraintName("fk_volunteers_volunteers_social_networks_list_volunteer_id");
-                                });
-
-                            b1.Navigation("SocialNetworks");
-                        });
-
-                    b.OwnsOne("PetProject.Domain.Volunteers.ValueObjects.Collections.RequisitesList", "RequisitesList", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("volunteers");
-
-                            b1.ToJson("requisites_list");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-
-                            b1.OwnsMany("PetProject.Domain.Volunteers.ValueObjects.Requisite", "Requisites", b2 =>
-                                {
-                                    b2.Property<Guid>("RequisitesListVolunteerId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Description")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("RequisitesListVolunteerId", "Id");
-
-                                    b2.ToTable("volunteers");
-
-                                    b2.ToJson("requisites_list");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("RequisitesListVolunteerId")
-                                        .HasConstraintName("fk_volunteers_volunteers_requisites_list_volunteer_id");
-                                });
-
-                            b1.Navigation("Requisites");
-                        });
-
-                    b.Navigation("RequisitesList")
-                        .IsRequired();
-
-                    b.Navigation("SocialNetworksList")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PetProject.Domain.Species.Species", b =>

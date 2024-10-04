@@ -32,8 +32,11 @@ namespace PetProject.Domain.Volunteers
         public DateTime BirthdayTime { get; private set; }
         public DateTime DateOfCreation { get; private set; }
 
-        public RequisitesList RequisitesList { get; private set; } = default!;
-        public PetPhotosList PhotosList { get; private set; } = default!;
+        private List<Requisite> _requisites = default!;
+        public IReadOnlyList<Requisite> Requisites => _requisites;
+
+        private List<PetPhoto> _photos = default!;
+        public IReadOnlyList<PetPhoto> Photos => _photos;
 
         public HelpStatus HelpStatus { get; private set; }
 
@@ -56,7 +59,7 @@ namespace PetProject.Domain.Volunteers
             bool isVaccinated, 
             DateTime birthdayTime, 
             DateTime dateOfCreation,
-            List<Requisite> requisitesList, 
+            List<Requisite> requisites, 
             List<PetPhoto> photos,
             SpeciesId speciesId,
             BreedId breedId,
@@ -74,14 +77,14 @@ namespace PetProject.Domain.Volunteers
             IsVaccinated = isVaccinated;
             BirthdayTime = birthdayTime;
             DateOfCreation = dateOfCreation;
-            RequisitesList = new RequisitesList(requisitesList);
-            PhotosList = new PetPhotosList(photos);
+            _requisites = requisites;
+            _photos = photos;
             PetTypeInfo = new PetTypeInfo(breedId, speciesId);
             HelpStatus = helpStatus;
         }
 
         public void UpdatePhotos(IEnumerable<PetPhoto> petPhotos) =>
-            PhotosList = new PetPhotosList(petPhotos);
+            _photos = petPhotos.ToList();
 
         public void SetSerialNumber(SerialNumber serialNumber) =>
             SerialNumber = serialNumber;

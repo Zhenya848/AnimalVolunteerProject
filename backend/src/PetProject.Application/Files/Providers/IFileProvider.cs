@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using PetProject.Application.Files.Create;
-using PetProject.Application.Files.Delete;
-using PetProject.Application.Files.Get;
+using PetProject.Application.Files.Commands.Create;
+using PetProject.Application.Files.Commands.Delete;
+using PetProject.Application.Files.Commands.Get;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers.ValueObjects;
 

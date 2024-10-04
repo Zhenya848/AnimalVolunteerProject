@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PetProject.Application.Volunteers.UseCases.Pets.Create;
+using PetProject.Application.Volunteers.Pets.Commands.Create;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers.ValueObjects;
 
@@ -24,7 +24,7 @@ namespace PetProject.API.Volunteers
 
             RuleFor(a => a.Addres).MustBeValueObject(a => Addres.Create(a.Street, a.City, a.State, a.ZipCode));
 
-            RuleForEach(r => r.Requisites).MustBeValueObject(r => Requisite.Create(r.Title, r.Description));
+            RuleForEach(r => r.Requisites).MustBeValueObject(r => Requisite.Create(r.Name, r.Description));
         }
     }
 }

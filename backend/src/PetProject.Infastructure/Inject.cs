@@ -1,10 +1,12 @@
-﻿ using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using PetProject.Application;
 using PetProject.Application.Database;
 using PetProject.Application.Files.Providers;
 using PetProject.Application.Messaging;
-using PetProject.Application.Repositories;
+using PetProject.Application.Repositories.Read;
+using PetProject.Application.Repositories.Write;
 using PetProject.Infastructure.BackgroundServices;
 using PetProject.Infastructure.DbContexts;
 using PetProject.Infastructure.MessageQueues;
@@ -19,9 +21,12 @@ namespace PetProject.Infastructure
         public static IServiceCollection AddFromInfrastructure(
             this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<WriteDbContext>();
-            services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+            services.AddScoped<ISqlConnectionFactory, SqlConnectionFactory>();
             services.AddScoped<IReadDbContext, ReadDbContext>();
+            services.AddScoped<WriteDbContext>();
+
+            services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddMinio(configuration);

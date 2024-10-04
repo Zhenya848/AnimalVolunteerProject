@@ -1,9 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetProject.Domain.Shared;
+using PetProject.Domain.Shared.ValueObjects.Dtos;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Volunteers;
 using PetProject.Domain.Volunteers.ValueObjects;
+using PetProject.Domain.Volunteers.ValueObjects.Collections;
+using PetProject.Infastructure.Extensions;
+using System.Text.Json;
 
 namespace PetProject.Infastructure.Configurations.Write
 {
@@ -36,27 +40,15 @@ namespace PetProject.Infastructure.Configurations.Write
 
             builder.ComplexProperty(e => e.Experience, eb => { eb.Property(v => v.Value); });
 
-            builder.OwnsOne(rl => rl.RequisitesList, rlb =>
-            {
-                rlb.ToJson();
+            builder.Property(rl => rl.Requisites)
+                .ValueToDtoConversion(
+                requisite => new RequisiteDto(requisite.Name, requisite.Description),
+                dto => Requisite.Create(dto.Name, dto.Description).Value);
 
-                rlb.OwnsMany(r => r.Requisites, rb =>
-                {
-                    rb.Property(n => n.Name).IsRequired();
-                    rb.Property(d => d.Description).IsRequired();
-                });
-            });
-
-            builder.OwnsOne(snl => snl.SocialNetworksList, snlb =>
-            {
-                snlb.ToJson();
-
-                snlb.OwnsMany(sn => sn.SocialNetworks, snb =>
-                {
-                    snb.Property(n => n.Name).IsRequired();
-                    snb.Property(r => r.Reference).IsRequired();
-                });
-            });
+            builder.Property(snl => snl.SocialNetworks)
+                .ValueToDtoConversion(
+                socialNetwork => new SocialNetworkDto(socialNetwork.Name, socialNetwork.Reference),
+                dto => SocialNetwork.Create(dto.Name, dto.Reference).Value);
 
             builder.HasMany(p => p.Pets).WithOne().HasForeignKey("volunteer_id");
             builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field).HasColumnName("is_deleted");

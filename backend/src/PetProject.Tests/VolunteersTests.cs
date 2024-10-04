@@ -160,7 +160,7 @@ namespace PetProject.Domain.Tests
             var requisiteDto = new RequisiteDto(TEST, TEST);
 
             var socialNetworks = new List<SocialNetwork>()
-            { SocialNetwork.Create(socilaNetworkDto.name, socilaNetworkDto.reference).Value };
+            { SocialNetwork.Create(socilaNetworkDto.Name, socilaNetworkDto.Reference).Value };
 
             var requisites = new List<Requisite>()
             { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };

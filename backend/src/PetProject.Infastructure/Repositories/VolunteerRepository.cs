@@ -1,5 +1,4 @@
-﻿using PetProject.Application.Repositories;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 using PetProject.Domain.Volunteers;
@@ -7,6 +6,7 @@ using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using Microsoft.Extensions.Logging;
 using PetProject.Infastructure.DbContexts;
+using PetProject.Application.Repositories.Write;
 
 namespace PetProject.Infastructure.Repositories
 {

@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Logging;
 using PetProject.Application.Files.Providers;
 using PetProject.Application.Messaging;
-using PetProject.Application.Files.Delete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using PetProject.Application.Files.Commands.Delete;
 
 namespace PetProject.Infastructure.BackgroundServices
 {

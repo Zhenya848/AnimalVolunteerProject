@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PetProject.Application.Repositories;
+using PetProject.Application.Repositories.Read;
 using PetProject.Domain.Shared.ValueObjects.Dtos.ForQuery;
 using System;
 using System.Collections.Generic;
@@ -13,8 +13,8 @@ namespace PetProject.Infastructure.DbContexts
 {
     public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
     {
-        public DbSet<VolunteerDto> Volunteers { get; set; }
-        public DbSet<PetDto> Pets { get; set; }
+        public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
+        public IQueryable<PetDto> Pets => Set<PetDto>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -23,6 +23,8 @@ namespace PetProject.Infastructure.DbContexts
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
             optionsBuilder.EnableSensitiveDataLogging();
             //optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
+
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

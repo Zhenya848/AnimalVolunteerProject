@@ -18,8 +18,8 @@ namespace PetProject.API.Volunteers
             RuleFor(pn => pn.PhoneNumber).MustBeValueObject(TelephoneNumber.Create);
             RuleFor(e => e.Experience).MustBeValueObject(Experience.Create);
 
-            RuleForEach(r => r.Requisites).MustBeValueObject(r => Requisite.Create(r.Title, r.Description));
-            RuleForEach(sn => sn.SocialNetworks).MustBeValueObject(sn => SocialNetwork.Create(sn.name, sn.reference));
+            RuleForEach(r => r.Requisites).MustBeValueObject(r => Requisite.Create(r.Name, r.Description));
+            RuleForEach(sn => sn.SocialNetworks).MustBeValueObject(sn => SocialNetwork.Create(sn.Name, sn.Reference));
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PetProject.Application.Volunteers.UseCases.Pets.UploadPhotos;
+using PetProject.Application.Volunteers.Pets.Commands.UploadPhotos;
 using PetProject.Domain.Shared;
 
 namespace PetProject.API.Volunteers

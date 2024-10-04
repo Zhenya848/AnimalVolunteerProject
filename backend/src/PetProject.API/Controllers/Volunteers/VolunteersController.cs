@@ -4,24 +4,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetProject.API.Response;
 using PetProject.API.Volunteers;
-using PetProject.Application.Files.Create;
-using PetProject.Application.Files.Delete;
-using PetProject.Application.Files.Get;
-using PetProject.Application.Files.Services;
-using PetProject.Application.Volunteers.UseCases.Pets.UploadPhotos;
 using PetProject.Application.Volunteers.UseCases.Create;
 using PetProject.Application.Volunteers.UseCases.Update;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.ValueObjects.Dtos;
 using PetProject.Domain.Volunteers.ValueObjects;
 using System.Linq;
-using PetProject.Application.Volunteers.UseCases.Services;
-using PetProject.Application.Volunteers.UseCases.Pets.Create;
-using PetProject.Application.Volunteers.UseCases.Pets.Services;
 using PetProject.Application.Volunteers.UseCases.Delete;
-using PetProject.Application.Volunteers.Queries.Pets.Services;
-using PetProject.Application.Volunteers.Queries.Pets;
 using PetProject.API.Controllers.Volunteers.Requests;
+using PetProject.Application.Volunteers.Pets.Commands.Create;
+using PetProject.Application.Volunteers.Commands;
+using PetProject.Application.Volunteers.Pets.Commands;
+using PetProject.Application.Volunteers.Pets.Commands.UploadPhotos;
+using PetProject.Application.Files.Commands.Get;
+using PetProject.Application.Files.Commands.Delete;
+using PetProject.Application.Files.Commands.Create;
+using PetProject.Application.Files.Commands;
 
 namespace PetProject.API.Controllers.Volunteers
 {
@@ -29,7 +27,7 @@ namespace PetProject.API.Controllers.Volunteers
     {
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
-            [FromServices] IVolunteerService volunteerService,
+            [FromServices] VolunteerService volunteerService,
             [FromBody] CreateVolunteerRequest request,
             CancellationToken cancellationToken = default)
         {
@@ -46,7 +44,7 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpPut("{id:guid}/volunteer-info")]
         public async Task<ActionResult<Guid>> UpdateVolunteerInfo(
-            [FromServices] IVolunteerService volunteerService,
+            [FromServices] VolunteerService volunteerService,
             [FromBody] UpdateVolunteerRequest request,
             [FromRoute] Guid id,
             CancellationToken cancellationToken = default)
@@ -64,7 +62,7 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Guid>> Delete(
-            [FromServices] IVolunteerService volunteerService,
+            [FromServices] VolunteerService volunteerService,
             [FromRoute] Guid id,
             CancellationToken cancellationToken = default)
         {
@@ -81,7 +79,7 @@ namespace PetProject.API.Controllers.Volunteers
         [HttpPost("petPhoto")]
         public async Task<IActionResult> CreatePhoto(
             IFormFile file,
-            [FromServices] IFileService service,
+            [FromServices] FileService service,
             CancellationToken cancellationToken)
         {
             await using var stream = file.OpenReadStream();
@@ -98,7 +96,7 @@ namespace PetProject.API.Controllers.Volunteers
         [HttpDelete("petPhoto/{objectName:guid}")]
         public async Task<IActionResult> DeletePhoto(
             [FromRoute] Guid objectName,
-            [FromServices] IFileService service,
+            [FromServices] FileService service,
             CancellationToken cancellationToken)
         {
             DeleteFileCommand request = new DeleteFileCommand("photos", objectName.ToString());
@@ -113,7 +111,7 @@ namespace PetProject.API.Controllers.Volunteers
         [HttpGet("petPhoto/{objectName:guid}")]
         public async Task<IActionResult> GetPhoto(
             [FromRoute] Guid objectName,
-            [FromServices] IFileService service,
+            [FromServices] FileService service,
             CancellationToken cancellationToken)
         {
             GetFileCommand request = new GetFileCommand("photos", objectName.ToString());
@@ -127,7 +125,7 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpPost("{volunteerId:guid}/pet")]
         public async Task<IActionResult> CreatePet(
-            [FromServices] IPetService service,
+            [FromServices] PetService service,
             [FromBody] CreatePetRequest request,
             [FromRoute] Guid volunteerId,
             CancellationToken cancellationToken)
@@ -150,7 +148,7 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpPost("{volunteerId:guid}/pet/{petId:guid}/photos")]
         public async Task<IActionResult> UploadPhotosToPet(
-            [FromServices] IPetService service,
+            [FromServices] PetService service,
             [FromRoute] Guid volunteerId,
             [FromRoute] Guid petId,
             [FromForm] IFormFileCollection files,
