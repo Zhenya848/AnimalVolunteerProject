@@ -20,6 +20,11 @@ using PetProject.Application.Files.Commands.Get;
 using PetProject.Application.Files.Commands.Delete;
 using PetProject.Application.Files.Commands.Create;
 using PetProject.Application.Files.Commands;
+using PetProject.Application.Volunteers.Commands.Create;
+using PetProject.Application.Volunteers.Commands.Update;
+using PetProject.Application.Volunteers.Commands.Delete;
+using System.Reflection.Metadata;
+using System.Threading;
 
 namespace PetProject.API.Controllers.Volunteers
 {
@@ -27,14 +32,14 @@ namespace PetProject.API.Controllers.Volunteers
     {
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
-            [FromServices] VolunteerService volunteerService,
+            [FromServices] CreateVolunteerHandler handler,
             [FromBody] CreateVolunteerRequest request,
             CancellationToken cancellationToken = default)
         {
             var command = new CreateVolunteerCommand(request.Name, request.Description, request.PhoneNumber,
                 request.Experience, request.SotialNetworks, request.Requisites);
 
-            var result = await volunteerService.Create(command, cancellationToken);
+            var result = await handler.Create(command, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
@@ -44,7 +49,7 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpPut("{id:guid}/volunteer-info")]
         public async Task<ActionResult<Guid>> UpdateVolunteerInfo(
-            [FromServices] VolunteerService volunteerService,
+            [FromServices] UpdateVolunteerHandler handler,
             [FromBody] UpdateVolunteerRequest request,
             [FromRoute] Guid id,
             CancellationToken cancellationToken = default)
@@ -52,7 +57,7 @@ namespace PetProject.API.Controllers.Volunteers
             var command = new UpdateVolunteerCommand(id, request.Name, request.Description,
                 request.PhoneNumber, request.Experience, request.SocialNetworks, request.Requisites);
 
-            var result = await volunteerService.Update(command, cancellationToken);
+            var result = await handler.Update(command, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
@@ -62,13 +67,13 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Guid>> Delete(
-            [FromServices] VolunteerService volunteerService,
+            [FromServices] DeleteVolunteerHandler handler,
             [FromRoute] Guid id,
             CancellationToken cancellationToken = default)
         {
             var request = new DeleteVolunteerCommand(id);
 
-            var result = await volunteerService.Delete(request, cancellationToken);
+            var result = await handler.Delete(request, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
@@ -79,13 +84,13 @@ namespace PetProject.API.Controllers.Volunteers
         [HttpPost("petPhoto")]
         public async Task<IActionResult> CreatePhoto(
             IFormFile file,
-            [FromServices] FileService service,
+            [FromServices] CreateFilesHandler handler,
             CancellationToken cancellationToken)
         {
             await using var stream = file.OpenReadStream();
             var request = new CreateFilesCommand([new FileData(stream, Guid.NewGuid().ToString())], "photos");
 
-            var result = await service.Create(request, cancellationToken);
+            var result = await handler.Create(request, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
@@ -96,11 +101,11 @@ namespace PetProject.API.Controllers.Volunteers
         [HttpDelete("petPhoto/{objectName:guid}")]
         public async Task<IActionResult> DeletePhoto(
             [FromRoute] Guid objectName,
-            [FromServices] FileService service,
+            [FromServices] DeleteFileHandler handler,
             CancellationToken cancellationToken)
         {
             DeleteFileCommand request = new DeleteFileCommand("photos", objectName.ToString());
-            var result = await service.Delete(request, cancellationToken);
+            var result = await handler.Delete(request, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
@@ -111,11 +116,11 @@ namespace PetProject.API.Controllers.Volunteers
         [HttpGet("petPhoto/{objectName:guid}")]
         public async Task<IActionResult> GetPhoto(
             [FromRoute] Guid objectName,
-            [FromServices] FileService service,
+            [FromServices] GetFileHandler handler,
             CancellationToken cancellationToken)
         {
             GetFileCommand request = new GetFileCommand("photos", objectName.ToString());
-            var result = await service.Get(request, cancellationToken);
+            var result = await handler.Get(request, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
@@ -125,14 +130,14 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpPost("{volunteerId:guid}/pet")]
         public async Task<IActionResult> CreatePet(
-            [FromServices] PetService service,
+            [FromServices] CreatePetHandler handler,
             [FromBody] CreatePetRequest request,
             [FromRoute] Guid volunteerId,
             CancellationToken cancellationToken)
         {
             var command = InitializeCreatePetCommand(volunteerId, request);
 
-            var result = await service.Create(command, cancellationToken);
+            var result = await handler.Create(command, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();
@@ -148,7 +153,7 @@ namespace PetProject.API.Controllers.Volunteers
 
         [HttpPost("{volunteerId:guid}/pet/{petId:guid}/photos")]
         public async Task<IActionResult> UploadPhotosToPet(
-            [FromServices] PetService service,
+            [FromServices] UploadFilesToPetHandler handler,
             [FromRoute] Guid volunteerId,
             [FromRoute] Guid petId,
             [FromForm] IFormFileCollection files,
@@ -159,7 +164,7 @@ namespace PetProject.API.Controllers.Volunteers
 
             var command = new UploadFilesToPetCommand(volunteerId, petId, filesDto);
 
-            var result = await service.UploadPhotos(command, cancellationToken);
+            var result = await handler.UploadPhotos(command, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();

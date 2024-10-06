@@ -1,5 +1,4 @@
-﻿using PetProject.Application.Shared.Interfaces.Commands;
-using PetProject.Domain.Shared.ValueObjects.Dtos;
+﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
 
 namespace PetProject.Application.Volunteers.Pets.Commands.Update
 {
@@ -19,5 +18,5 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Update
         DateTime BirthdayTime,
         DateTime DateOfCreation,
         IEnumerable<RequisiteDto> Requisites,
-        HelpStatus HelpStatus) : IUpdateCommand;
+        HelpStatus HelpStatus);
 }

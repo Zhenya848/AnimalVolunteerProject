@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PetProject.Application.Files;
-using PetProject.Application.Shared.Interfaces.Commands;
-using PetProject.Application.Shared.Interfaces.Queries;
+using PetProject.Application.Shared.Interfaces;
 using PetProject.Application.Volunteers.Commands;
 using PetProject.Application.Volunteers.Pets.Commands;
+using PetProject.Application.Volunteers.Pets.Commands.UploadPhotos;
 using PetProject.Application.Volunteers.Pets.Queries;
 
 namespace PetProject.Application
@@ -12,22 +12,20 @@ namespace PetProject.Application
     {
         public static IServiceCollection AddFromApplication(this IServiceCollection services)
         {
-            services.AddCommands().AddQueries();
+            services.AddHandlers();
+            services.AddScoped<UploadFilesToPetHandler>();
 
             return services;
         }
 
-        private static IServiceCollection AddCommands(this IServiceCollection services)
+        public static IServiceCollection AddHandlers(this IServiceCollection services)
         {
             return services.Scan(scan => scan.FromAssemblies(typeof(Inject).Assembly)
-                .AddClasses(classes => classes.AssignableToAny(typeof(ICommandService<,,,>)))
-                .AsSelfWithInterfaces()
-                .WithLifetime(ServiceLifetime.Scoped));
-        }
-        private static IServiceCollection AddQueries(this IServiceCollection services)
-        {
-            return services.Scan(scan => scan.FromAssemblies(typeof(Inject).Assembly)
-                .AddClasses(classes => classes.AssignableToAny(typeof(IQueryService<,>)))
+                .AddClasses(classes => classes.AssignableToAny(
+                    typeof(ICreateHandler<,>),
+                    typeof(IDeleteHandler<,>),
+                    typeof(IUpdateHandler<,>),
+                    typeof(IQueryHandler<,>)))
                 .AsSelfWithInterfaces()
                 .WithLifetime(ServiceLifetime.Scoped));
         }

@@ -1,6 +1,4 @@
-﻿using PetProject.Application.Shared.Interfaces.Commands;
-using PetProject.Domain.Shared.ValueObjects.Dtos;
-using PetProject.Domain.Volunteers.ValueObjects;
+﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
 
 namespace PetProject.Application.Volunteers.Pets.Commands.Create
 {
@@ -19,5 +17,5 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Create
         DateTime BirthdayTime,
         DateTime DateOfCreation,
         IEnumerable<RequisiteDto> Requisites,
-        HelpStatus HelpStatus) : ICreateCommand;
+        HelpStatus HelpStatus);
 }
