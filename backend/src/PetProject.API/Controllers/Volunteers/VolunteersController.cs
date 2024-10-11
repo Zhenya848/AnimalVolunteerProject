@@ -35,10 +35,10 @@ using PetProject.Application.Volunteers.Commands.Get;
 
 namespace PetProject.API.Controllers.Volunteers
 {
-    [Authorize]
+    //[Authorize]
     public class VolunteersController : ApplicationController
     {
-        [AllowAnonymous]
+        /*[AllowAnonymous]
         [HttpPost("login")]
         public ActionResult Login()
         {
@@ -61,7 +61,7 @@ namespace PetProject.API.Controllers.Volunteers
             var tokenHandler = new JwtSecurityTokenHandler();
 
             return Ok(tokenHandler.WriteToken(token));
-        }
+        }*/
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(

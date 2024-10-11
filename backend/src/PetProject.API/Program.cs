@@ -27,7 +27,9 @@ builder.Services.AddSerilog();
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+
+builder.Services.AddSwaggerGen();
+/*builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyTestService", Version = "v1" });
 
@@ -53,14 +55,14 @@ builder.Services.AddSwaggerGen(c =>
             new string[]{ }
         }
     });
-});
+});*/
 
 builder.Services
     .AddFromInfrastructure(builder.Configuration)
     .AddFromAPI()
     .AddFromApplication();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+/*builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -71,7 +73,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("123458844984546121546452151254651321awgfyukawegfahsijhafkhwhfguhaefguhwjdfnawoifoiawjfws")),
             ValidateIssuerSigningKey = true,
         };
-    });
+    });*/
 
 var app = builder.Build();
 
