@@ -19,6 +19,14 @@ namespace PetProject.Infastructure.Configurations.Read
 
             builder.HasKey(i => i.Id);
 
+            builder.Property(f => f.FirstName);
+            builder.Property(l => l.LastName);
+            builder.Property(p => p.Patronymic);
+
+            builder.Property(d => d.Description);
+            builder.Property(p => p.PhoneNumber);
+            builder.Property(e => e.Experience);
+
             builder.Property(pl => pl.Requisites)
                 .HasConversion(
                     requisites => JsonSerializer.Serialize(

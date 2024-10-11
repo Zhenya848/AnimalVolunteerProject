@@ -15,22 +15,22 @@ namespace PetProject.Application.Extensions
 {
     public static class QueriesExtensions
     {
-        public static async Task<PagedList<T>> GetPetsWithPagination<T>(
+        public static async Task<PagedList<T>> GetItemsWithPagination<T>(
             this IQueryable<T> source,
             int page,
             int pageSize,
             CancellationToken cancellationToken)
         {
-            var petsCount = await source.CountAsync(cancellationToken); 
-            var pets = await source
+            var itemsCount = await source.CountAsync(cancellationToken); 
+            var items = await source
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 
             return new PagedList<T>()
             {
-                Items = pets,
-                TotalCount = petsCount,
+                Items = items,
+                TotalCount = itemsCount,
                 Page = page,
                 PageSize = pageSize,
             };

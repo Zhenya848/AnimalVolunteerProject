@@ -19,8 +19,4 @@
     <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Volunteers\Queries\" />
-  </ItemGroup>
-
 </Project>

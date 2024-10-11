@@ -40,7 +40,7 @@ namespace PetProject.Application.Volunteers.Pets.Queries
             petsQuery = petsQuery
                 .WhereIf(query.PositionTo != null, sn => sn.SerialNumber <= query.PositionTo);
 
-            return await petsQuery.GetPetsWithPagination(query.Page, query.PageSize, cancellationToken);
+            return await petsQuery.GetItemsWithPagination(query.Page, query.PageSize, cancellationToken);
         }
     }
 }

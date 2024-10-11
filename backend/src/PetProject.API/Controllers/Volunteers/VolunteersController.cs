@@ -25,11 +25,44 @@ using PetProject.Application.Volunteers.Commands.Update;
 using PetProject.Application.Volunteers.Commands.Delete;
 using System.Reflection.Metadata;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using PetProject.Application.Volunteers.Queries;
+using PetProject.Application.Volunteers.Commands.Get;
 
 namespace PetProject.API.Controllers.Volunteers
 {
+    [Authorize]
     public class VolunteersController : ApplicationController
     {
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public ActionResult Login()
+        {
+            var claims = new[]
+{
+                new Claim(ClaimTypes.NameIdentifier, "user1"),
+                new Claim(ClaimTypes.Role, "volunteer")
+            };
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("123458844984546121546452151254651321awgfyukawegfahsijhafkhwhfguhaefguhwjdfnawoifoiawjfws"));
+            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
+
+            var token = new JwtSecurityToken(
+                issuer: "test",
+                audience: "test",
+                claims: claims,
+                signingCredentials: creds
+            );
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            return Ok(tokenHandler.WriteToken(token));
+        }
+
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromServices] CreateVolunteerHandler handler,
@@ -74,6 +107,36 @@ namespace PetProject.API.Controllers.Volunteers
             var request = new DeleteVolunteerCommand(id);
 
             var result = await handler.Delete(request, cancellationToken);
+
+            if (result.IsFailure)
+                return result.Error.ToResponse();
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetWithPagination(
+            [FromServices] GetVolunteersWithPaginationHandler handler,
+            [FromQuery] GetVolunteersWithPaginationRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            var query = new GetVolunteersWithPaginationQuery(
+                request.Page,
+                request.PageSize,
+                request.OrderByDesc,
+                request.OrderBy);
+
+            var response = await handler.Get(query, cancellationToken);
+            return Ok(Envelope.Ok(response));
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult> Get(
+            [FromServices] GetVolunteerHandler handler,
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var result = await handler.Get(id, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();

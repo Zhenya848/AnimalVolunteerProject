@@ -36,9 +36,9 @@ namespace PetProject.Infastructure.Configurations.Write
             });
 
             builder.ComplexProperty(d => d.Description, db =>
-            { db.Property(v => v.Value).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH); });
+            { db.Property(v => v.Value).HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH).HasColumnName("description"); });
 
-            builder.ComplexProperty(e => e.Experience, eb => { eb.Property(v => v.Value); });
+            builder.ComplexProperty(e => e.Experience, eb => { eb.Property(v => v.Value).HasColumnName("experience"); });
 
             builder.Property(rl => rl.Requisites)
                 .ValueToDtoConversion(

@@ -13,7 +13,7 @@ using PetProject.Infastructure.DbContexts;
 namespace PetProject.Infastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20241004104403_Initial")]
+    [Migration("20241011145913_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -250,7 +250,7 @@ namespace PetProject.Infastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(1000)
                                 .HasColumnType("character varying(1000)")
-                                .HasColumnName("description_value");
+                                .HasColumnName("description");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Experience", "PetProject.Domain.Volunteers.Volunteer.Experience#Experience", b1 =>
@@ -259,7 +259,7 @@ namespace PetProject.Infastructure.Migrations
 
                             b1.Property<int>("Value")
                                 .HasColumnType("integer")
-                                .HasColumnName("experience_value");
+                                .HasColumnName("experience");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "PetProject.Domain.Volunteers.Volunteer.Name#FullName", b1 =>
