@@ -26,6 +26,7 @@ namespace PetProject.Infastructure
             services.AddScoped<WriteDbContext>();
 
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+            services.AddScoped<ISpeciesRepository, SpeciesRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

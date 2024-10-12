@@ -16,7 +16,7 @@ namespace PetProject.API.Controllers.Pets
             var query = new GetPetsWithPaginationQuery(
                 request.Page, request.PageSize, request.PositionFrom, request.PositionTo, request.OrderByDesc, request.OrderBy);
 
-            var response = await handler.Get(query);
+            var response = await handler.Get(query, cancellationToken);
 
             return Ok(Envelope.Ok(response));
         }

@@ -1,10 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using PetProject.Application.Database;
 using PetProject.Application.Extensions;
 using PetProject.Application.Messaging;
+using PetProject.Application.Repositories.Read;
 using PetProject.Application.Repositories.Write;
 using PetProject.Application.Shared.Interfaces;
+using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Volunteers;
 using PetProject.Domain.Volunteers.ValueObjects;
@@ -15,16 +18,19 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Create
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IVolunteerRepository _volunteerRepository;
+        private readonly IReadDbContext _readDbContext;
 
         private readonly IValidator<CreatePetCommand> _createPetValidator;
 
         public CreatePetHandler(
             IVolunteerRepository volunteerRepository,
+            IReadDbContext readDbContext,
             IUnitOfWork unitOfWork,
             IValidator<CreatePetCommand> createPetValidator,
             IMessageQueue<IEnumerable<Files.Providers.FileInfo>> messageQueue)
         {
             _volunteerRepository = volunteerRepository;
+            _readDbContext = readDbContext;
             _unitOfWork = unitOfWork;
             _createPetValidator = createPetValidator;
         }
@@ -43,6 +49,19 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Create
 
             if (volunteer.IsFailure)
                 return (ErrorList)volunteer.Error;
+
+            var species = await _readDbContext.Species.Where(i => i.Id == command.SpeciseId).FirstOrDefaultAsync();
+            
+            if (species == null)
+                return (ErrorList)Errors.General.NotFound(command.SpeciseId);
+
+            var breed = await _readDbContext.Breeds.Where(i => i.Id == command.BreedId).FirstOrDefaultAsync();
+
+            if (breed == null)
+                return (ErrorList)Errors.General.NotFound(command.BreedId);
+
+            if (breed.SpeciesId != species.Id)
+                return (ErrorList)Errors.General.ValueIsInvalid("Breed");
 
             var pet = InitializePet(command);
             var addPetResult = volunteer.Value.AddPet(pet);
@@ -71,8 +90,8 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Create
             var requisites = command.Requisites
             .Select(r => Requisite.Create(r.Name, r.Description).Value).ToList();
 
-            var speciesId = SpeciesId.AddEmptyId();
-            var breedId = BreedId.AddEmptyId();
+            var speciesId = SpeciesId.Create(command.SpeciseId);
+            var breedId = BreedId.Create(command.BreedId);
 
             return new Pet(PetId.AddNewId(), command.Name, description, command.Color, command.HealthInfo,
                 addres, telephoneNumber, command.Weight, command.Height, command.IsCastrated,

@@ -4,6 +4,8 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Create
 {
     public record CreatePetCommand(
         Guid VolunteerId,
+        Guid SpeciseId,
+        Guid BreedId,
         string Name,
         string Description,
         string Color,

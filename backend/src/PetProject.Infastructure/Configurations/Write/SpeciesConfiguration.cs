@@ -22,7 +22,8 @@ namespace PetProject.Infastructure.Configurations.Write
             builder.Property(x => x.Name)
                 .IsRequired();
 
-            builder.HasMany(b => b.Breeds).WithOne().HasForeignKey("species_id");
+            builder.HasMany(b => b.Breeds).WithOne().HasForeignKey("species_id")
+                .OnDelete(DeleteBehavior.Cascade).IsRequired();
         }
     }
 }

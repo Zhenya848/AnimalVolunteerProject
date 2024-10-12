@@ -19,4 +19,8 @@
     <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Volunteers\Breeds\Commands\" />
+  </ItemGroup>
+
 </Project>

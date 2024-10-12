@@ -55,7 +55,7 @@ namespace PetProject.Infastructure.Repositories
         {
             var volunteer = await _appDbContext.Volunteers
                 .Include(p => p.Pets)
-                .FirstOrDefaultAsync(v => v.Id == volunteerId);
+                .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
 
             if (volunteer == null)
                 return Errors.General.NotFound((Guid)volunteerId);
@@ -68,7 +68,7 @@ namespace PetProject.Infastructure.Repositories
             CancellationToken cancellationToken = default)
         {
             var volunteer = await _appDbContext.Volunteers
-                .FirstOrDefaultAsync(v => v.TelephoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(v => v.TelephoneNumber == phoneNumber, cancellationToken);
 
             if (volunteer == null)
                 return Errors.General.NotFound();

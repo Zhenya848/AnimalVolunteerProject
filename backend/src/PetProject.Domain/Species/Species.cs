@@ -11,5 +11,11 @@ namespace PetProject.Domain.Species
         {
 
         }
+
+        public Species(SpeciesId speciesId, string name, List<Breed> breeds) : base(speciesId)
+        {
+            Name = name;
+            Breeds = breeds;
+        }
     }
 }

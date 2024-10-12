@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetProject.Application.Repositories.Read;
+using PetProject.Domain.Shared.ValueObjects.Dtos;
 using PetProject.Domain.Shared.ValueObjects.Dtos.ForQuery;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace PetProject.Infastructure.DbContexts
     {
         public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
         public IQueryable<PetDto> Pets => Set<PetDto>();
+
+        public IQueryable<SpeciesDto> Species => Set<SpeciesDto>();
+        public IQueryable<BreedDto> Breeds => Set<BreedDto>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -44,6 +44,9 @@ namespace PetProject.Infastructure.Configurations.Read
             builder.Property(bt => bt.BirthdayTime);
             builder.Property(doc => doc.DateOfCreation);
 
+            builder.Property(si => si.SpeciesId).HasColumnName("pet_type_info_species_id");
+            builder.Property(bi => bi.BreedId).HasColumnName("pet_type_info_breed_id"); ;
+
             builder.Property(sn => sn.SerialNumber);
 
             builder.Property(pl => pl.Requisites)
