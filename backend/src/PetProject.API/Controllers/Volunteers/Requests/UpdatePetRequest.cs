@@ -1,12 +1,8 @@
 ﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
 
-namespace PetProject.Application.Volunteers.Pets.Commands.Update
+namespace PetProject.API.Controllers.Volunteers.Requests
 {
-    public record UpdatePetCommand(
-        Guid PetId,
-        Guid VolunteerId,
-        Guid SpeciseId,
-        Guid BreedId,
+    public record UpdatePetRequest(
         string Name,
         string Description,
         string Color,

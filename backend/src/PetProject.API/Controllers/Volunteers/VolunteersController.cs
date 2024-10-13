@@ -32,6 +32,7 @@ using System.Security.Claims;
 using System.Text;
 using PetProject.Application.Volunteers.Queries;
 using PetProject.Application.Volunteers.Commands.Get;
+using PetProject.Application.Volunteers.Pets.Commands.Update;
 
 namespace PetProject.API.Controllers.Volunteers
 {
@@ -210,8 +211,43 @@ namespace PetProject.API.Controllers.Volunteers
             return new ObjectResult(result.Value) { StatusCode = StatusCodes.Status201Created };
         }
 
-        private CreatePetCommand InitializeCreatePetCommand(Guid volunteerId, Guid speciesId, Guid breedId, CreatePetRequest request) =>
+        [HttpPut("{volunteerId:guid}/{petId:guid}/{speciesId:guid}/{breedId:guid}/pet")]
+        public async Task<IActionResult> UpdatePet(
+            [FromServices] UpdatePetHandler handler,
+            [FromBody] UpdatePetRequest request,
+            [FromRoute] Guid volunteerId,
+            [FromRoute] Guid petId,
+            [FromRoute] Guid speciesId,
+            [FromRoute] Guid breedId,
+            CancellationToken cancellationToken)
+        {
+            var command = InitializeUpdatePetCommand(volunteerId, petId, speciesId, breedId, request);
+
+            var result = await handler.Update(command, cancellationToken);
+
+            if (result.IsFailure)
+                return result.Error.ToResponse();
+
+            return Ok(result.Value);
+        }
+
+        private CreatePetCommand InitializeCreatePetCommand(
+            Guid volunteerId, 
+            Guid speciesId, 
+            Guid breedId, 
+            CreatePetRequest request) =>
             new CreatePetCommand(volunteerId, speciesId, breedId, request.Name, request.Description,
+                request.Color, request.HealthInfo, request.Addres, request.TelephoneNumber,
+                request.Weight, request.Height, request.IsCastrated, request.IsVaccinated,
+                request.BirthdayTime, request.DateOfCreation, request.Requisites, request.HelpStatus);
+
+        private UpdatePetCommand InitializeUpdatePetCommand(
+            Guid volunteerId,
+            Guid petId,
+            Guid speciesId,
+            Guid breedId,
+            UpdatePetRequest request) =>
+            new UpdatePetCommand(petId, volunteerId, speciesId, breedId, request.Name, request.Description,
                 request.Color, request.HealthInfo, request.Addres, request.TelephoneNumber,
                 request.Weight, request.Height, request.IsCastrated, request.IsVaccinated,
                 request.BirthdayTime, request.DateOfCreation, request.Requisites, request.HelpStatus);

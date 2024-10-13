@@ -13,7 +13,7 @@ using PetProject.Infastructure.DbContexts;
 namespace PetProject.Infastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20241012142037_Initial")]
+    [Migration("20241013193713_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,7 +32,7 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("species_id")
+                    b.Property<Guid>("species_id")
                         .HasColumnType("uuid")
                         .HasColumnName("species_id");
 
@@ -307,6 +307,8 @@ namespace PetProject.Infastructure.Migrations
                     b.HasOne("PetProject.Domain.Species.Species", null)
                         .WithMany("Breeds")
                         .HasForeignKey("species_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_breed_species_species_id");
                 });
 
