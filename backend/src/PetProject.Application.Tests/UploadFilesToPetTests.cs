@@ -112,7 +112,7 @@ namespace PetProject.Application.Tests
 
             var description = Description.Create(TEST).Value;
 
-            var addres = Addres.Create(
+            var addres = Address.Create(
                 TEST,
                 TEST,
                 TEST,

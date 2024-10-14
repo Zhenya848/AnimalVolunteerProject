@@ -1,8 +1,11 @@
-﻿using PetProject.Domain.Shared.ValueObjects.Dtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using PetProject.Domain.Shared.ValueObjects.Dtos;
 
 namespace PetProject.API.Controllers.Volunteers.Requests
 {
     public record CreatePetRequest(
+        Guid SpeciesId,
+        Guid BreedId,
         string Name,
         string Description,
         string Color,

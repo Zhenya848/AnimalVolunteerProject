@@ -77,7 +77,7 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Create
 
         private Pet InitializePet(CreatePetCommand command)
         {
-            var addres = Addres.Create(
+            var addres = Address.Create(
                 command.Addres.Street,
                 command.Addres.City,
                 command.Addres.State,

@@ -17,7 +17,7 @@ namespace PetProject.Domain.Volunteers
         public Description Description { get; private set; } = default!;
         public string Color { get; private set; } = default!;
         public string HealthInfo { get; private set; } = default!;
-        public Addres Address { get; private set; } = default!;
+        public Address Address { get; private set; } = default!;
         public TelephoneNumber TelephoneNumber { get; private set; } = default!;
 
         public PetTypeInfo PetTypeInfo { get; private set; } = default!;
@@ -52,7 +52,7 @@ namespace PetProject.Domain.Volunteers
             Description description, 
             string color, 
             string healthInfo, 
-            Addres address, 
+            Address address, 
             TelephoneNumber telephoneNumber, 
             float weight, 
             float height, 
@@ -84,12 +84,12 @@ namespace PetProject.Domain.Volunteers
             HelpStatus = helpStatus;
         }
 
-        public void UpdateInfo(
+        internal void UpdateInfo(
             string name,
             Description description,
             string color,
             string healthInfo,
-            Addres address,
+            Address address,
             TelephoneNumber telephoneNumber,
             float weight,
             float height,

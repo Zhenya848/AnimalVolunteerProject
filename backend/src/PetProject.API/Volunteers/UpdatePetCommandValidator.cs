@@ -24,7 +24,7 @@ namespace PetProject.API.Volunteers
             RuleFor(d => d.Description).MustBeValueObject(Description.Create);
             RuleFor(t => t.TelephoneNumber).MustBeValueObject(TelephoneNumber.Create);
 
-            RuleFor(a => a.Addres).MustBeValueObject(a => Addres.Create(a.Street, a.City, a.State, a.ZipCode));
+            RuleFor(a => a.Addres).MustBeValueObject(a => Address.Create(a.Street, a.City, a.State, a.ZipCode));
 
             RuleForEach(r => r.Requisites).MustBeValueObject(r => Requisite.Create(r.Name, r.Description));
         }

@@ -33,6 +33,7 @@ using System.Text;
 using PetProject.Application.Volunteers.Queries;
 using PetProject.Application.Volunteers.Commands.Get;
 using PetProject.Application.Volunteers.Pets.Commands.Update;
+using PetProject.API.Controllers.Pets;
 
 namespace PetProject.API.Controllers.Volunteers
 {
@@ -192,16 +193,15 @@ namespace PetProject.API.Controllers.Volunteers
             return Ok(result.Value);
         }
 
-        [HttpPost("{volunteerId:guid}/{speciesId:guid}/{breedId:guid}/pet")]
+        [HttpPost("{volunteerId:guid}/pet")]
         public async Task<IActionResult> CreatePet(
             [FromServices] CreatePetHandler handler,
             [FromBody] CreatePetRequest request,
             [FromRoute] Guid volunteerId,
-            [FromRoute] Guid speciesId,
-            [FromRoute] Guid breedId,
             CancellationToken cancellationToken)
         {
-            var command = InitializeCreatePetCommand(volunteerId, speciesId, breedId, request);
+            var command = PetCommandsInitializer
+                .InitializeCreatePetCommand(volunteerId, request);
 
             var result = await handler.Create(command, cancellationToken);
 
@@ -211,17 +211,16 @@ namespace PetProject.API.Controllers.Volunteers
             return new ObjectResult(result.Value) { StatusCode = StatusCodes.Status201Created };
         }
 
-        [HttpPut("{volunteerId:guid}/{petId:guid}/{speciesId:guid}/{breedId:guid}/pet")]
+        [HttpPut("{volunteerId:guid}/{petId:guid}/pet")]
         public async Task<IActionResult> UpdatePet(
             [FromServices] UpdatePetHandler handler,
             [FromBody] UpdatePetRequest request,
             [FromRoute] Guid volunteerId,
             [FromRoute] Guid petId,
-            [FromRoute] Guid speciesId,
-            [FromRoute] Guid breedId,
             CancellationToken cancellationToken)
         {
-            var command = InitializeUpdatePetCommand(volunteerId, petId, speciesId, breedId, request);
+            var command = PetCommandsInitializer
+                .InitializeUpdatePetCommand(volunteerId, petId, request);
 
             var result = await handler.Update(command, cancellationToken);
 
@@ -230,27 +229,6 @@ namespace PetProject.API.Controllers.Volunteers
 
             return Ok(result.Value);
         }
-
-        private CreatePetCommand InitializeCreatePetCommand(
-            Guid volunteerId, 
-            Guid speciesId, 
-            Guid breedId, 
-            CreatePetRequest request) =>
-            new CreatePetCommand(volunteerId, speciesId, breedId, request.Name, request.Description,
-                request.Color, request.HealthInfo, request.Addres, request.TelephoneNumber,
-                request.Weight, request.Height, request.IsCastrated, request.IsVaccinated,
-                request.BirthdayTime, request.DateOfCreation, request.Requisites, request.HelpStatus);
-
-        private UpdatePetCommand InitializeUpdatePetCommand(
-            Guid volunteerId,
-            Guid petId,
-            Guid speciesId,
-            Guid breedId,
-            UpdatePetRequest request) =>
-            new UpdatePetCommand(petId, volunteerId, speciesId, breedId, request.Name, request.Description,
-                request.Color, request.HealthInfo, request.Addres, request.TelephoneNumber,
-                request.Weight, request.Height, request.IsCastrated, request.IsVaccinated,
-                request.BirthdayTime, request.DateOfCreation, request.Requisites, request.HelpStatus);
 
         [HttpPost("{volunteerId:guid}/pet/{petId:guid}/photos")]
         public async Task<IActionResult> UploadPhotosToPet(

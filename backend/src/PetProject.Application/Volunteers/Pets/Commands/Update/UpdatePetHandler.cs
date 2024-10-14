@@ -64,7 +64,7 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Update
             if (breed.SpeciesId != species.Id)
                 return (ErrorList)Errors.General.ValueIsInvalid("Breed");
 
-            var addres = Addres.Create(
+            var address = Address.Create(
                 command.Addres.Street,
                 command.Addres.City,
                 command.Addres.State,
@@ -80,9 +80,9 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Update
             var speciesId = SpeciesId.Create(command.SpeciseId);
             var breedId = BreedId.Create(command.BreedId);
 
-            pet.Value.UpdateInfo(
-                command.Name, description, command.Color, command.HealthInfo,
-                addres, telephoneNumber, command.Weight, command.Height, command.IsCastrated,
+            volunteer.Value.UpdatePetInfo(
+                command.PetId, command.Name, description, command.Color, command.HealthInfo,
+                address, telephoneNumber, command.Weight, command.Height, command.IsCastrated,
                 command.IsVaccinated, command.BirthdayTime, command.DateOfCreation, requisites,
                 speciesId, breedId, command.HelpStatus);
 
