@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.API.Controllers.Pets.Requests;
 using PetProject.API.Response;
+using PetProject.Application.Volunteers.Pets.Commands.Get;
 using PetProject.Application.Volunteers.Pets.Queries;
 
 namespace PetProject.API.Controllers.Pets
@@ -21,11 +22,24 @@ namespace PetProject.API.Controllers.Pets
             return Ok(Envelope.Ok(response));
         }
 
+        [HttpGet("{petId:guid}")]
+        public async Task<ActionResult> GetById(
+            [FromServices] GetPetHandler handler,
+            [FromRoute] Guid petId,
+            CancellationToken cancellationToken = default)
+        {
+            var petResult = await handler.Get(petId, cancellationToken);
+
+            if (petResult.IsFailure)
+                return petResult.Error.ToResponse();
+
+            return Ok(Envelope.Ok(petResult.Value));
+        }
+
         [HttpGet("dapper")]
         public async Task<ActionResult> GetDapper(
             [FromServices] GetPetsWithPaginationDapperHandler handler,
-            [FromQuery] GetPetsWithPaginationRequest request,
-            CancellationToken cancellationToken = default)
+            [FromQuery] GetPetsWithPaginationRequest request)
         {
             var query = new GetPetsWithPaginationQuery(
                 request.Page, request.PageSize, request.PositionFrom, request.PositionTo, request.OrderByDesc, request.OrderBy);
