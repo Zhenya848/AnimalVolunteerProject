@@ -22,14 +22,32 @@ namespace PetProject.Application.Volunteers.Pets.Queries
         {
             var petsQuery = _readDbContext.Pets;
 
+            var speciesQuery = _readDbContext.Species;
+            var breedsQuery = _readDbContext.Breeds;
+
             Expression<Func<PetDto, object>> selector = query.OrderBy?.ToLower() switch
             {
+                "volunteerId" => pet => pet.VolunteerId,
                 "name" => pet => pet.Name,
+                "color" => pet => pet.Color,
+                "species" => pet => speciesQuery.Where(i => i.Id == pet.Id).First(),
+                "breeds" => pet => breedsQuery.Where(i => i.Id == pet.Id).First(),
                 "description" => pet => pet.Description,
                 "weight" => pet => pet.Weight,
                 "height" => pet => pet.Height,
+                "street" => pet => pet.Street,
+                "city" => pet => pet.City,
+                "state" => pet => pet.State,
+                "zipcode" => pet => pet.Zipcode,
+
                 _ => pet => pet.Id
             };
+
+            /*
+               public string Street { get; }
+               public string City { get; }
+               public string State { get; }
+               public string ZipCode { get; }*/
 
             petsQuery = query.OrderByDesc
                 ? petsQuery.OrderByDescending(selector) : petsQuery.OrderBy(selector);
