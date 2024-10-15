@@ -4,6 +4,7 @@ using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Species;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Volunteers.ValueObjects.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetProject.Domain.Volunteers
@@ -16,7 +17,7 @@ namespace PetProject.Domain.Volunteers
         public Description Description { get; private set; } = default!;
         public string Color { get; private set; } = default!;
         public string HealthInfo { get; private set; } = default!;
-        public Addres Address { get; private set; } = default!;
+        public Address Address { get; private set; } = default!;
         public TelephoneNumber TelephoneNumber { get; private set; } = default!;
 
         public PetTypeInfo PetTypeInfo { get; private set; } = default!;
@@ -51,7 +52,7 @@ namespace PetProject.Domain.Volunteers
             Description description, 
             string color, 
             string healthInfo, 
-            Addres address, 
+            Address address, 
             TelephoneNumber telephoneNumber, 
             float weight, 
             float height, 
@@ -66,7 +67,7 @@ namespace PetProject.Domain.Volunteers
             HelpStatus helpStatus) : base(id)
         {
             Name = name;
-            Description = description;
+            Description = description; 
             Color = color;
             HealthInfo = healthInfo;
             Address = address;
@@ -81,6 +82,42 @@ namespace PetProject.Domain.Volunteers
             _photos = photos;
             PetTypeInfo = new PetTypeInfo(breedId, speciesId);
             HelpStatus = helpStatus;
+        }
+
+        internal void UpdateInfo(
+            string name,
+            Description description,
+            string color,
+            string healthInfo,
+            Address address,
+            TelephoneNumber telephoneNumber,
+            float weight,
+            float height,
+            bool isCastrated,
+            bool isVaccinated,
+            DateTime birthdayTime,
+            DateTime dateOfCreation,
+            List<Requisite> requisites,
+            SpeciesId speciesId,
+            BreedId breedId,
+            HelpStatus helpStatus)
+        {
+            Name = name;
+            Description = description;
+            Color = color; 
+            HealthInfo = healthInfo;
+            Address = address;
+            TelephoneNumber = telephoneNumber;
+            Weight = weight;
+            Height = height;
+            IsCastrated = isCastrated;
+            IsVaccinated = isVaccinated;
+            BirthdayTime = birthdayTime;
+            DateOfCreation = dateOfCreation;
+            _requisites = requisites;
+            PetTypeInfo = new PetTypeInfo(breedId, speciesId);
+            HelpStatus = helpStatus;
+
         }
 
         public void UpdatePhotos(IEnumerable<PetPhoto> petPhotos) =>

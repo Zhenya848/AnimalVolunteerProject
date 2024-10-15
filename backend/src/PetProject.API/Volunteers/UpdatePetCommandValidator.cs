@@ -1,14 +1,16 @@
 ﻿using FluentValidation;
-using PetProject.Application.Volunteers.Pets.Commands.Create;
+using PetProject.Application.Volunteers.Pets.Commands.Update;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.API.Volunteers
 {
-    public class CreatePetCommandValidator : AbstractValidator<CreatePetCommand>
+    public class UpdatePetCommandValidator : AbstractValidator<UpdatePetCommand>
     {
-        public CreatePetCommandValidator()
+        public UpdatePetCommandValidator() 
         {
+            RuleFor(i => i.PetId).NotEmpty().WithError(Errors.General.Failure("id"));
+
             RuleFor(n => n.Name).NotEmpty().WithError(Errors.General.ValueIsRequired("Name"));
             RuleFor(c => c.Color).NotEmpty().WithError(Errors.General.ValueIsRequired("Color"));
             RuleFor(c => c.HealthInfo).NotEmpty().WithError(Errors.General.ValueIsRequired("Health info"));

@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Domain.Shared;
+using PetProject.Domain.Shared.ValueObjects.Dtos;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Volunteers.ValueObjects;
 using PetProject.Domain.Volunteers.ValueObjects.Collections;
@@ -112,6 +113,51 @@ namespace PetProject.Domain.Volunteers
             pet.SetSerialNumber(serialNumber.Value);
 
             _pets.Add(pet);
+
+            return Result.Success<Error>();
+        }
+
+        public UnitResult<Error> UpdatePetInfo(
+            Guid petId,
+            string name,
+            Description description,
+            string color,
+            string healthInfo,
+            Address address,
+            TelephoneNumber telephoneNumber,
+            float weight,
+            float height,
+            bool isCastrated,
+            bool isVaccinated,
+            DateTime birthdayTime,
+            DateTime dateOfCreation,
+            List<Requisite> requisites,
+            SpeciesId speciesId,
+            BreedId breedId,
+            HelpStatus helpStatus)
+        {
+            var pet = _pets.Where(i => i.Id == petId).FirstOrDefault();
+
+            if (pet == null)
+                return Errors.General.NotFound(petId);
+
+            pet.UpdateInfo(
+                name,
+                description,
+                color,
+                healthInfo,
+                address,
+                telephoneNumber,
+                weight,
+                height,
+                isCastrated,
+                isVaccinated,
+                birthdayTime,
+                dateOfCreation,
+                requisites,
+                speciesId,
+                breedId,
+                helpStatus);
 
             return Result.Success<Error>();
         }

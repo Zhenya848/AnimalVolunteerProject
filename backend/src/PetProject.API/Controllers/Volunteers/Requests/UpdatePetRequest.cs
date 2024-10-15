@@ -3,7 +3,7 @@ using PetProject.Domain.Shared.ValueObjects.Dtos;
 
 namespace PetProject.API.Controllers.Volunteers.Requests
 {
-    public record CreatePetRequest(
+    public record UpdatePetRequest(
         Guid SpeciesId,
         Guid BreedId,
         string Name,

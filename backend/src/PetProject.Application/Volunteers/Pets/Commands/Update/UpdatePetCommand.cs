@@ -5,6 +5,8 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Update
     public record UpdatePetCommand(
         Guid PetId,
         Guid VolunteerId,
+        Guid SpeciseId,
+        Guid BreedId,
         string Name,
         string Description,
         string Color,

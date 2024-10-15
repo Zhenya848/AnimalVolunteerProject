@@ -3,14 +3,14 @@ using PetProject.Domain.Shared;
 
 namespace PetProject.Domain.Volunteers.ValueObjects
 {
-    public record Addres
+    public record Address
     {
         public string Street { get; }
         public string City { get; }
         public string State { get; }
         public string ZipCode { get; }
 
-        private Addres(string street, string city, string state, string zipCode)
+        private Address(string street, string city, string state, string zipCode)
         {
             Street = street;
             City = city;
@@ -18,7 +18,7 @@ namespace PetProject.Domain.Volunteers.ValueObjects
             ZipCode = zipCode;
         }
 
-        public static Result<Addres, Error> Create(string street, string city, string state, string zipCode)
+        public static Result<Address, Error> Create(string street, string city, string state, string zipCode)
         {
             if (string.IsNullOrWhiteSpace(street))
                 return Errors.General.ValueIsInvalid("Street");
@@ -32,7 +32,7 @@ namespace PetProject.Domain.Volunteers.ValueObjects
             if (string.IsNullOrWhiteSpace(zipCode))
                 return Errors.General.ValueIsInvalid("Zip code");
 
-            return new Addres(street, city, state, zipCode);
+            return new Address(street, city, state, zipCode);
         }
     }
 }
