@@ -16,7 +16,7 @@ namespace PetProject.API.Controllers.Species
         {
             var query = new GetSpeciesWithPaginationQuery(request.Page, request.PageSize);
 
-            var response = await handler.Get(query, cancellationToken);
+            var response = await handler.Handle(query, cancellationToken);
 
             return Ok(Envelope.Ok(response));
         }
@@ -29,7 +29,7 @@ namespace PetProject.API.Controllers.Species
         {
             DeleteSpeciesCommand command = new DeleteSpeciesCommand(id);
 
-            var result = await handler.Delete(command, cancellationToken);
+            var result = await handler.Handle(command, cancellationToken);
 
             if (result.IsFailure)
                 return result.Error.ToResponse();

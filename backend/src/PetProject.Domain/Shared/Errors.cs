@@ -24,8 +24,20 @@
         {
             public static Error AlreadyExist()
             {
-                return Error.Validation("user.already.exist", "volunteer with this phone number already exist!");
+                return Error.Validation("volunteer.already.exist", "volunteer with this phone number already exist!");
             }
+        }
+        
+        public static class User
+        {
+            public static Error AlreadyExist() =>
+                Error.Validation("user.already.exist", "user with this email already exist!");
+
+            public static Error NotFound(string email) => 
+                Error.NotFound("user.notfound", $"user with email {email} not found");
+            
+            public static Error WrongCredentials() =>
+                Error.Validation("user.wrong.credentials", "user with wrong credentials");
         }
     }
 }

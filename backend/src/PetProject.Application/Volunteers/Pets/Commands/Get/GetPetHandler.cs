@@ -12,9 +12,9 @@ using PetProject.Domain.Shared.ValueObjects.Dtos.ForQuery;
 
 namespace PetProject.Application.Volunteers.Pets.Commands.Get
 {
-    public class GetPetHandler(IReadDbContext _readDbContext) : IQueryHandler<Guid, Result<PetDto, ErrorList>>
+    public class GetPetHandler(IReadDbContext _readDbContext) : ICommandHandler<Guid, Result<PetDto, ErrorList>>
     {
-        public async Task<Result<PetDto, ErrorList>> Get(
+        public async Task<Result<PetDto, ErrorList>> Handle(
             Guid petId,
             CancellationToken cancellationToken = default)
         {

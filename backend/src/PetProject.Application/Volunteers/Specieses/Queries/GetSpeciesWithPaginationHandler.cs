@@ -21,7 +21,7 @@ namespace PetProject.Application.Volunteers.Specieses.Queries
             _readDbContext = readDbContext;
         }
 
-        public async Task<PagedList<SpeciesDto>> Get(
+        public async Task<PagedList<SpeciesDto>> Handle(
             GetSpeciesWithPaginationQuery query, 
             CancellationToken cancellationToken = default)
         {

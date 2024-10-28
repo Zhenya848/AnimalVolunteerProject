@@ -2,6 +2,7 @@ using PetProject.API;
 using PetProject.Application;
 using PetProject.Application.Repositories;
 using PetProject.Infastructure;
+using PetProject.Infrastructure.Authentification;
 using PetProject.Infastructure.Repositories;
 using FluentValidation.AspNetCore;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
@@ -29,7 +30,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
-/*builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyTestService", Version = "v1" });
 
@@ -55,25 +56,13 @@ builder.Services.AddSwaggerGen();
             new string[]{ }
         }
     });
-});*/
+});
 
 builder.Services
     .AddFromInfrastructure(builder.Configuration)
+    .AddFromAuthentificationInfrastructure(builder.Configuration)
     .AddFromAPI()
     .AddFromApplication();
-
-/*builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = false,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("123458844984546121546452151254651321awgfyukawegfahsijhafkhwhfguhaefguhwjdfnawoifoiawjfws")),
-            ValidateIssuerSigningKey = true,
-        };
-    });*/
 
 var app = builder.Build();
 

@@ -7,13 +7,14 @@ using PetProject.Application.Files.Commands.Create;
 using PetProject.Application.Files.Providers;
 using PetProject.Application.Messaging;
 using PetProject.Application.Repositories.Write;
+using PetProject.Application.Shared.Interfaces;
 using PetProject.Domain.Shared;
 using PetProject.Domain.Shared.ValueObjects.IdClasses;
 using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.Application.Volunteers.Pets.Commands.UploadPhotos
 {
-    public class UploadFilesToPetHandler
+    public class UploadFilesToPetHandler : ICommandHandler<UploadFilesToPetCommand, Result<Guid, ErrorList>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -37,9 +38,9 @@ namespace PetProject.Application.Volunteers.Pets.Commands.UploadPhotos
             _uploadFilesValidator = uploadFilesValidator;
             _messageQueue = messageQueue;
         }
-
-        public async Task<Result<Guid, ErrorList>> UploadPhotos(
-            UploadFilesToPetCommand command,
+        
+        public async Task<Result<Guid, ErrorList>> Handle(
+            UploadFilesToPetCommand command, 
             CancellationToken cancellationToken = default)
         {
             var validationResult = await _uploadFilesValidator.ValidateAsync(command, cancellationToken);

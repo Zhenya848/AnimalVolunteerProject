@@ -14,7 +14,7 @@ using PetProject.Domain.Volunteers.ValueObjects;
 
 namespace PetProject.Application.Volunteers.Pets.Commands.Create
 {
-    public class CreatePetHandler : ICreateHandler<CreatePetCommand, Result<Guid, ErrorList>>
+    public class CreatePetHandler : ICommandHandler<CreatePetCommand, Result<Guid, ErrorList>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IVolunteerRepository _volunteerRepository;
@@ -35,7 +35,7 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Create
             _createPetValidator = createPetValidator;
         }
 
-        public async Task<Result<Guid, ErrorList>> Create(
+        public async Task<Result<Guid, ErrorList>> Handle(
             CreatePetCommand command,
             CancellationToken cancellationToken = default)
         {

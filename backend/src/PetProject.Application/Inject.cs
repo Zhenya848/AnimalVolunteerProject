@@ -13,7 +13,6 @@ namespace PetProject.Application
         public static IServiceCollection AddFromApplication(this IServiceCollection services)
         {
             services.AddHandlers();
-            services.AddScoped<UploadFilesToPetHandler>();
 
             return services;
         }
@@ -22,9 +21,7 @@ namespace PetProject.Application
         {
             return services.Scan(scan => scan.FromAssemblies(typeof(Inject).Assembly)
                 .AddClasses(classes => classes.AssignableToAny(
-                    typeof(ICreateHandler<,>),
-                    typeof(IDeleteHandler<,>),
-                    typeof(IUpdateHandler<,>),
+                    typeof(ICommandHandler<,>),
                     typeof(IQueryHandler<,>)))
                 .AsSelfWithInterfaces()
                 .WithLifetime(ServiceLifetime.Scoped));

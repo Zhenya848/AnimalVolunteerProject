@@ -17,7 +17,7 @@ namespace PetProject.API.Controllers.Breeds
         {
             var query = new GetBreedsWithPaginationQuery(request.SpeciesId, request.Page, request.PageSize);
 
-            var response = await handler.Get(query, cancellationToken);
+            var response = await handler.Handle(query, cancellationToken);
 
             return Ok(Envelope.Ok(response));
         }

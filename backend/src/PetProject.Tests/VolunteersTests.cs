@@ -134,7 +134,7 @@ namespace PetProject.Domain.Tests
             var requisiteDto = new RequisiteDto(TEST, TEST);
 
             var requisites = new List<Requisite>()
-            { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };
+            { Requisite.Create(requisiteDto.Name, requisiteDto.Description).Value };
 
             return new Pet(PetId.AddNewId(), name, description, TEST, TEST,
                 addres, telephoneNumber, 0, 0, true,
@@ -163,7 +163,7 @@ namespace PetProject.Domain.Tests
             { SocialNetwork.Create(socilaNetworkDto.Name, socilaNetworkDto.Reference).Value };
 
             var requisites = new List<Requisite>()
-            { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };
+            { Requisite.Create(requisiteDto.Name, requisiteDto.Description).Value };
 
             return new Volunteer(VolunteerId.AddNewId(), fullName, description,
                 telephoneNumber, experience, socialNetworks, requisites);

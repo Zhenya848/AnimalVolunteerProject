@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetProject.Domain.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetProject.Application.Tests", "src\PetProject.Application.Tests\PetProject.Application.Tests.csproj", "{0169754A-C505-4C5C-8BDF-C73F0A640F6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetProject.Infrastructure.Authentification", "src\PetProject.Infrastructure.Authentification\PetProject.Infrastructure.Authentification.csproj", "{A3FA5EA1-EC1E-41EA-A03E-EDA8459C0C98}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{0169754A-C505-4C5C-8BDF-C73F0A640F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0169754A-C505-4C5C-8BDF-C73F0A640F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0169754A-C505-4C5C-8BDF-C73F0A640F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3FA5EA1-EC1E-41EA-A03E-EDA8459C0C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FA5EA1-EC1E-41EA-A03E-EDA8459C0C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FA5EA1-EC1E-41EA-A03E-EDA8459C0C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FA5EA1-EC1E-41EA-A03E-EDA8459C0C98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

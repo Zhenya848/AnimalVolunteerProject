@@ -9,7 +9,7 @@ using PetProject.Domain.Shared.ValueObjects.IdClasses;
 
 namespace PetProject.Application.Volunteers.Commands.Delete
 {
-    public class DeleteVolunteerHandler : IDeleteHandler<DeleteVolunteerCommand, Result<Guid, ErrorList>>
+    public class DeleteVolunteerHandler : ICommandHandler<DeleteVolunteerCommand, Result<Guid, ErrorList>>
     {
         private readonly IValidator<DeleteVolunteerCommand> _deleteValidator;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +25,7 @@ namespace PetProject.Application.Volunteers.Commands.Delete
             _deleteValidator = createValidator;
         }
 
-        public async Task<Result<Guid, ErrorList>> Delete(
+        public async Task<Result<Guid, ErrorList>> Handle(
             DeleteVolunteerCommand command,
             CancellationToken cancellationToken = default)
         {

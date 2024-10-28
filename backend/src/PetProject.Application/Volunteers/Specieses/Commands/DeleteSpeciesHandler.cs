@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace PetProject.Application.Volunteers.Specieses.Commands
 {
-    public class DeleteSpeciesHandler : IDeleteHandler<DeleteSpeciesCommand, Result<Guid, ErrorList>>
+    public class DeleteSpeciesHandler : ICommandHandler<DeleteSpeciesCommand, Result<Guid, ErrorList>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISpeciesRepository _speciesRepository;
@@ -31,7 +31,7 @@ namespace PetProject.Application.Volunteers.Specieses.Commands
             _readDbContext = readDbContext;
         }
 
-        public async Task<Result<Guid, ErrorList>> Delete(DeleteSpeciesCommand command, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid, ErrorList>> Handle(DeleteSpeciesCommand command, CancellationToken cancellationToken = default)
         {
             var speciesResult = await _speciesRepository
                 .GetById(SpeciesId.Create(command.id), cancellationToken);

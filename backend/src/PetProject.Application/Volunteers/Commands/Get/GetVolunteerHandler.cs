@@ -21,14 +21,14 @@ namespace PetProject.Application.Volunteers.Commands.Get
             _readDbContext = readDbContext;
         }
 
-        public async Task<Result<VolunteerDto, ErrorList>> Get(
+        public async Task<Result<VolunteerDto, ErrorList>> Handle(
             Guid id, 
             CancellationToken cancellationToken = default)
         {
             var volunteerQuery = _readDbContext.Volunteers;
             
-            var volunteerResult = await volunteerQuery.Where(i => i.Id == id)
-                .FirstOrDefaultAsync(cancellationToken);
+            var volunteerResult = await volunteerQuery
+                .FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
 
             if (volunteerResult == null)
                 return (ErrorList)Errors.General.NotFound(id);

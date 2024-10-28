@@ -13,7 +13,7 @@ using PetProject.Application.Extensions;
 
 namespace PetProject.Application.Volunteers.Commands.Create
 {
-    public class CreateVolunteerHandler : ICreateHandler<CreateVolunteerCommand, Result<Guid, ErrorList>>
+    public class CreateVolunteerHandler : ICommandHandler<CreateVolunteerCommand, Result<Guid, ErrorList>>
     {
         private readonly IValidator<CreateVolunteerCommand> _createValidator;
         private readonly IUnitOfWork _unitOfWork;
@@ -29,7 +29,7 @@ namespace PetProject.Application.Volunteers.Commands.Create
             _createValidator = createValidator;
         }
 
-        public async Task<Result<Guid, ErrorList>> Create(
+        public async Task<Result<Guid, ErrorList>> Handle(
             CreateVolunteerCommand command,
             CancellationToken cancellationToken = default)
         {

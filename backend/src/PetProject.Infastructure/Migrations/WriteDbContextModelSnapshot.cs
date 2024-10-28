@@ -137,7 +137,7 @@ namespace PetProject.Infastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Address", "PetProject.Domain.Volunteers.Pet.Address#Addres", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Address", "PetProject.Domain.Volunteers.Pet.Address#Address", b1 =>
                         {
                             b1.IsRequired();
 

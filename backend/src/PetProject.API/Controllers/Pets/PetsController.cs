@@ -17,9 +17,12 @@ namespace PetProject.API.Controllers.Pets
             var query = new GetPetsWithPaginationQuery(
                 request.Page, request.PageSize, request.PositionFrom, request.PositionTo, request.OrderByDesc, request.OrderBy);
 
-            var response = await handler.Get(query, cancellationToken);
+            var responseResult = await handler.Handle(query, cancellationToken);
 
-            return Ok(Envelope.Ok(response));
+            if (responseResult.IsFailure)
+                return responseResult.Error.ToResponse();
+
+            return Ok(Envelope.Ok(responseResult.Value));
         }
 
         [HttpGet("{petId:guid}")]
@@ -28,7 +31,7 @@ namespace PetProject.API.Controllers.Pets
             [FromRoute] Guid petId,
             CancellationToken cancellationToken = default)
         {
-            var petResult = await handler.Get(petId, cancellationToken);
+            var petResult = await handler.Handle(petId, cancellationToken);
 
             if (petResult.IsFailure)
                 return petResult.Error.ToResponse();
@@ -39,12 +42,13 @@ namespace PetProject.API.Controllers.Pets
         [HttpGet("dapper")]
         public async Task<ActionResult> GetDapper(
             [FromServices] GetPetsWithPaginationDapperHandler handler,
-            [FromQuery] GetPetsWithPaginationRequest request)
+            [FromQuery] GetPetsWithPaginationRequest request,
+            CancellationToken cancellationToken = default)
         {
             var query = new GetPetsWithPaginationQuery(
                 request.Page, request.PageSize, request.PositionFrom, request.PositionTo, request.OrderByDesc, request.OrderBy);
 
-            var response = await handler.GetWithDapper(query);
+            var response = await handler.Handle(query, cancellationToken);
 
             return Ok(Envelope.Ok(response));
         }

@@ -5,10 +5,11 @@ using PetProject.Domain.Shared.ValueObjects.Dtos;
 using PetProject.Domain.Shared.ValueObjects.Dtos.ForQuery;
 using System.Text;
 using System.Text.Json;
+using PetProject.Application.Shared.Interfaces;
 
 namespace PetProject.Application.Volunteers.Pets.Queries
 {
-    public class GetPetsWithPaginationDapperHandler
+    public class GetPetsWithPaginationDapperHandler : IQueryHandler<GetPetsWithPaginationQuery, PagedList<PetDto>>
     {
         private readonly ISqlConnectionFactory _connectionFactory;
 
@@ -17,8 +18,9 @@ namespace PetProject.Application.Volunteers.Pets.Queries
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<PagedList<PetDto>> GetWithDapper(
-            GetPetsWithPaginationQuery query)
+        public async Task<PagedList<PetDto>> Handle(
+            GetPetsWithPaginationQuery query, 
+            CancellationToken cancellationToken)
         {
             var connection = _connectionFactory.Create();
 

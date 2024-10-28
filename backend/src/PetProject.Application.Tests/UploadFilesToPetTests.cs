@@ -20,6 +20,7 @@ using PetProject.Application.Volunteers.Pets.Commands.UploadPhotos;
 using PetProject.Application.Volunteers.Pets.Commands.Create;
 using PetProject.Application.Volunteers.Pets.Commands;
 using PetProject.Application.Files.Commands.Create;
+using PetProject.Application.Messaging;
 using PetProject.Application.Repositories.Write;
 
 namespace PetProject.Application.Tests
@@ -30,7 +31,7 @@ namespace PetProject.Application.Tests
         private readonly Mock<IUnitOfWork> _unitOfWork = new();
         private readonly Mock<IDbTransaction> _transactionMock = new();
         private readonly Mock<IVolunteerRepository> _volunteerRepository = new();
-        private readonly Mock<ILogger<PetService>> _loggerMock = new();
+        private readonly Mock<IMessageQueue<IEnumerable<Files.Providers.FileInfo>>> _messageQueue = new();
         private readonly Mock<IValidator<UploadFilesToPetCommand>> _uploadFilesValidatorMock = new();
         private readonly Mock<IValidator<CreatePetCommand>> _createPetValidatorMock = new();
 
@@ -88,18 +89,16 @@ namespace PetProject.Application.Tests
 
             _createPetValidatorMock.Setup(v => v.ValidateAsync(It.IsAny<CreatePetCommand>(), ct))
                 .ReturnsAsync(new ValidationResult());
-
-            var petService = new PetService(
+            
+            var handler = new UploadFilesToPetHandler(
                 _volunteerRepository.Object,
                 _fileProviderMock.Object,
                 _unitOfWork.Object,
-                _loggerMock.Object,
-                _createPetValidatorMock.Object,
-                _uploadFilesValidatorMock.Object);
-
+                _uploadFilesValidatorMock.Object,
+                _messageQueue.Object);
             // act
 
-            var result = await petService.UploadPhotos(command, ct);
+            var result = await handler.Handle(command, ct);
 
             // assert
 
@@ -126,7 +125,7 @@ namespace PetProject.Application.Tests
             var requisiteDto = new RequisiteDto(TEST, TEST);
 
             var requisites = new List<Requisite>()
-            { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };
+            { Requisite.Create(requisiteDto.Name, requisiteDto.Description).Value };
 
             return new Pet(PetId.AddNewId(), TEST, description, TEST, TEST,
                 addres, telephoneNumber, 0, 0, true,
@@ -155,7 +154,7 @@ namespace PetProject.Application.Tests
             { SocialNetwork.Create(socilaNetworkDto.Name, socilaNetworkDto.Reference).Value };
 
             var requisites = new List<Requisite>()
-            { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };
+            { Requisite.Create(requisiteDto.Name, requisiteDto.Description).Value };
 
             return new Volunteer(VolunteerId.AddNewId(), fullName, description,
                 telephoneNumber, experience, socialNetworks, requisites);

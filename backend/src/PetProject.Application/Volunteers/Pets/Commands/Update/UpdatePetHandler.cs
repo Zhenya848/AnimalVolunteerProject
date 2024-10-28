@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PetProject.Application.Volunteers.Pets.Commands.Update
 {
-    public class UpdatePetHandler : IUpdateHandler<UpdatePetCommand, Result<Guid, ErrorList>>
+    public class UpdatePetHandler : ICommandHandler<UpdatePetCommand, Result<Guid, ErrorList>>
     {
         private readonly IValidator<UpdatePetCommand> _updateValidator;
         private readonly IUnitOfWork _unitOfWork;
@@ -32,7 +32,7 @@ namespace PetProject.Application.Volunteers.Pets.Commands.Update
             _readDbContext = readDbContext;
         }
 
-        public async Task<Result<Guid, ErrorList>> Update(
+        public async Task<Result<Guid, ErrorList>> Handle(
             UpdatePetCommand command, 
             CancellationToken cancellationToken = default)
         {

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace PetProject.Application.Volunteers.Commands.Update
 {
-    public class UpdateVolunteerHandler : IUpdateHandler<UpdateVolunteerCommand, Result<Guid, ErrorList>>
+    public class UpdateVolunteerHandler : ICommandHandler<UpdateVolunteerCommand, Result<Guid, ErrorList>>
     {
         private readonly IValidator<UpdateVolunteerCommand> _updateValidator;
         private readonly IUnitOfWork _unitOfWork;
@@ -32,7 +32,7 @@ namespace PetProject.Application.Volunteers.Commands.Update
             _updateValidator = updateValidator;
         }
 
-        public async Task<Result<Guid, ErrorList>> Update(
+        public async Task<Result<Guid, ErrorList>> Handle(
             UpdateVolunteerCommand command,
             CancellationToken cancellationToken = default)
         {
