@@ -1,10 +1,9 @@
 using CSharpFunctionalExtensions;
-using PetProject.Domain.Shared;
-using PetProject.Domain.Shared.ValueObjects.Dtos;
-using PetProject.Domain.Shared.ValueObjects.IdClasses;
-using PetProject.Domain.Species;
-using PetProject.Domain.Volunteers;
-using PetProject.Domain.Volunteers.ValueObjects;
+using PetProject.Core.ValueObjects;
+using PetProject.Core.ValueObjects.Dtos;
+using PetProject.Core.ValueObjects.IdValueObjects;
+using PetProject.Volunteers.Domain;
+using PetProject.Volunteers.Domain.ValueObjects;
 
 namespace PetProject.Domain.Tests
 {

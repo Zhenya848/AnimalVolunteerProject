@@ -1,21 +1,20 @@
-using PetProject.API;
-using PetProject.Application;
-using PetProject.Application.Repositories;
-using PetProject.Infastructure;
 using PetProject.Infrastructure.Authentification;
-using PetProject.Infastructure.Repositories;
-using FluentValidation.AspNetCore;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using Microsoft.EntityFrameworkCore;
 using PetProject.API.Middlewares;
 using Serilog;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Text;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.DependencyInjection;
+using PetProject.Accounts.Application;
+using PetProject.Accounts.Implementation;
+using PetProject.Accounts.Presentation;
+using PetProject.Core.Application;
+using PetProject.Core.Infrastructure;
+using PetProject.Framework;
+using PetProject.Infrastructure.Authentification.Seeding;
+using PetProject.Species.Application;
+using PetProject.Species.Infrastructure;
+using PetProject.Volunteers.Application;
+using PetProject.Volunteers.Infrastructure;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,12 +58,21 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services
-    .AddFromInfrastructure(builder.Configuration)
-    .AddFromAuthentificationInfrastructure(builder.Configuration)
-    .AddFromAPI()
-    .AddFromApplication();
+    .AddFromFramework()
+    .AddFromCoreApplication()
+    .AddFromCoreInfrastructure(builder.Configuration)
+    .AddFromImplementation()
+    .AddFromAccountsInfrastructure(builder.Configuration)
+    .AddFromAccountsApplication()
+    .AddFromVolunteersInfrastructure(builder.Configuration)
+    .AddFromVolunteersApplication()
+    .AddFromSpeciesInfrastructure(builder.Configuration)
+    .AddFromSpeciesApplication();
 
 var app = builder.Build();
+
+var accountsSeeder = app.Services.GetRequiredService<AccountsSeeder>();
+await accountsSeeder.SeedAsync();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -73,7 +81,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    await app.ApplyMigrations();
+    //await app.ApplyMigrations();
 }
 
 app.UseSerilogRequestLogging();

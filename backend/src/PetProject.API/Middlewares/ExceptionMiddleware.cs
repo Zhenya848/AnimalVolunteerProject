@@ -1,6 +1,6 @@
-﻿using PetProject.API.Response;
-using PetProject.Domain.Shared;
-using System.Net;
+﻿using System.Net;
+using PetProject.Core;
+using PetProject.Framework;
 
 namespace PetProject.API.Middlewares
 {
