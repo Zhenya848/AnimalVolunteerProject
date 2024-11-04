@@ -12,9 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -26,13 +27,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PetProject.Application\PetProject.Application.csproj" />
-    <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
-    <ProjectReference Include="..\PetProject.Infastructure\PetProject.Infastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Contracts\" />
+    <ProjectReference Include="..\Accounts\PetProject.Accounts.Presentation\PetProject.Accounts.Presentation.csproj" />
+    <ProjectReference Include="..\Accounts\PetProject.Accounts.Infrastructure\PetProject.Accounts.Infrastructure.csproj" />
+    <ProjectReference Include="..\PetProject.Accounts.Implementation\PetProject.Accounts.Implementation.csproj" />
+    <ProjectReference Include="..\PetProject.Core.Infrastructure\PetProject.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\PetProject.Framework\PetProject.Framework.csproj" />
+    <ProjectReference Include="..\PetProject.Species.Infrastructure\PetProject.Species.Infrastructure.csproj" />
+    <ProjectReference Include="..\PetProject.Species.Presentation\PetProject.Species.Presentation.csproj" />
+    <ProjectReference Include="..\PetProject.Volunteers.Presentation\PetProject.Volunteers.Presentation.csproj" />
+    <ProjectReference Include="..\PetProject.Volunteers.Infrastructure\PetProject.Volunteers.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>PetProject.Infrastructure.Authentification</RootNamespace>
+        <PackageId>PetProject.Accounts.Infrastructure</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\PetProject.Core.Infrastructure\PetProject.Core.Infrastructure.csproj" />
+      <ProjectReference Include="..\PetProject.Accounts.Application\PetProject.Accounts.Application.csproj" />
+      <ProjectReference Include="..\PetProject.Accounts.Domain\PetProject.Accounts.Domain.csproj" />
+      <ProjectReference Include="..\PetProject.Accounts.Presentation\PetProject.Accounts.Presentation.csproj" />
+    </ItemGroup>
+
+</Project>

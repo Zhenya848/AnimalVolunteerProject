@@ -1,20 +1,20 @@
-using PetProject.API;
-using PetProject.Application;
-using PetProject.Application.Repositories;
-using PetProject.Infastructure;
-using PetProject.Infastructure.Repositories;
-using FluentValidation.AspNetCore;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using Microsoft.EntityFrameworkCore;
+using PetProject.Infrastructure.Authentification;
 using PetProject.API.Middlewares;
 using Serilog;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Text;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.DependencyInjection;
+using PetProject.Accounts.Application;
+using PetProject.Accounts.Implementation;
+using PetProject.Accounts.Presentation;
+using PetProject.Core.Application;
+using PetProject.Core.Infrastructure;
+using PetProject.Framework;
+using PetProject.Infrastructure.Authentification.Seeding;
+using PetProject.Species.Application;
+using PetProject.Species.Infrastructure;
+using PetProject.Volunteers.Application;
+using PetProject.Volunteers.Infrastructure;
+
+DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +29,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
-/*builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyTestService", Version = "v1" });
 
@@ -55,27 +55,24 @@ builder.Services.AddSwaggerGen();
             new string[]{ }
         }
     });
-});*/
+});
 
 builder.Services
-    .AddFromInfrastructure(builder.Configuration)
-    .AddFromAPI()
-    .AddFromApplication();
-
-/*builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = false,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("123458844984546121546452151254651321awgfyukawegfahsijhafkhwhfguhaefguhwjdfnawoifoiawjfws")),
-            ValidateIssuerSigningKey = true,
-        };
-    });*/
+    .AddFromFramework()
+    .AddFromCoreApplication()
+    .AddFromCoreInfrastructure(builder.Configuration)
+    .AddFromImplementation()
+    .AddFromAccountsInfrastructure(builder.Configuration)
+    .AddFromAccountsApplication()
+    .AddFromVolunteersInfrastructure(builder.Configuration)
+    .AddFromVolunteersApplication()
+    .AddFromSpeciesInfrastructure(builder.Configuration)
+    .AddFromSpeciesApplication();
 
 var app = builder.Build();
+
+var accountsSeeder = app.Services.GetRequiredService<AccountsSeeder>();
+await accountsSeeder.SeedAsync();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
@@ -84,7 +81,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    await app.ApplyMigrations();
+    //await app.ApplyMigrations();
 }
 
 app.UseSerilogRequestLogging();

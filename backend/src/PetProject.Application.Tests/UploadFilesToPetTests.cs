@@ -1,26 +1,23 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Runtime.InteropServices.JavaScript;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Moq;
-using PetProject.Application.Database;
-using PetProject.Application.Files.Providers;
-using PetProject.Domain.Shared;
-using PetProject.Domain.Shared.ValueObjects.Dtos;
-using PetProject.Domain.Shared.ValueObjects.IdClasses;
-using PetProject.Domain.Volunteers;
-using PetProject.Domain.Volunteers.ValueObjects;
-using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using System.Data;
-using PetProject.Application.Volunteers.Pets.Commands.UploadPhotos;
-using PetProject.Application.Volunteers.Pets.Commands.Create;
-using PetProject.Application.Volunteers.Pets.Commands;
-using PetProject.Application.Files.Commands.Create;
-using PetProject.Application.Repositories.Write;
+using PetProject.Core;
+using PetProject.Core.Application.Abstractions;
+using PetProject.Core.Application.Messaging;
+using PetProject.Core.ValueObjects;
+using PetProject.Core.ValueObjects.Dtos;
+using PetProject.Core.ValueObjects.IdValueObjects;
+using PetProject.Volunteers.Application.Files.Commands.Create;
+using PetProject.Volunteers.Application.Pets.Commands.Create;
+using PetProject.Volunteers.Application.Pets.Commands.UploadPhotos;
+using PetProject.Volunteers.Application.Providers;
+using PetProject.Volunteers.Application.Volunteers.Repositories;
+using PetProject.Volunteers.Domain;
+using PetProject.Volunteers.Domain.ValueObjects;
+using FileInfo = PetProject.Volunteers.Application.Providers.FileInfo;
 
 namespace PetProject.Application.Tests
 {
@@ -30,7 +27,7 @@ namespace PetProject.Application.Tests
         private readonly Mock<IUnitOfWork> _unitOfWork = new();
         private readonly Mock<IDbTransaction> _transactionMock = new();
         private readonly Mock<IVolunteerRepository> _volunteerRepository = new();
-        private readonly Mock<ILogger<PetService>> _loggerMock = new();
+        private readonly Mock<IMessageQueue<IEnumerable<FileInfo>>> _messageQueue = new();
         private readonly Mock<IValidator<UploadFilesToPetCommand>> _uploadFilesValidatorMock = new();
         private readonly Mock<IValidator<CreatePetCommand>> _createPetValidatorMock = new();
 
@@ -83,23 +80,21 @@ namespace PetProject.Application.Tests
             _volunteerRepository.Setup(g => g.GetById(volunteer.Id, ct))
                 .ReturnsAsync(volunteer);
 
-            _uploadFilesValidatorMock.Setup(v => v.ValidateAsync(command, ct))
+            /*_uploadFilesValidatorMock.Setup(v => v.ValidateAsync(command, ct))
                 .ReturnsAsync(new ValidationResult());
 
             _createPetValidatorMock.Setup(v => v.ValidateAsync(It.IsAny<CreatePetCommand>(), ct))
-                .ReturnsAsync(new ValidationResult());
-
-            var petService = new PetService(
+                .ReturnsAsync(new ValidationResult());*/
+            
+            var handler = new UploadFilesToPetHandler(
                 _volunteerRepository.Object,
                 _fileProviderMock.Object,
                 _unitOfWork.Object,
-                _loggerMock.Object,
-                _createPetValidatorMock.Object,
-                _uploadFilesValidatorMock.Object);
-
+                _uploadFilesValidatorMock.Object,
+                _messageQueue.Object);
             // act
 
-            var result = await petService.UploadPhotos(command, ct);
+            var result = await handler.Handle(command, ct);
 
             // assert
 
@@ -126,7 +121,7 @@ namespace PetProject.Application.Tests
             var requisiteDto = new RequisiteDto(TEST, TEST);
 
             var requisites = new List<Requisite>()
-            { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };
+            { Requisite.Create(requisiteDto.Name, requisiteDto.Description).Value };
 
             return new Pet(PetId.AddNewId(), TEST, description, TEST, TEST,
                 addres, telephoneNumber, 0, 0, true,
@@ -155,7 +150,7 @@ namespace PetProject.Application.Tests
             { SocialNetwork.Create(socilaNetworkDto.Name, socilaNetworkDto.Reference).Value };
 
             var requisites = new List<Requisite>()
-            { Requisite.Create(requisiteDto.Title, requisiteDto.Description).Value };
+            { Requisite.Create(requisiteDto.Name, requisiteDto.Description).Value };
 
             return new Volunteer(VolunteerId.AddNewId(), fullName, description,
                 telephoneNumber, experience, socialNetworks, requisites);

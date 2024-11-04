@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\PetProject.Accounts.Contracts\PetProject.Accounts.Contracts.csproj" />
+      <ProjectReference Include="..\..\PetProject.Framework\PetProject.Framework.csproj" />
+      <ProjectReference Include="..\PetProject.Accounts.Application\PetProject.Accounts.Application.csproj" />
+    </ItemGroup>
+
+</Project>

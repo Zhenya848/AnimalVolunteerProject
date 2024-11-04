@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Pets\" />
+      <Folder Include="Volunteers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\PetProject.Core.Application\PetProject.Core.Application.csproj" />
+      <ProjectReference Include="..\PetProject.Volunteers.Domain\PetProject.Volunteers.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    </ItemGroup>
+
+</Project>

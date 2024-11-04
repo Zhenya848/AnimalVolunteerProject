@@ -25,8 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetProject.API\PetProject.API.csproj" />
-    <ProjectReference Include="..\PetProject.Application\PetProject.Application.csproj" />
-    <ProjectReference Include="..\PetProject.Domain\PetProject.Domain.csproj" />
+    <ProjectReference Include="..\PetProject.Volunteers.Domain\PetProject.Volunteers.Domain.csproj" />
   </ItemGroup>
 
 </Project>
