@@ -44,6 +44,7 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    social_networks = table.Column<string>(type: "jsonb", nullable: false),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -124,6 +125,27 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                     table.PrimaryKey("pk_admin_accounts", x => x.id);
                     table.ForeignKey(
                         name: "fk_admin_accounts_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "participant_accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    patronymic = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_participant_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_participant_accounts_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
@@ -237,9 +259,38 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "volunteer_accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    expirience = table.Column<int>(type: "integer", nullable: false),
+                    requisites = table.Column<string>(type: "jsonb", nullable: false),
+                    first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    patronymic = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_volunteer_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_volunteer_accounts_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_admin_accounts_user_id",
                 table: "admin_accounts",
+                column: "user_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_participant_accounts_user_id",
+                table: "participant_accounts",
                 column: "user_id",
                 unique: true);
 
@@ -295,6 +346,12 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                 table: "users",
                 column: "normalized_user_name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_volunteer_accounts_user_id",
+                table: "volunteer_accounts",
+                column: "user_id",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -302,6 +359,9 @@ namespace PetProject.Infrastructure.Authentification.Migrations
         {
             migrationBuilder.DropTable(
                 name: "admin_accounts");
+
+            migrationBuilder.DropTable(
+                name: "participant_accounts");
 
             migrationBuilder.DropTable(
                 name: "refresh_sessions");
@@ -323,6 +383,9 @@ namespace PetProject.Infrastructure.Authentification.Migrations
 
             migrationBuilder.DropTable(
                 name: "user_tokens");
+
+            migrationBuilder.DropTable(
+                name: "volunteer_accounts");
 
             migrationBuilder.DropTable(
                 name: "permissions");

@@ -15,6 +15,15 @@ public class AccountRepository : IAccountRepository
         _accountsDbContext = accountsDbContext;
     }
 
+    public Guid CreateParticipant(
+        ParticipantAccount participantAccount)
+    {
+        var addResult = _accountsDbContext.ParticipantAccounts
+            .Add(participantAccount);
+        
+        return participantAccount.Id;
+    }
+
     public async Task<Result<RefreshSession, Error>> GetByRefreshToken(
         Guid refreshToken, 
         CancellationToken cancellationToken = default)

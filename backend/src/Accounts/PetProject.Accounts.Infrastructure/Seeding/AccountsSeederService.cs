@@ -40,19 +40,32 @@ public class AccountsSeederService(
         
         var adminRole = await roleManager.FindByNameAsync(AdminAccount.ADMIN)
             ?? throw new ApplicationException("Admin Role not found");
+        
+        var adminUser = await userManager.Users
+            .FirstOrDefaultAsync(u => u.Roles.Any(r => r.Name == adminRole.Name));
 
-        var adminUser = User.Create(adminOptions.Name, adminOptions.Email, adminRole);
-        await userManager.CreateAsync(adminUser, adminOptions.Password);
+        if (adminUser == null)
+        {
+            adminUser = User.CreateAdmin(adminOptions.Name, adminOptions.Email, adminRole);
+        
+            await userManager.CreateAsync(adminUser, adminOptions.Password);
+        }
         
         logger.LogInformation("Created user admin successfully");
-
-        var fullName = FullName.Create(
-            adminOptions.Name,
-            adminOptions.Name,
-            adminOptions.Name).Value;
         
-        var adminAccount = new AdminAccount(fullName, adminUser);
-        await accountsDbContext.AdminAccounts.AddAsync(adminAccount);
+        var adminExist = await accountsDbContext.AdminAccounts
+            .AnyAsync(e => e.User.Email == adminOptions.Email);
+
+        if (adminExist == false)
+        {
+            var fullName = FullName.Create(
+                adminOptions.Name,
+                adminOptions.Name,
+                adminOptions.Name).Value;
+        
+            var adminAccount = AdminAccount.CreateAdmin(fullName, adminUser);
+            await accountsDbContext.AdminAccounts.AddAsync(adminAccount);
+        }
         
         logger.LogInformation("Created admin account successfully");
         
@@ -79,7 +92,7 @@ public class AccountsSeederService(
 
             if (isPermissionExist == false)
                 await accountsDbContext.Permissions.AddAsync(new Permission() 
-                    { Code = permissionCode, Description = permissionCode});
+                    { Code = permissionCode, Description = permissionCode} );
         }
     }
     
