@@ -12,6 +12,8 @@
     ],
     
     "Admin" : [
+      "admin.test",
+      
       "volunteer.create",
       "volunteer.read",
       "volunteer.update",
@@ -25,6 +27,10 @@
   },
   
   "Permissions" : {
+    "Admin" : [
+      "admin.test"
+    ],
+    
     "Volunteers" : [
       "volunteer.create",
       "volunteer.read",

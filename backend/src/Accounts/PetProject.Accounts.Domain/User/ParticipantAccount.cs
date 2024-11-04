@@ -2,9 +2,9 @@ using PetProject.Core.ValueObjects;
 
 namespace PetProject.Accounts.Domain.User;
 
-public class AdminAccount
+public class ParticipantAccount
 {
-    public const string ADMIN = "Admin";
+    public const string PARTICIPANT = "Participant";
     
     public Guid Id { get; set; }
     public FullName FullName { get; set; }
@@ -12,14 +12,14 @@ public class AdminAccount
     public Guid UserId { get; set; }
     public User User { get; set; }
 
-    private AdminAccount()
+    private ParticipantAccount()
     {
         
     }
     
-    public static AdminAccount CreateAdmin(FullName fullName, User user)
+    public static ParticipantAccount CreateParticipant(FullName fullName, User user)
     {
-        return new AdminAccount()
+        return new ParticipantAccount()
         {
             Id = Guid.NewGuid(),
             FullName = fullName,

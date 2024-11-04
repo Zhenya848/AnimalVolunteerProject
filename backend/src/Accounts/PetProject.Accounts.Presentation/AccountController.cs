@@ -17,7 +17,13 @@ public class AccountController : ApplicationController
         [FromServices] CreateUserHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var command = new CreateUserCommand(request.Email, request.UserName, request.Password);
+        var command = new CreateUserCommand(
+            request.Email, 
+            request.UserName, 
+            request.FullName,
+            request.Password, 
+            request.SocialNetworks);
+        
         var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
@@ -56,9 +62,9 @@ public class AccountController : ApplicationController
         return Ok(result.Value);
     }
 
-    [Permission("volunteer.create")]
-    [HttpGet("admin")]
-    public async Task<IActionResult> Admin()
+    [Permission("admin.test")]
+    [HttpPost("admin")]
+    public async Task<IActionResult> TestAdmin()
     {
         return Ok("Admin");
     }

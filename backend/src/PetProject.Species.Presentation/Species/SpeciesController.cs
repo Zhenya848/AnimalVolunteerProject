@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.Framework;
+using PetProject.Framework.Authorization;
 using PetProject.Species.Application.Commands;
 using PetProject.Species.Application.Queries;
 using PetProject.Species.Presentation.Species.Requests;
@@ -9,6 +10,7 @@ namespace PetProject.Species.Presentation.Species
     public class SpeciesController : ApplicationController
     {
         [HttpGet]
+        [Permission("species.get")]
         public async Task<ActionResult> Get(
             [FromServices] GetSpeciesWithPaginationHandler handler,
             [FromQuery] GetSpeciesWithPaginationRequest request,
@@ -22,6 +24,7 @@ namespace PetProject.Species.Presentation.Species
         }
 
         [HttpDelete("{id:guid}")]
+        [Permission("species.delete")]
         public async Task<ActionResult> Delete(
             [FromRoute] Guid id,
             [FromServices] DeleteSpeciesHandler handler,
