@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PetProject.Core;
 using PetProject.Core.Application;
 using PetProject.Core.Application.Abstractions;
@@ -22,7 +23,7 @@ namespace PetProject.Volunteers.Application.Pets.Commands.Update
 
         public UpdatePetHandler(
             IVolunteerRepository volunteerRepository,
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(Modules.Volunteer)]IUnitOfWork unitOfWork,
             IValidator<UpdatePetCommand> updateValidator,
             IReadDbContext readDbContext)
         {

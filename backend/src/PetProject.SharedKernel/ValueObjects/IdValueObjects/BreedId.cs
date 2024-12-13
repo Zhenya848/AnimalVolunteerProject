@@ -10,5 +10,7 @@
         public static BreedId AddEmptyId() => new(Guid.Empty);
 
         public static BreedId Create(Guid id) => new(id);
+        
+        public static implicit operator Guid(BreedId breedId) => breedId.Value;
     }
 }

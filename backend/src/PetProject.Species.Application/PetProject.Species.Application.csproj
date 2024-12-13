@@ -12,4 +12,8 @@
       <ProjectReference Include="..\PetProject.Species.Domain\PetProject.Species.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Species\" />
+    </ItemGroup>
+
 </Project>

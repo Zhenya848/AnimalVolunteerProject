@@ -8,6 +8,7 @@ using PetProject.Accounts.Application.Repositories;
 using PetProject.Accounts.Domain.User;
 using PetProject.Accounts.Presentation;
 using PetProject.Accounts.Presentation.Options;
+using PetProject.Core;
 using PetProject.Core.Application.Abstractions;
 using PetProject.Infrastructure.Authentification.Options;
 using PetProject.Infrastructure.Authentification.Repositories;
@@ -47,9 +48,10 @@ public static class Inject
         services.AddScoped<AccountsSeederService>();
         
         services.AddTransient<ITokenProvider, JwtTokenProvider>();
+        
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.Accounts);
 
         services.AddScoped<IAccountRepository, AccountRepository>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
         
         services.AddAuthentication(options =>
         {

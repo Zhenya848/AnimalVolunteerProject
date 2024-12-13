@@ -13,7 +13,7 @@ using PetProject.Infrastructure.Authentification;
 namespace PetProject.Infrastructure.Authentification.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    [Migration("20241102171730_Initial")]
+    [Migration("20241207183259_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -200,6 +200,50 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                     b.ToTable("admin_accounts", (string)null);
                 });
 
+            modelBuilder.Entity("PetProject.Accounts.Domain.User.ParticipantAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.ComplexProperty<Dictionary<string, object>>("FullName", "PetProject.Accounts.Domain.User.ParticipantAccount.FullName#FullName", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("first_name");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("last_name");
+
+                            b1.Property<string>("Patronymic")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("patronymic");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_participant_accounts");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_participant_accounts_user_id");
+
+                    b.ToTable("participant_accounts", (string)null);
+                });
+
             modelBuilder.Entity("PetProject.Accounts.Domain.User.Permission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -374,6 +418,11 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                         .HasColumnType("text")
                         .HasColumnName("security_stamp");
 
+                    b.Property<string>("SocialNetworks")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("social_networks");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean")
                         .HasColumnName("two_factor_enabled");
@@ -394,6 +443,59 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("PetProject.Accounts.Domain.User.VolunteerAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("Expirience")
+                        .HasColumnType("integer")
+                        .HasColumnName("expirience");
+
+                    b.Property<string>("Requisites")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("requisites");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.ComplexProperty<Dictionary<string, object>>("FullName", "PetProject.Accounts.Domain.User.VolunteerAccount.FullName#FullName", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("first_name");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("last_name");
+
+                            b1.Property<string>("Patronymic")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("patronymic");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_volunteer_accounts");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_volunteer_accounts_user_id");
+
+                    b.ToTable("volunteer_accounts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -465,6 +567,18 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PetProject.Accounts.Domain.User.ParticipantAccount", b =>
+                {
+                    b.HasOne("PetProject.Accounts.Domain.User.User", "User")
+                        .WithOne()
+                        .HasForeignKey("PetProject.Accounts.Domain.User.ParticipantAccount", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_participant_accounts_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PetProject.Accounts.Domain.User.RefreshSession", b =>
                 {
                     b.HasOne("PetProject.Accounts.Domain.User.User", "User")
@@ -496,6 +610,18 @@ namespace PetProject.Infrastructure.Authentification.Migrations
                     b.Navigation("Permission");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PetProject.Accounts.Domain.User.VolunteerAccount", b =>
+                {
+                    b.HasOne("PetProject.Accounts.Domain.User.User", "User")
+                        .WithOne()
+                        .HasForeignKey("PetProject.Accounts.Domain.User.VolunteerAccount", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_volunteer_accounts_users_user_id");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PetProject.Accounts.Domain.User.Role", b =>

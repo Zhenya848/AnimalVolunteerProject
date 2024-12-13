@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetProject.Framework;
-using PetProject.Species.Application.Queries;
+using PetProject.Species.Application.Breeds.Commands;
+using PetProject.Species.Application.Breeds.Queries;
 using PetProject.Species.Presentation.Breeds.Requests;
 
 namespace PetProject.Species.Presentation.Breeds

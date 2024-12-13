@@ -1,16 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using PetProject.Core;
-using PetProject.Core.Interfaces;
 using PetProject.Core.ValueObjects;
 using PetProject.Core.ValueObjects.IdValueObjects;
 using PetProject.Volunteers.Domain.ValueObjects;
 
 namespace PetProject.Volunteers.Domain
 {
-    public class Volunteer : Core.Entity<VolunteerId>, ISoftDeletable
+    public class Volunteer : SoftDeletableEntity<VolunteerId>
     {
-        private bool _isDeleted = false;
-
         public FullName Name { get; private set; } = default!;
         public Description Description { get; private set; } = default!;
         public TelephoneNumber TelephoneNumber { get; private set; } = default!;
@@ -74,26 +71,18 @@ namespace PetProject.Volunteers.Domain
             return pet;
         }
 
-        public void Delete()
+        public override void Delete()
         {
-            _isDeleted = true;
-            DeleteSoftDeletableEntities(Pets);
-        }
-        public void Restore()
-        {
-            _isDeleted = false;
-            RestoreSoftDeletableEntities(Pets);
-        }
-
-        private void DeleteSoftDeletableEntities(IReadOnlyList<ISoftDeletable> entities)
-        {
-            foreach (ISoftDeletable entity in entities)
+            base.Delete();
+            
+            foreach (var entity in Pets)
                 entity.Delete();
         }
-
-        private void RestoreSoftDeletableEntities(IReadOnlyList<ISoftDeletable> entities)
+        public override void Restore()
         {
-            foreach (ISoftDeletable entity in entities)
+            base.Restore();
+            
+            foreach (var entity in Pets)
                 entity.Restore();
         }
 
@@ -134,7 +123,7 @@ namespace PetProject.Volunteers.Domain
             BreedId breedId,
             HelpStatus helpStatus)
         {
-            var pet = _pets.Where(i => i.Id == petId).FirstOrDefault();
+            var pet = _pets.FirstOrDefault(i => i.Id == petId);
 
             if (pet == null)
                 return Errors.General.NotFound(petId);

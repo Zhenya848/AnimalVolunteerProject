@@ -49,8 +49,11 @@ namespace PetProject.Volunteers.Infrastructure.Configurations.Write
                 socialNetwork => new SocialNetworkDto(socialNetwork.Name, socialNetwork.Reference),
                 dto => SocialNetwork.Create(dto.Name, dto.Reference).Value);
 
-            builder.HasMany(p => p.Pets).WithOne().HasForeignKey("volunteer_id");
-            builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field).HasColumnName("is_deleted");
+            builder.HasMany(p => p.Pets).WithOne().HasForeignKey("volunteer_id")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(d => d.IsDeleted);
+            builder.Property(dt => dt.DeletionDate);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PetProject.Core;
 using PetProject.Core.Application;
 using PetProject.Core.Application.Abstractions;
@@ -27,7 +28,7 @@ namespace PetProject.Volunteers.Application.Pets.Commands.Create
         public CreatePetHandler(
             IVolunteerRepository volunteerRepository,
             IReadDbContext readDbContext,
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(Modules.Volunteer)]IUnitOfWork unitOfWork,
             IValidator<CreatePetCommand> createPetValidator,
             IMessageQueue<IEnumerable<FileInfo>> messageQueue)
         {

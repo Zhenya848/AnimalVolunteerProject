@@ -6,6 +6,9 @@ namespace PetProject.Accounts.Application.Repositories;
 
 public interface IAccountRepository
 {
+    public Guid CreateParticipant(
+        ParticipantAccount participantAccount);
+    
     Task<Result<RefreshSession, Error>> GetByRefreshToken(
         Guid refreshToken,
         CancellationToken cancellationToken = default);

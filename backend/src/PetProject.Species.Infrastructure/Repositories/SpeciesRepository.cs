@@ -21,6 +21,14 @@ namespace PetProject.Species.Infrastructure.Repositories
             _logger = logger;
         }
 
+        public Guid Create(Domain.Species species)
+        {
+            _appDbContext.Species.Add(species);
+            
+            _logger.LogInformation("Created species {species} with id {species.Id.Value}", species, species.Id.Value);
+            return species.Id.Value;
+        }
+        
         public Guid Save(Domain.Species species)
         {
             _appDbContext.Species.Attach(species);
@@ -28,7 +36,7 @@ namespace PetProject.Species.Infrastructure.Repositories
             _logger.LogInformation("Saved species {species} with id {species.Id.Value}", species, species.Id.Value);
             return species.Id.Value;
         }
-
+        
         public Guid Delete(Domain.Species species)
         {
             _appDbContext.Species.Remove(species);

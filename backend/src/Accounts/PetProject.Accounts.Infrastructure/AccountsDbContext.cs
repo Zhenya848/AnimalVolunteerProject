@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetProject.Accounts.Domain.User;
 using PetProject.Core;
+using PetProject.Core.Infrastructure.Extensions;
+using PetProject.Core.ValueObjects;
+using PetProject.Core.ValueObjects.Dtos;
 
 namespace PetProject.Infrastructure.Authentification;
 
@@ -13,8 +16,11 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
 {
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<Permission> Permissions => Set<Permission>();
-    public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
     public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
+    
+    public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
+    public DbSet<VolunteerAccount> VolunteerAccounts => Set<VolunteerAccount>();
+    public DbSet<ParticipantAccount> ParticipantAccounts => Set<ParticipantAccount>();
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -34,6 +40,10 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
             .HasMany(u => u.Roles)
             .WithMany()
             .UsingEntity<IdentityUserRole<Guid>>();
+        modelBuilder.Entity<User>().Property(sn => sn.SocialNetworks)
+            .ValueToDtoConversion(
+                socialNetwork => new SocialNetworkDto(socialNetwork.Name, socialNetwork.Reference),
+                dto => SocialNetwork.Create(dto.Name, dto.Reference).Value);
 
         modelBuilder.Entity<AdminAccount>().ToTable("admin_accounts");
         modelBuilder.Entity<AdminAccount>().HasOne(u => u.User)
@@ -45,6 +55,34 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
             fnb.Property(l => l.LastName).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("last_name");
             fnb.Property(p => p.Patronymic).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("patronymic");
         });
+        
+        modelBuilder.Entity<ParticipantAccount>().ToTable("participant_accounts");
+        modelBuilder.Entity<ParticipantAccount>().HasOne(u => u.User)
+            .WithOne()
+            .HasForeignKey<ParticipantAccount>(i => i.UserId);
+        modelBuilder.Entity<ParticipantAccount>().ComplexProperty(fn => fn.FullName, fnb =>
+        {
+            fnb.Property(f => f.FirstName).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("first_name");
+            fnb.Property(l => l.LastName).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("last_name");
+            fnb.Property(p => p.Patronymic).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("patronymic");
+        });
+        
+        modelBuilder.Entity<VolunteerAccount>().ToTable("volunteer_accounts");
+        modelBuilder.Entity<VolunteerAccount>().HasOne(u => u.User)
+            .WithOne()
+            .HasForeignKey<VolunteerAccount>(i => i.UserId);
+        modelBuilder.Entity<VolunteerAccount>().ComplexProperty(fn => fn.FullName, fnb =>
+        {
+            fnb.Property(f => f.FirstName).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("first_name");
+            fnb.Property(l => l.LastName).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("last_name");
+            fnb.Property(p => p.Patronymic).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH).HasColumnName("patronymic");
+        });
+
+        modelBuilder.Entity<VolunteerAccount>().Property(e => e.Expirience);
+        modelBuilder.Entity<VolunteerAccount>().Property(r => r.Requisites)
+            .ValueToDtoConversion(
+                requisite => new RequisiteDto(requisite.Name, requisite.Description),
+                dto => Requisite.Create(dto.Name, dto.Description).Value);
         
         modelBuilder.Entity<Role>().ToTable("roles");
         

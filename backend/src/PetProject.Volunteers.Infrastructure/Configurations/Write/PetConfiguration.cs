@@ -84,7 +84,8 @@ namespace PetProject.Volunteers.Infrastructure.Configurations.Write
                 photos => new PetPhotoDto(photos.Path, photos.IsMainPhoto),
                 dto => PetPhoto.Create(dto.Path, dto.IsMainPhoto).Value);
 
-            builder.Property<bool>("_isDeleted").UsePropertyAccessMode(PropertyAccessMode.Field).HasColumnName("is_deleted");
+            builder.Property(d => d.IsDeleted);
+            builder.Property(dt => dt.DeletionDate);
 
             builder.Property(hs => hs.HelpStatus).HasConversion<string>()
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);

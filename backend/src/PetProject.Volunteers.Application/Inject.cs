@@ -2,6 +2,7 @@ using System.Reflection;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PetProject.Core.Application.Abstractions;
+using PetProject.Core.ValueObjects.Dtos;
 
 namespace PetProject.Volunteers.Application;
 

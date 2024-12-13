@@ -1,11 +1,10 @@
-﻿using PetProject.Core;
-using PetProject.Core.Application;
+﻿using PetProject.Core.Application;
 using PetProject.Core.Application.Abstractions;
 using PetProject.Core.Application.Extensions;
 using PetProject.Core.Application.Repositories;
 using PetProject.Core.ValueObjects.Dtos.ForQuery;
 
-namespace PetProject.Species.Application.Queries
+namespace PetProject.Species.Application.Species.Queries
 {
     public class GetSpeciesWithPaginationHandler : IQueryHandler<GetSpeciesWithPaginationQuery, PagedList<SpeciesDto>>
     {
