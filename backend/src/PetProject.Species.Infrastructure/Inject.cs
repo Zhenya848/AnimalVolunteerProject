@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PetProject.Core;
+using PetProject.Core.Application.Abstractions;
 using PetProject.Species.Application.Repositories;
 using PetProject.Species.Infrastructure.DbContexts;
 using PetProject.Species.Infrastructure.Repositories;
@@ -13,6 +15,8 @@ public static class Inject
     {
         services.AddScoped<WriteDbContext>();
         services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+        
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.Species);
 
         return services;
     }

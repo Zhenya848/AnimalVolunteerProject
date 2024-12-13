@@ -1,11 +1,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using PetProject.Core;
 using PetProject.Core.Application.Abstractions;
 using PetProject.Core.Application.Messaging;
 using PetProject.Core.Application.Repositories;
+using PetProject.Core.Infrastructure.Dapper;
 using PetProject.Core.Infrastructure.DbContexts;
 using PetProject.Core.Infrastructure.MessageQueues;
+using PetProject.Core.ValueObjects.Dtos;
 using PetProject.Volunteers.Application.Providers;
 using PetProject.Volunteers.Application.Volunteers.Repositories;
 using PetProject.Volunteers.Infrastructure.BackgroundServices;
@@ -22,14 +25,19 @@ public static class Inject
     public static IServiceCollection AddFromVolunteersInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
+        Dapper.SqlMapper.AddTypeHandler(new JsonTypeHandler<RequisiteDto[]>());
+        Dapper.SqlMapper.AddTypeHandler(new JsonTypeHandler<PetPhotoDto[]>());
+        
         services.AddScoped<WriteDbContext>();
         services.AddScoped<IReadDbContext, ReadDbContext>();
         services.AddScoped<IVolunteerRepository, VolunteerRepository>();
         
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.Volunteer);
         
         services.AddMinio(configuration);
+        
         services.AddHostedService<FileCleanerBackgroundService>();
+        services.AddHostedService<DeleteExpiredVolunteersBackgroundService>();
         
         services.AddScoped<IFileProvider, MinioProvider>();
         

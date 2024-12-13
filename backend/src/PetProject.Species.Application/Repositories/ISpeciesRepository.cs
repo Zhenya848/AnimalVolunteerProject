@@ -6,6 +6,7 @@ namespace PetProject.Species.Application.Repositories
 {
     public interface ISpeciesRepository
     {
+        Guid Create(Domain.Species species);
         Guid Save(Domain.Species species);
         Guid Delete(Domain.Species species);
         Task<Result<Domain.Species, Error>> GetById(

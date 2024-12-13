@@ -15,5 +15,6 @@
         public SocialNetworkDto[] SocialNetworks { get; init; } = [];
 
         public int Experience { get; } = default!;
+        
     }
 }

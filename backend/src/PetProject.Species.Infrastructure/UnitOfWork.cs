@@ -1,14 +1,15 @@
 ﻿using System.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using PetProject.Core.Application.Abstractions;
+using PetProject.Species.Infrastructure.DbContexts;
 
-namespace PetProject.Infrastructure.Authentification
+namespace PetProject.Species.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly AccountsDbContext _appDbContext;
+        private readonly WriteDbContext _appDbContext;
 
-        public UnitOfWork(AccountsDbContext appDbContext)
+        public UnitOfWork(WriteDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }

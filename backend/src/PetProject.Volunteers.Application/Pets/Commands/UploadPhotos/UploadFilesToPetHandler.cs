@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using PetProject.Core;
 using PetProject.Core.Application;
 using PetProject.Core.Application.Abstractions;
@@ -29,7 +30,7 @@ namespace PetProject.Volunteers.Application.Pets.Commands.UploadPhotos
         public UploadFilesToPetHandler(
             IVolunteerRepository volunteerRepository,
             IFileProvider fileProvider,
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(Modules.Volunteer)]IUnitOfWork unitOfWork,
             IValidator<UploadFilesToPetCommand> uploadFilesValidator,
             IMessageQueue<IEnumerable<FileInfo>> messageQueue)
         {

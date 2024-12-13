@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using PetProject.Core;
 using PetProject.Core.Application;
 using PetProject.Core.Application.Abstractions;
@@ -17,7 +18,7 @@ namespace PetProject.Volunteers.Application.Volunteers.Commands.Delete
 
         public DeleteVolunteerHandler(
             IVolunteerRepository volunteerRepository,
-            IUnitOfWork unitOfWork,
+            [FromKeyedServices(Modules.Volunteer)]IUnitOfWork unitOfWork,
             IValidator<DeleteVolunteerCommand> createValidator)
         {
             _volunteerRepository = volunteerRepository;

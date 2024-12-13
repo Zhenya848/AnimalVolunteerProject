@@ -1,12 +1,11 @@
 ﻿using PetProject.Core;
-using PetProject.Core.Interfaces;
 using PetProject.Core.ValueObjects;
 using PetProject.Core.ValueObjects.IdValueObjects;
 using PetProject.Volunteers.Domain.ValueObjects;
 
 namespace PetProject.Volunteers.Domain
 {
-    public class Pet : Entity<PetId>, ISoftDeletable
+    public class Pet : SoftDeletableEntity<PetId>
     {
         private bool _isDeleted = false;
 
@@ -81,7 +80,7 @@ namespace PetProject.Volunteers.Domain
             HelpStatus = helpStatus;
         }
 
-        public void UpdateInfo(
+        internal void UpdateInfo(
             string name,
             Description description,
             string color,
@@ -120,17 +119,13 @@ namespace PetProject.Volunteers.Domain
         public void UpdatePhotos(IEnumerable<PetPhoto> petPhotos) =>
             _photos = petPhotos.ToList();
 
-        public void SetSerialNumber(SerialNumber serialNumber) =>
+        internal void SetSerialNumber(SerialNumber serialNumber) =>
             SerialNumber = serialNumber;
 
-        public void Delete() => _isDeleted = true;
-
-        public void Restore() => _isDeleted = false;
-
-        public void MoveSerialNumberToForward() =>
+        internal void MoveSerialNumberToForward() =>
             SerialNumber = SerialNumber.Create(SerialNumber.Value + 1).Value;
 
-        public void MoveSerialNumberToBackward() =>
+        internal void MoveSerialNumberToBackward() =>
             SerialNumber = SerialNumber.Create(SerialNumber.Value - 1).Value;
     }
 }

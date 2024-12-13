@@ -1,4 +1,4 @@
-﻿namespace PetProject.Species.Application.Queries
+﻿namespace PetProject.Species.Application.Breeds.Queries
 {
     public record GetBreedsWithPaginationQuery(
         Guid SpeciesId,

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetProject.Core.ValueObjects.Dtos;
 using PetProject.Framework;
+using PetProject.Framework.Authorization;
 using PetProject.Volunteers.Application.Files.Commands.Create;
 using PetProject.Volunteers.Application.Files.Commands.Delete;
 using PetProject.Volunteers.Application.Files.Commands.Get;
@@ -21,6 +22,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
     public class VolunteersController : ApplicationController
     {
         [HttpPost]
+        [Permission("volunteer.create")]
         public async Task<ActionResult<Guid>> Create(
             [FromServices] CreateVolunteerHandler handler,
             [FromBody] CreateVolunteerRequest request,
@@ -38,6 +40,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
         }
 
         [HttpPut("{id:guid}/volunteer-info")]
+        [Permission("volunteer.update")]
         public async Task<ActionResult<Guid>> UpdateVolunteerInfo(
             [FromServices] UpdateVolunteerHandler handler,
             [FromBody] UpdateVolunteerRequest request,
@@ -56,6 +59,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
         }
 
         [HttpDelete("{id:guid}")]
+        //[Permission("volunteer.delete")]
         public async Task<ActionResult<Guid>> Delete(
             [FromServices] DeleteVolunteerHandler handler,
             [FromRoute] Guid id,
@@ -72,6 +76,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
         }
 
         [HttpGet]
+        [Permission("volunteer.get")]
         public async Task<ActionResult> GetWithPagination(
             [FromServices] GetVolunteersWithPaginationHandler handler,
             [FromQuery] GetVolunteersWithPaginationRequest request,

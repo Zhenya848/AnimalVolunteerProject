@@ -1,4 +1,4 @@
-﻿namespace PetProject.Species.Application.Queries
+﻿namespace PetProject.Species.Application.Species.Queries
 {
     public record GetSpeciesWithPaginationQuery(
         int Page,

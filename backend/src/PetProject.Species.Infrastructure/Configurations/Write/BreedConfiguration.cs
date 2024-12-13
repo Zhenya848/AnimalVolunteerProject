@@ -15,7 +15,7 @@ namespace PetProject.Species.Infrastructure.Configurations.Write
             builder.HasKey(x => x.Id);
             builder.Property(p => p.Id).HasConversion(i => i.Value, value => BreedId.Create(value));
 
-            builder.Property(x => x.title).HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+            builder.Property(x => x.Title).IsRequired().HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
         }
     }
 }

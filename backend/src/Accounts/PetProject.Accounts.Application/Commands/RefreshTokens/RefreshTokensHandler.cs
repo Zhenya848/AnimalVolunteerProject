@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
+using Microsoft.Extensions.DependencyInjection;
 using PetProject.Accounts.Application.Repositories;
 using PetProject.Accounts.Contracts.Responses;
 using PetProject.Core;
@@ -16,7 +17,7 @@ public class RefreshTokensHandler : ICommandHandler<RefreshTokensCommand, Result
     public RefreshTokensHandler(
         IAccountRepository accountRepository,
         ITokenProvider tokenProvider,
-        IUnitOfWork unitOfWork)
+        [FromKeyedServices(Modules.Accounts)]IUnitOfWork unitOfWork)
     {
         _accountRepository = accountRepository;
         _tokenProvider = tokenProvider;

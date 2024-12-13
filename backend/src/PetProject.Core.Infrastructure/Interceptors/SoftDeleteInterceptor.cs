@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using PetProject.Core.Interfaces;
 
 namespace PetProject.Core.Infrastructure.Interceptors
 {
@@ -26,4 +25,4 @@ namespace PetProject.Core.Infrastructure.Interceptors
             return await base.SavingChangesAsync(eventData, result, cancellationToken);
         }
     }
-}
+}*/

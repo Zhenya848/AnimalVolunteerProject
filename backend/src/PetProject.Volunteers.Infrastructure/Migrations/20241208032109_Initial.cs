@@ -18,13 +18,14 @@ namespace PetProject.Volunteers.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     requisites = table.Column<string>(type: "jsonb", nullable: false),
                     social_networks = table.Column<string>(type: "jsonb", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     experience = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     last_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false)
+                    phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deletion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -48,7 +49,6 @@ namespace PetProject.Volunteers.Infrastructure.Migrations
                     requisites = table.Column<string>(type: "jsonb", nullable: false),
                     photos = table.Column<string>(type: "jsonb", nullable: false),
                     help_status = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     state = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
@@ -58,7 +58,9 @@ namespace PetProject.Volunteers.Infrastructure.Migrations
                     pet_type_info_breed_id = table.Column<Guid>(type: "uuid", nullable: false),
                     pet_type_info_species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     serial_number = table.Column<int>(type: "integer", nullable: false),
-                    phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false)
+                    phone_number = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deletion_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

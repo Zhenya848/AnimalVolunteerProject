@@ -38,17 +38,8 @@ namespace PetProject.Volunteers.Application.Pets.Queries
             sql.Append(sortingForSql);
             sql.Append(paginationForSql);
 
-            var pets = await connection.QueryAsync<PetDto, string, PetDto>(
+            var pets = await connection.QueryAsync<PetDto>(
                 sql.ToString(),
-                (pets, jsonRequisites) =>
-                {
-                    var requisites = JsonSerializer.Deserialize<RequisiteDto[]>(jsonRequisites) ?? [];
-
-                    pets.Requisites = requisites;
-
-                    return pets;
-                },
-                splitOn: "Requisites",
                 param: parameters);
 
             var totalCountSql = new StringBuilder("SELECT COUNT(*) FROM pets");
