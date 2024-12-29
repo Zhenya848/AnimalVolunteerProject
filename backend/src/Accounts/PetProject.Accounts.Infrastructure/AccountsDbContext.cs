@@ -47,7 +47,7 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
 
         modelBuilder.Entity<AdminAccount>().ToTable("admin_accounts");
         modelBuilder.Entity<AdminAccount>().HasOne(u => u.User)
-            .WithOne()
+            .WithOne(a => a.AdminAccount)
             .HasForeignKey<AdminAccount>(i => i.UserId);
         modelBuilder.Entity<AdminAccount>().ComplexProperty(fn => fn.FullName, fnb =>
         {
@@ -58,7 +58,7 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
         
         modelBuilder.Entity<ParticipantAccount>().ToTable("participant_accounts");
         modelBuilder.Entity<ParticipantAccount>().HasOne(u => u.User)
-            .WithOne()
+            .WithOne(p => p.ParticipantAccount)
             .HasForeignKey<ParticipantAccount>(i => i.UserId);
         modelBuilder.Entity<ParticipantAccount>().ComplexProperty(fn => fn.FullName, fnb =>
         {
@@ -69,7 +69,7 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
         
         modelBuilder.Entity<VolunteerAccount>().ToTable("volunteer_accounts");
         modelBuilder.Entity<VolunteerAccount>().HasOne(u => u.User)
-            .WithOne()
+            .WithOne(v => v.VolunteerAccount)
             .HasForeignKey<VolunteerAccount>(i => i.UserId);
         modelBuilder.Entity<VolunteerAccount>().ComplexProperty(fn => fn.FullName, fnb =>
         {

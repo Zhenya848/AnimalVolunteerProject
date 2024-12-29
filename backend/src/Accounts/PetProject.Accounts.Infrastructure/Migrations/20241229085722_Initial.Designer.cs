@@ -13,7 +13,7 @@ using PetProject.Infrastructure.Authentification;
 namespace PetProject.Infrastructure.Authentification.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    [Migration("20241207183259_Initial")]
+    [Migration("20241229085722_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -558,7 +558,7 @@ namespace PetProject.Infrastructure.Authentification.Migrations
             modelBuilder.Entity("PetProject.Accounts.Domain.User.AdminAccount", b =>
                 {
                     b.HasOne("PetProject.Accounts.Domain.User.User", "User")
-                        .WithOne()
+                        .WithOne("AdminAccount")
                         .HasForeignKey("PetProject.Accounts.Domain.User.AdminAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -570,7 +570,7 @@ namespace PetProject.Infrastructure.Authentification.Migrations
             modelBuilder.Entity("PetProject.Accounts.Domain.User.ParticipantAccount", b =>
                 {
                     b.HasOne("PetProject.Accounts.Domain.User.User", "User")
-                        .WithOne()
+                        .WithOne("ParticipantAccount")
                         .HasForeignKey("PetProject.Accounts.Domain.User.ParticipantAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -615,7 +615,7 @@ namespace PetProject.Infrastructure.Authentification.Migrations
             modelBuilder.Entity("PetProject.Accounts.Domain.User.VolunteerAccount", b =>
                 {
                     b.HasOne("PetProject.Accounts.Domain.User.User", "User")
-                        .WithOne()
+                        .WithOne("VolunteerAccount")
                         .HasForeignKey("PetProject.Accounts.Domain.User.VolunteerAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -627,6 +627,15 @@ namespace PetProject.Infrastructure.Authentification.Migrations
             modelBuilder.Entity("PetProject.Accounts.Domain.User.Role", b =>
                 {
                     b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("PetProject.Accounts.Domain.User.User", b =>
+                {
+                    b.Navigation("AdminAccount");
+
+                    b.Navigation("ParticipantAccount");
+
+                    b.Navigation("VolunteerAccount");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetProject.Accounts.Application.Commands.CreateUser;
+using PetProject.Accounts.Application.Commands.GetInfoAboutUser;
+using PetProject.Accounts.Application.Commands.GetUsers;
 using PetProject.Accounts.Application.Commands.LoginUser;
 using PetProject.Accounts.Application.Commands.RefreshTokens;
+using PetProject.Accounts.Application.Commands.SendNotification;
+using PetProject.Accounts.Application.Commands.UpdateNotificationSettings;
 using PetProject.Accounts.Presentation.Requests;
 using PetProject.Framework;
 using PetProject.Framework.Authorization;
@@ -62,10 +66,64 @@ public class AccountController : ApplicationController
         return Ok(result.Value);
     }
 
-    [Permission("admin.test")]
-    [HttpPost("admin")]
-    public async Task<IActionResult> TestAdmin()
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetInfoAboutUser(
+        [FromRoute] Guid id,
+        [FromServices] GetInfoAboutUserHandler handler,
+        CancellationToken cancellationToken = default)
     {
-        return Ok("Admin");
+        var result = await handler.Handle(id, cancellationToken);
+        
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("send_notification")]
+    public async Task<IActionResult> SendNotificationForUsers(
+        [FromBody] SendNotificationRequest request,
+        [FromServices] SendNotificationHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new SendNotificationCommand(request.Users, request.Roles, request.Message);
+        var result = await handler.Handle(command, cancellationToken);
+        
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
+        return Ok();
+    }
+    
+    [HttpPost("users")]
+    public async Task<IActionResult> GetUsers(
+        [FromBody] GetUsersRequest request,
+        [FromServices] GetUsersHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new GetUsersCommand(request.Users, request.Roles);
+        var result = await handler.Handle(command, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPost("notification_settings")]
+    public async Task<IActionResult> UpdateNotificationSettings(
+        [FromBody] UpdateNotificationSettingsRequest request,
+        [FromServices] UpdateNotificationSettingsHandler handler,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateNotificationSettingsCommand(
+            request.UserId, 
+            request.Email, 
+            request.Telegram,
+            request.Web);
+        
+        var result = await handler.Handle(command, cancellationToken);
+        
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok();
     }
 }

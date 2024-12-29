@@ -11,10 +11,6 @@
         public string Description { get; } = default!;
         public string PhoneNumber { get; } = default!;
 
-        public RequisiteDto[] Requisites { get; init; } = [];
-        public SocialNetworkDto[] SocialNetworks { get; init; } = [];
-
         public int Experience { get; } = default!;
-        
     }
 }

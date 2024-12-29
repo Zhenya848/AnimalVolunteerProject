@@ -1,4 +1,6 @@
-namespace PetProject.Core;
+using PetProject.Core;
+
+namespace PetProject.Volunteers.Domain;
 
 public abstract class SoftDeletableEntity<TId> : Entity<TId>
 {

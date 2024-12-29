@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option csharp_namespace = "NotificationService";
+
+package greet;
+
+service Greeter {
+  rpc SendNotification (SendNotificationRequest) returns (SendNotificationResponse);
+  rpc UpdateNotificationSettings (UpdateNotificationSettingsRequest) returns (UpdateNotificationSettingsResponse);
+}
+
+message SendNotificationRequest {
+  repeated string roles = 1;
+  repeated string users = 2;
+  string message = 3;
+}
+
+message SendNotificationResponse {
+
+}
+
+message UpdateNotificationSettingsRequest {
+  string userId = 1;
+  bool email = 2;
+  bool telegram = 3;
+  bool web = 4;
+}
+
+message UpdateNotificationSettingsResponse {
+
+}

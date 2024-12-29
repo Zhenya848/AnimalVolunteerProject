@@ -42,4 +42,36 @@ public class AccountRepository : IAccountRepository
     {
         _accountsDbContext.RefreshSessions.Remove(refreshSession);
     }
+
+    public async Task<Result<User, Error>> GetInfoAboutUser(
+        Guid userId, 
+        CancellationToken cancellationToken = default)
+    {
+        var user = await _accountsDbContext.Users
+            .Include(p => p.ParticipantAccount)
+            .Include(v => v.VolunteerAccount)
+            .Include(a => a.AdminAccount)
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        
+        if (user == null)
+            return Errors.User.NotFound();
+        
+        return user;
+    }
+
+    public async Task<IEnumerable<User>> GetUsers(
+        IEnumerable<string> users, 
+        IEnumerable<string> roles, 
+        CancellationToken cancellationToken = default)
+    {
+        var usersExist = await _accountsDbContext.Users
+            .Include(p => p.ParticipantAccount)
+            .Include(v => v.VolunteerAccount)
+            .Include(a => a.AdminAccount)
+            .Include(r => r.Roles)
+            .Where(u => users.Contains(u.UserName) || u.Roles.Any(role => roles.Contains(role.Name)))
+            .ToListAsync(cancellationToken);
+
+        return usersExist;
+    }
 }

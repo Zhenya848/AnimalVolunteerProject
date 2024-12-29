@@ -14,12 +14,6 @@ namespace PetProject.Volunteers.Domain
 
         public Experience Experience { get; private set; } = default!;
 
-        private List<Requisite> _requisites = default!;
-        public IReadOnlyList<Requisite> Requisites => _requisites;
-
-        private List<SocialNetwork> _socialNetworks = default!;
-        public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
-
         private List<Pet> _pets = new List<Pet>();
         public IReadOnlyList<Pet> Pets => _pets;
 
@@ -32,33 +26,24 @@ namespace PetProject.Volunteers.Domain
             FullName name, 
             Description description, 
             TelephoneNumber telephoneNumber, 
-            Experience experience,
-            List<SocialNetwork> sotialNetworks, 
-            List<Requisite> requisites) : base(id)
+            Experience experience) : base(id)
         {
             Name = name;
             Description = description;
             TelephoneNumber = telephoneNumber;
             Experience = experience;
-
-            _requisites = requisites;
-            _socialNetworks = sotialNetworks;
         }
 
         public void UpdateInfo(
             FullName name,
             Description description,
             TelephoneNumber telephoneNumber,
-            Experience experience,
-            List<SocialNetwork> sotialNetworks,
-            List<Requisite> requisites)
+            Experience experience)
         {
             Name = name;
             Description = description;
             TelephoneNumber = telephoneNumber;
             Experience = experience;
-            _requisites = requisites;
-            _socialNetworks = sotialNetworks;
         }
 
         public Result<Pet, Error> GetPetById(PetId id)

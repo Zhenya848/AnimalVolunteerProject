@@ -39,16 +39,6 @@ namespace PetProject.Volunteers.Infrastructure.Configurations.Write
 
             builder.ComplexProperty(e => e.Experience, eb => { eb.Property(v => v.Value).HasColumnName("experience"); });
 
-            builder.Property(rl => rl.Requisites)
-                .ValueToDtoConversion(
-                requisite => new RequisiteDto(requisite.Name, requisite.Description),
-                dto => Requisite.Create(dto.Name, dto.Description).Value);
-
-            builder.Property(snl => snl.SocialNetworks)
-                .ValueToDtoConversion(
-                socialNetwork => new SocialNetworkDto(socialNetwork.Name, socialNetwork.Reference),
-                dto => SocialNetwork.Create(dto.Name, dto.Reference).Value);
-
             builder.HasMany(p => p.Pets).WithOne().HasForeignKey("volunteer_id")
                 .OnDelete(DeleteBehavior.Cascade);
 

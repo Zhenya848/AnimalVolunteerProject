@@ -14,4 +14,13 @@ public interface IAccountRepository
         CancellationToken cancellationToken = default);
     
     void Delete(RefreshSession refreshSession);
+    
+    public Task<Result<User, Error>> GetInfoAboutUser(
+        Guid userId,
+        CancellationToken cancellationToken = default);
+    
+    public Task<IEnumerable<User>> GetUsers(
+        IEnumerable<string> users,
+        IEnumerable<string> roles,
+        CancellationToken cancellationToken = default);
 }

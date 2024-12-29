@@ -155,17 +155,8 @@ namespace PetProject.Domain.Tests
             var description = Description.Create(TEST).Value;
             var experience = Experience.Create(0).Value;
 
-            var socilaNetworkDto = new SocialNetworkDto(TEST, TEST);
-            var requisiteDto = new RequisiteDto(TEST, TEST);
-
-            var socialNetworks = new List<SocialNetwork>()
-            { SocialNetwork.Create(socilaNetworkDto.Name, socilaNetworkDto.Reference).Value };
-
-            var requisites = new List<Requisite>()
-            { Requisite.Create(requisiteDto.Name, requisiteDto.Description).Value };
-
             return new Volunteer(VolunteerId.AddNewId(), fullName, description,
-                telephoneNumber, experience, socialNetworks, requisites);
+                telephoneNumber, experience);
         }
     }
 }

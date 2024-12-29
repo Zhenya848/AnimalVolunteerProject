@@ -29,7 +29,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
             CancellationToken cancellationToken = default)
         {
             var command = new CreateVolunteerCommand(request.Name, request.Description, request.PhoneNumber,
-                request.Experience, request.SotialNetworks, request.Requisites);
+                request.Experience);
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -40,7 +40,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
         }
 
         [HttpPut("{id:guid}/volunteer-info")]
-        [Permission("volunteer.update")]
+        //[Permission("volunteer.update")]
         public async Task<ActionResult<Guid>> UpdateVolunteerInfo(
             [FromServices] UpdateVolunteerHandler handler,
             [FromBody] UpdateVolunteerRequest request,
@@ -48,7 +48,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
             CancellationToken cancellationToken = default)
         {
             var command = new UpdateVolunteerCommand(id, request.Name, request.Description,
-                request.PhoneNumber, request.Experience, request.SocialNetworks, request.Requisites);
+                request.PhoneNumber, request.Experience);
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -76,7 +76,7 @@ namespace PetProject.Volunteers.Presentation.Volunteers
         }
 
         [HttpGet]
-        [Permission("volunteer.get")]
+        //[Permission("volunteer.get")]
         public async Task<ActionResult> GetWithPagination(
             [FromServices] GetVolunteersWithPaginationHandler handler,
             [FromQuery] GetVolunteersWithPaginationRequest request,

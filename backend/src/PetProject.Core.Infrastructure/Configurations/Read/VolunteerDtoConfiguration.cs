@@ -21,24 +21,6 @@ namespace PetProject.Core.Infrastructure.Configurations.Read
             builder.Property(d => d.Description);
             builder.Property(p => p.PhoneNumber);
             builder.Property(e => e.Experience);
-
-            builder.Property(pl => pl.Requisites)
-                .HasConversion(
-                    requisites => JsonSerializer.Serialize(
-                        string.Empty,
-                        JsonSerializerOptions.Default),
-
-                    json => JsonSerializer.Deserialize<RequisiteDto[]>(json, JsonSerializerOptions.Default)!)
-                .HasColumnType("jsonb");
-
-            builder.Property(pl => pl.SocialNetworks)
-                .HasConversion(
-                    requisites => JsonSerializer.Serialize(
-                        string.Empty,
-                        JsonSerializerOptions.Default),
-
-                    json => JsonSerializer.Deserialize<SocialNetworkDto[]>(json, JsonSerializerOptions.Default)!)
-                .HasColumnType("jsonb");
         }
     }
 }

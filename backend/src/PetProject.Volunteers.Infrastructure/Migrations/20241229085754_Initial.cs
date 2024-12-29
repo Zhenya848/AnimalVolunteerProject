@@ -16,8 +16,6 @@ namespace PetProject.Volunteers.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    requisites = table.Column<string>(type: "jsonb", nullable: false),
-                    social_networks = table.Column<string>(type: "jsonb", nullable: false),
                     description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     experience = table.Column<int>(type: "integer", nullable: false),
                     first_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
@@ -69,7 +67,8 @@ namespace PetProject.Volunteers.Infrastructure.Migrations
                         name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
                         principalTable: "volunteers",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
