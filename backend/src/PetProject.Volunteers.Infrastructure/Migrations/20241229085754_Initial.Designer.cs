@@ -13,7 +13,7 @@ using PetProject.Volunteers.Infrastructure.DbContexts;
 namespace PetProject.Volunteers.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20241208032109_Initial")]
+    [Migration("20241229085754_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -198,16 +198,6 @@ namespace PetProject.Volunteers.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<string>("Requisites")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("requisites");
-
-                    b.Property<string>("SocialNetworks")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("social_networks");
-
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetProject.Volunteers.Domain.Volunteer.Description#Description", b1 =>
                         {
                             b1.IsRequired();
@@ -273,6 +263,7 @@ namespace PetProject.Volunteers.Infrastructure.Migrations
                     b.HasOne("PetProject.Volunteers.Domain.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
                 });
 

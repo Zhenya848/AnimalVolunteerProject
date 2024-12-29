@@ -10,5 +10,10 @@
             public const int DELETE_EXPIRED_VOLUNTEERS_SERVICE_REDUCTION_HOURS = 24;
             public const int LIFETIME_AFTER_DELETION = 1;
         }
+
+        public class ServiceAdresses
+        {
+            public const string NOTIFICATION_SERVICE_ADRESS = "https://localhost:7030";
+        }
     }
 }

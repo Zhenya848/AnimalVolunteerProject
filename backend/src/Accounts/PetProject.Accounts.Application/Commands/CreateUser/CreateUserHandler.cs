@@ -15,17 +15,20 @@ public class CreateUserHandler : ICommandHandler<CreateUserCommand, UnitResult<E
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
     private readonly IAccountRepository _accountRepository;
+    private readonly INotificationProvider _notificationProvider;
     private readonly ILogger<CreateUserHandler> _logger;
 
     public CreateUserHandler(
         UserManager<User> userManager, 
         RoleManager<Role> roleManager,
         IAccountRepository accountRepository,
+        INotificationProvider notificationProvider,
         ILogger<CreateUserHandler> logger)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _accountRepository = accountRepository;
+        _notificationProvider = notificationProvider;
         _logger = logger;
     }
     
@@ -61,6 +64,8 @@ public class CreateUserHandler : ICommandHandler<CreateUserCommand, UnitResult<E
                 .Select(e => Error.Failure(e.Code, e.Description)).ToList();
         
         _logger.LogInformation("User created: {userName} a new account with password.", user.UserName);
+        
+        await _notificationProvider.UpdateNotificationSettings(user.Id);
 
         return Result.Success<ErrorList>();
     }

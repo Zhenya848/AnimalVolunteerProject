@@ -28,15 +28,15 @@ namespace PetProject.Species.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("species_id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("species_id");
-
-                    b.Property<string>("title")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("title");
+
+                    b.Property<Guid>("species_id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("species_id");
 
                     b.HasKey("Id")
                         .HasName("pk_breeds");

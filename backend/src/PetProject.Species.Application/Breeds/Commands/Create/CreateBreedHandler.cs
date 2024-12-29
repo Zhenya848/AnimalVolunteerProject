@@ -8,7 +8,7 @@ using PetProject.Core.ValueObjects.IdValueObjects;
 using PetProject.Species.Application.Repositories;
 using PetProject.Species.Domain;
 
-namespace PetProject.Species.Application.Breeds.Commands;
+namespace PetProject.Species.Application.Breeds.Commands.Create;
 
 public class CreateBreedHandler : ICommandHandler<CreateBreedCommand, Result<Guid, ErrorList>>
 {

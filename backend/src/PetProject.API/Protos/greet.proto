@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "NotificationService";
+
+package greet;
+
+service Greeter {
+
+  rpc SendNotification (NotificationRequest) returns (NotificationResponse);
+}
+
+message NotificationRequest {
+  repeated string roles = 1;
+  repeated string users = 2;
+  string message = 3;
+}
+
+message NotificationResponse {
+  string result = 1;
+}

@@ -48,6 +48,7 @@ public static class Inject
         services.AddScoped<AccountsSeederService>();
         
         services.AddTransient<ITokenProvider, JwtTokenProvider>();
+        services.AddSingleton<INotificationProvider, NotificationProvider>();
         
         services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(Modules.Accounts);
 

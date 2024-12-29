@@ -13,6 +13,10 @@ public class User : IdentityUser<Guid>
     
     public IReadOnlyList<Role> Roles => _roles;
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
+    
+    public ParticipantAccount? ParticipantAccount { get; }
+    public VolunteerAccount? VolunteerAccount { get; }
+    public AdminAccount? AdminAccount { get; }
 
     private User()
     {

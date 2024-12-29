@@ -6,9 +6,7 @@ namespace PetProject.Volunteers.Application.Volunteers.Commands.Create
         FullNameDto Name,
         string Description,
         string PhoneNumber,
-        int Experience,
-        IEnumerable<SocialNetworkDto> SocialNetworks,
-        IEnumerable<RequisiteDto> Requisites)
+        int Experience)
     {
 
     };

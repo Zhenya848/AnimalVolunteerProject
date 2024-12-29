@@ -52,14 +52,8 @@ namespace PetProject.Volunteers.Application.Volunteers.Commands.Create
             var description = Description.Create(command.Description).Value;
             var experience = Experience.Create(command.Experience).Value;
 
-            var socialNetworks = command.SocialNetworks
-            .Select(s => SocialNetwork.Create(s.Name, s.Reference).Value).ToList();
-
-            var requisites = command.Requisites
-            .Select(r => Requisite.Create(r.Name, r.Description).Value).ToList();
-
             Volunteer volunteer = new Volunteer(VolunteerId.AddNewId(), fullName, description,
-                telephoneNumber, experience, socialNetworks, requisites);
+                telephoneNumber, experience);
 
             _volunteerRepository.Add(volunteer);
 

@@ -6,7 +6,5 @@ namespace PetProject.Volunteers.Presentation.Volunteers.Requests
         FullNameDto Name,
         string Description,
         string PhoneNumber,
-        int Experience,
-        IEnumerable<SocialNetworkDto> SocialNetworks,
-        IEnumerable<RequisiteDto> Requisites);
+        int Experience);
 }
