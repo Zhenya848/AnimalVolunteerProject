@@ -84,6 +84,20 @@ if (app.Environment.IsDevelopment())
     //await app.ApplyMigrations();
 }
 
+app.UseCors(config =>
+{
+    config.WithOrigins("http://localhost:5179")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+});
+
+app.MapGet("/u", () =>
+{
+    var users = new List<string> { "us1", "us2" };
+
+    return Results.Ok(users);
+});
+
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
